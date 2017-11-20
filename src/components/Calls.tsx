@@ -19,7 +19,7 @@ class Calls extends React.Component<ICallProps> {
                 </span>
                 <TextField 
                     style={styles.callTextField}
-                    hintText="Enter notation" 
+                    hintText="Place Notation" 
                     defaultValue={call.callNotation} 
                     onChange={(event, newValue) => this.handleCallChange(call, newValue)}
                 />

@@ -3,13 +3,13 @@ const styles: { [name: string]: React.CSSProperties } = {
         width: 150,
     },
     methodNameTextField: {
-        width: 150,
+        width: '100%',
     },
     methodSymbolTextField: {
-        width: 100,
+        width: '100%',
     },
     methodPlaceNotationTextField: {
-        width: 250,
+        width: 'calc(100% - 24px)',
     },
 };
 

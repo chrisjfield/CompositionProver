@@ -15,7 +15,18 @@
     width: 10px;
 }
 
-.text-field-method {
+.text-field-method-wrapper {
     padding-left: 15px;
     padding-top: 15px;
+    width: 100%;
+}
+
+.method-break {
+    width: calc(100% + 15px);
+    margin-top: 5px;
+    margin-bottom: 5px; 
+}
+
+.text-field-method {
+    margin-left: 15px;
 }

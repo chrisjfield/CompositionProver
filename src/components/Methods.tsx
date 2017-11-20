@@ -13,26 +13,35 @@ class Methods extends React.Component<IMethodProps> {
 
     generateMethodHTML = (method: IMethod, index: number) => {
         return (
-            <div className={'text-field-method'}  key={method.methodId}>
-                <TextField 
-                    style={styles.methodNameTextField}
-                    hintText="Enter Method Name" 
-                    defaultValue={method.methodName} 
-                    onChange={(event, newValue) => this.updateMethodName(method, newValue)}
-                />
-                <TextField 
-                    style={styles.methodSymbolTextField}
-                    hintText="Enter Method Abbrieviation" 
-                    defaultValue={method.methodSymbol} 
-                    onChange={(event, newValue) => this.updateMethodSymbol(method, newValue)}
-                />
-                <TextField 
-                    style={styles.methodPlaceNotationTextField}
-                    hintText="Enter Method Place Notation" 
-                    defaultValue={method.methodPlaceNotation} 
-                    onChange={(event, newValue) => this.updateMethodPlaceNotation(method, newValue)}
-                />
-                {method.coreMethod ? null : this.getDeleteButton(method)}
+            <div>
+                <div className={'row text-field-method-wrapper'}  key={method.methodId}>
+                    <div className="col-lg-4 col-md-3 col-sm-8 text-field-method">
+                        <TextField 
+                            style={styles.methodNameTextField}
+                            hintText="Name" 
+                            defaultValue={method.methodName} 
+                            onChange={(event, newValue) => this.updateMethodName(method, newValue)}
+                        />
+                    </div>
+                    <div className="col-lg-1 col-md-1 col-sm-3 text-field-method">
+                        <TextField 
+                            style={styles.methodSymbolTextField}
+                            hintText="Code" 
+                            defaultValue={method.methodSymbol} 
+                            onChange={(event, newValue) => this.updateMethodSymbol(method, newValue)}
+                        />
+                    </div>
+                    <div className="col-lg-6 col-md-7 col-sm-11 text-field-method">
+                        <TextField 
+                            style={styles.methodPlaceNotationTextField}
+                            hintText="Place Notation" 
+                            defaultValue={method.methodPlaceNotation} 
+                            onChange={(event, newValue) => this.updateMethodPlaceNotation(method, newValue)}
+                        />
+                        {method.coreMethod ? null : this.getDeleteButton(method)}
+                    </div>
+                </div>
+                <hr className="row method-break"/>
             </div>
         );
     }
