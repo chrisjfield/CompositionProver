@@ -1,0 +1,20 @@
+.text-field-call-label {
+    width: 120px;
+    display: inline-block;
+}
+
+.text-field-call-text {
+    width: 120px;
+}
+
+.call-button {
+    padding: 15px;
+}
+
+.text-field-call-delete {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
+    width: 10px;
+}

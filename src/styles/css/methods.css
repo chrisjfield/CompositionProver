@@ -1,0 +1,21 @@
+.text-field-method-label {
+    width: 120px;
+    display: inline-block;
+}
+
+.method-button {
+    padding: 15px;
+}
+
+.text-field-method-delete {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
+    width: 10px;
+}
+
+.text-field-method {
+    padding-left: 15px;
+    padding-top: 15px;
+}

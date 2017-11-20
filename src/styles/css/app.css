@@ -1,0 +1,18 @@
+@import url("./calls.css");
+@import url("./methods.css");
+
+body {
+    background-color: #E0E0E0;
+}
+
+.compose-app {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.compose-tab {
+    overflow-y: auto;
+    max-height: calc(100vh - 78px);
+    padding-left: 15px;
+    padding-right: 15px;
+}
