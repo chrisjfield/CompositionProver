@@ -13,8 +13,8 @@ class Methods extends React.Component<IMethodProps> {
 
     generateMethodHTML = (method: IMethod, index: number) => {
         return (
-            <div>
-                <div className={'row text-field-method-wrapper'}  key={method.methodId}>
+            <div key={method.methodId}>
+                <div className={'row text-field-method-wrapper'}>
                     <div className="col-lg-4 col-md-3 col-sm-8 text-field-method">
                         <TextField 
                             style={styles.methodNameTextField}

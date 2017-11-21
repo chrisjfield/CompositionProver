@@ -11,6 +11,14 @@ const styles: { [name: string]: React.CSSProperties } = {
     methodPlaceNotationTextField: {
         width: 'calc(100% - 24px)',
     },
+    compositionStageField: {
+        width: 'calc(100% - 150px)',
+        maxWidth: 200,
+    },
+    compositionCompositionField: {
+        width: '100%',
+        maxWidth: 320,
+    },
 };
 
 export default styles;

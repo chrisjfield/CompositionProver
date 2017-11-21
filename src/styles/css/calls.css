@@ -18,3 +18,7 @@
     cursor: pointer;
     width: 10px;
 }
+
+.text-field-row-wrapper {
+    padding: 15px
+}

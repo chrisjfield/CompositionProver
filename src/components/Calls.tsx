@@ -69,7 +69,7 @@ class Calls extends React.Component<ICallProps> {
     render() {
         return (
             <div>
-                <div className="row">
+                <div className="row text-field-row-wrapper">
                     {this.props.calls.map((call: ICall, index: number) => this.generateCallHTML(call, index))}
                 </div>
                 <div className="row call-button">

@@ -1,9 +1,6 @@
-export interface IStage {
-    stage: string;
-    numberOfBells: number;
-}
+import { IStageEnum } from '../interfaces/Interfaces';
 
-export const ringingStages: IStage[] = [
+export const ringingStages: IStageEnum[] = [
     { stage: 'Minimus', numberOfBells: 4 },
     { stage: 'Doubles', numberOfBells: 5 },
     { stage: 'Minor', numberOfBells: 6 },

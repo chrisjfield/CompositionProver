@@ -1,57 +1,76 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-import { ICompositionProps } from '../interfaces/Interfaces';
-import { updateComposition, updatePlaceNotation, updateStage } from '../actions/appActions';
-import { ringingStages, IStage } from '../helpers/stagesHelper';
+import { IStore, ICompositionProps, IStageEnum } from '../interfaces/Interfaces';
+import { updateComposition, updateParts, updateStage } from '../actions/compositionActions';
+import { ringingStages } from '../helpers/stagesHelper';
 
-class Composition extends React.Component<ICompositionProps> {
+import styles from '../styles';
+
+class Composition extends React.Component<ICompositionProps, {}> {
+
+    handleStageChange = (value: number) => {
+        this.props.dispatch(updateStage(value)); 
+    }
 
     getStages = () => {
-        return ringingStages.map((stage: IStage) => <MenuItem key={stage.numberOfBells} value={stage.numberOfBells} primaryText={stage.stage} />);
+        return ringingStages.map((stage: IStageEnum) => {
+            return (
+                <MenuItem 
+                    key={stage.numberOfBells} 
+                    value={stage.numberOfBells} 
+                    primaryText={stage.stage}
+                />
+            );
+        });
     }
 
-    handleCompositionChange = (event: React.FormEvent<HTMLSelectElement>, value: string) => { 
+    handlePartsChange = (value: string) => {
+        this.props.dispatch(updateParts(Number(value))); 
+    }
+
+    handleCompositionChange = (value: string) => { 
         this.props.dispatch(updateComposition(value));
-    }
-
-    handlePlaceNotationChange = (event: React.FormEvent<HTMLSelectElement>, value: string) => { 
-        this.props.dispatch(updatePlaceNotation(value)); 
-    }
-
-    handleStageChange = (event: any, index: any, value: any) => {
-        this.props.dispatch(updateStage(value)); 
     }
     
     render() {
         return (
-            <div>
-                <div>
-                    <SelectField floatingLabelText="Stage" value={this.props.stage} onChange={this.handleStageChange}>
+            <div className="text-field-composition-wrapper">
+                <div className="row">
+                    <div className="text-field-composition-label">
+                        Stage 
+                    </div>
+                    <SelectField 
+                        value={this.props.stage} 
+                        onChange={(event, newValue) => this.handleStageChange(newValue)} 
+                        style={styles.compositionStageField}
+                    >
                         {this.getStages()}
                     </SelectField>
                 </div>
-                <br/>
-                <div>
-                    <TextField
-                        name="placeNotation"
-                        hintText="Place Notation"
-                        defaultValue={this.props.placeNotation}
-                        onChange={this.handlePlaceNotationChange}
+                <div className="row">
+                    <div className="text-field-composition-label">
+                        Number of parts 
+                    </div>
+                    <TextField 
+                        style={styles.compositionStageField}
+                        hintText="Parts" 
+                        defaultValue={this.props.parts} 
+                        onChange={(event, newValue) => this.handlePartsChange(newValue)}
                     />
                 </div>
-                <br/>
-                <div>
+                <div className="row composition-multiline-text-field">
                     <TextField
-                        name="composition"
+                        style={styles.compositionCompositionField}
                         hintText="Composition"
                         defaultValue={this.props.composition}
-                        onChange={this.handleCompositionChange}
+                        onChange={(event, newValue) => this.handleCompositionChange(newValue)}
                         multiLine={true}
-                        rows={5}
+                        rows={3}
                     />
                 </div>
             </div>
@@ -59,4 +78,13 @@ class Composition extends React.Component<ICompositionProps> {
     }
 }
 
-export default Composition;
+const mapStateToProps = (store: IStore) => {
+    return {
+        stage: store.compositionReducer.stage,
+        parts: store.compositionReducer.parts,
+        composition: store.compositionReducer.composition,
+    };
+};
+  
+const ConnectedComposition = connect(mapStateToProps)(Composition);
+export default ConnectedComposition;

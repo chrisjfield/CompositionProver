@@ -9,6 +9,7 @@ export interface IStore {
     appReducer: IAppReducerState;
     callReducer: ICallReducerState;
     methodReducer: IMethodReducerState;
+    compositionReducer: ICompositionReducerState;
 }
 
 export interface IAppReducerState {
@@ -42,11 +43,8 @@ export interface IMethodProps extends IMethodReducerState {
     dispatch: Dispatch<{}>;
 }
 
-export interface ICompositionProps {
+export interface ICompositionProps extends ICompositionReducerState {
     dispatch: Dispatch<{}>;
-    stage: number;
-    placeNotation: string;
-    composition: string;
 }
 
 export interface ICallReducerState {
@@ -55,6 +53,12 @@ export interface ICallReducerState {
 
 export interface IMethodReducerState {
     methods: IMethod[];
+}
+
+export interface ICompositionReducerState {
+    stage: number;
+    parts: number;
+    composition: string;
 }
 
 export interface ICall {
@@ -75,5 +79,10 @@ export interface IMethod {
 export interface IStage {
     methods: IMethod[];
     calls: ICall[];
+    numberOfBells: number;
+}
+
+export interface IStageEnum {
+    stage: string;
     numberOfBells: number;
 }

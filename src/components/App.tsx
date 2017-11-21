@@ -26,8 +26,7 @@ class App extends React.Component<IAppProps> {
                     <Tabs>
                         <Tab label="Composition" >
                             <div className="compose-tab">
-                                <Composition dispatch={this.props.dispatch} composition={this.props.composition} 
-                                            placeNotation={this.props.placeNotation} stage={this.props.stage}/>
+                                <Composition />
                             </div>
                         </Tab>
                         <Tab label="Methods" >
