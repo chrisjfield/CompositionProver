@@ -6,7 +6,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 import { IStore, ICompositionProps, IStageEnum } from '../interfaces/Interfaces';
-import { updateComposition, updateParts, updateStage } from '../actions/compositionActions';
+import { updateComposition, updateParts } from '../actions/compositionActions';
+import { setStageDefaults } from '../actions/stageActions';
 import { ringingStages } from '../helpers/stagesHelper';
 
 import styles from '../styles';
@@ -14,7 +15,7 @@ import styles from '../styles';
 class Composition extends React.Component<ICompositionProps, {}> {
 
     handleStageChange = (value: number) => {
-        this.props.dispatch(updateStage(value)); 
+        this.props.dispatch(setStageDefaults(value));
     }
 
     getStages = () => {
@@ -46,7 +47,7 @@ class Composition extends React.Component<ICompositionProps, {}> {
                     </div>
                     <SelectField 
                         value={this.props.stage} 
-                        onChange={(event, newValue) => this.handleStageChange(newValue)} 
+                        onChange={(event, index, newValue) => this.handleStageChange(newValue)} 
                         style={styles.compositionStageField}
                     >
                         {this.getStages()}
@@ -59,7 +60,7 @@ class Composition extends React.Component<ICompositionProps, {}> {
                     <TextField 
                         style={styles.compositionStageField}
                         hintText="Parts" 
-                        defaultValue={this.props.parts} 
+                        value={this.props.parts} 
                         onChange={(event, newValue) => this.handlePartsChange(newValue)}
                     />
                 </div>
@@ -67,7 +68,7 @@ class Composition extends React.Component<ICompositionProps, {}> {
                     <TextField
                         style={styles.compositionCompositionField}
                         hintText="Composition"
-                        defaultValue={this.props.composition}
+                        value={this.props.composition}
                         onChange={(event, newValue) => this.handleCompositionChange(newValue)}
                         multiLine={true}
                         rows={3}

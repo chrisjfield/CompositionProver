@@ -20,7 +20,7 @@ class Calls extends React.Component<ICallProps> {
                 <TextField 
                     style={styles.callTextField}
                     hintText="Place Notation" 
-                    defaultValue={call.callNotation} 
+                    value={call.callNotation ? call.callNotation : ''} 
                     onChange={(event, newValue) => this.handleCallChange(call, newValue)}
                 />
                 {call.coreCall ? null : this.getDeleteButton(call)}

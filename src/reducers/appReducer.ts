@@ -41,6 +41,7 @@ function appReducer(state: IAppReducerState = {
             ...state,
             initialChange,
             stage: action.payload,
+            
         };
     case UPDATE_ROWS:
         return {

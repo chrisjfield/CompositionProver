@@ -7,13 +7,15 @@ import { minor } from '../defaults';
 function compositionReducer(state: ICompositionReducerState = {
     stage: minor.numberOfBells,
     parts: 1,
-    composition: undefined,
+    composition: '',
 },                          action: Action) {
     switch (action.type) {
     case UPDATE_STAGE:
         return {
             ...state,
             stage: action.payload,
+            parts: 1,
+            composition: '',
         };
     case UPDATE_PARTS:
         return {

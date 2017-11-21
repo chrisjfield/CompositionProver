@@ -19,7 +19,7 @@ class Methods extends React.Component<IMethodProps> {
                         <TextField 
                             style={styles.methodNameTextField}
                             hintText="Name" 
-                            defaultValue={method.methodName} 
+                            value={method.methodName ? method.methodName : ''} 
                             onChange={(event, newValue) => this.updateMethodName(method, newValue)}
                         />
                     </div>
@@ -27,7 +27,7 @@ class Methods extends React.Component<IMethodProps> {
                         <TextField 
                             style={styles.methodSymbolTextField}
                             hintText="Code" 
-                            defaultValue={method.methodSymbol} 
+                            value={method.methodSymbol ? method.methodSymbol : ''} 
                             onChange={(event, newValue) => this.updateMethodSymbol(method, newValue)}
                         />
                     </div>
@@ -35,7 +35,7 @@ class Methods extends React.Component<IMethodProps> {
                         <TextField 
                             style={styles.methodPlaceNotationTextField}
                             hintText="Place Notation" 
-                            defaultValue={method.methodPlaceNotation} 
+                            value={method.methodPlaceNotation ? method.methodPlaceNotation : ''}
                             onChange={(event, newValue) => this.updateMethodPlaceNotation(method, newValue)}
                         />
                         {method.coreMethod ? null : this.getDeleteButton(method)}
