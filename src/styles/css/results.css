@@ -12,6 +12,15 @@
     text-decoration: underline;
 }
 
+.group-heading {
+    text-decoration: underline;
+    padding-left: 15px;
+}
+
+.group-heading > h4 {
+    font-weight: bold;
+}
+
 .important-changes-row {
     text-align: center;
     font-size: 16px;

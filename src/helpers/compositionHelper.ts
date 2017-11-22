@@ -19,6 +19,7 @@ export function generateResults() {
         resultsHelper = generatePart(currentStore, resultsHelper, lastPart);
     }
     resultsHelper.results.numberOfChanges = resultsHelper.results.grid.length;
+    resultsHelper.results.truth = getTruth(currentStore.compositionReducer.stage, resultsHelper.results.grid);
     resultsHelper.results.musicalChanges = getMusicalChanges(currentStore.compositionReducer.stage, resultsHelper.results.grid);
 
     store.dispatch(updateResults(resultsHelper.results)); 
@@ -167,4 +168,50 @@ function getBackChangeCount(rows: string[], change1: string, change2: string) {
     const count: number = filteredRows ? filteredRows.length : 0;
 
     return count;
+}
+
+function getTruth(stage: number, rows: string[]) {
+    let truth: boolean = true;
+    let rowsToCheck: string[] = rows;
+    const numberOfRows: number = rows.length;
+    const extent: number = getFactorial(stage);
+    // plus one to account for exact multiples of an extent - these will have 0 allowed of the next repeat number)
+    const maxNumberOfEachChanges: number = Math.ceil((numberOfRows + 1) / extent);
+    let numberOfMaxRepeatsLeft: number = numberOfRows % extent;
+
+    // each change may only occur maxNumberOfEachChanges times or maxNumberOfEachChanges - 1 to get the most even spread possible
+    // there are only numberOfMaxRepeatsLeft instances of each change repeating maxNumberOfEachChanges times.
+    // therefore take a change, check if it repeats the right number of times, if so remove all instances from array.
+    // if it repeats max times, take 1 from number of repeats
+    // if it repeats outside the allowed range or number of max repeats drops below 0 it is false.
+    while (truth && rowsToCheck.length > 0) {
+        const rowToCheck: string = rowsToCheck[0];
+        const countOfRows: number = rowsToCheck.filter(row => row === rowToCheck).length;
+
+        // check if row is repeated an ok number of times
+        if (countOfRows === maxNumberOfEachChanges) {
+            numberOfMaxRepeatsLeft -= 1;
+        } else if (countOfRows === maxNumberOfEachChanges - 1) {
+            numberOfMaxRepeatsLeft = numberOfMaxRepeatsLeft;
+        } else {
+            truth = false;
+        }
+
+        // check if we have gone over the max number or maximum repeats
+        if (numberOfMaxRepeatsLeft < 0) {
+            truth = false;
+        }
+
+        // filter the rows left to check
+        rowsToCheck = rowsToCheck.filter(row => row !== rowToCheck);
+    }
+
+    return truth;
+}
+
+function getFactorial(number: number) {
+    let rval = 1;
+    for (let i = 2; i <= number; i += 1)
+        rval = rval * i;
+    return rval;
 }

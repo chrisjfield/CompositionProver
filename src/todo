@@ -1,15 +1,3 @@
-
-
-results page show:
-* row count
-* change of method count
-* lead ends
-* course ends
-* musical changes count
-* grid
-* highlight false rows in red
-
-Row 2: musical changes, queens, tittumns, reverse rounds, rollups, front bell runs (1234) (lookup what people send up)
 Row 4: grid
 
 publish and check mobile (tabs?)
@@ -20,3 +8,6 @@ Lookup methods - repeating notations? see what i need to use
 How to Use tab
 validation
 save setups
+
+
+str=str.replace(/4/g,"<font color='red'>4</font>");

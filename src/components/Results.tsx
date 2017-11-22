@@ -102,6 +102,79 @@ class Results extends React.Component<IResultProps> {
         );
     }
 
+    getMusicalChanges = () => {
+        return (
+            <div className="row">
+                <div className="col-sm-4">
+                    <span className="text-field-results-label">
+                        Queens
+                    </span>
+                    <TextField 
+                        name="queens"
+                        style={styles.resultTruthTextField}
+                        disabled={true}
+                        value={this.props.musicalChanges.queens} 
+                    />
+                </div>
+                <div className="col-sm-4">
+                    <span className="text-field-results-label">
+                        Tittums
+                    </span>
+                    <TextField 
+                        name="tittums"
+                        style={styles.resultTruthTextField}
+                        disabled={true}
+                        value={this.props.musicalChanges.tittums} 
+                    />
+                </div>
+                <div className="col-sm-4">
+                    <span className="text-field-results-label">
+                        Rollups (Front)
+                    </span>
+                    <TextField 
+                        name="rollupsf"
+                        style={styles.resultTruthTextField}
+                        disabled={true}
+                        value={this.props.musicalChanges.rollupsFront} 
+                    />
+                </div>
+                <div className="col-sm-4">
+                    <span className="text-field-results-label">
+                        Rollups (Back)
+                    </span>
+                    <TextField 
+                        name="rollupsb"
+                        style={styles.resultTruthTextField}
+                        disabled={true}
+                        value={this.props.musicalChanges.rollupsBack} 
+                    />
+                </div>
+                <div className="col-sm-4">
+                    <span className="text-field-results-label">
+                        Little Bells (Front)
+                    </span>
+                    <TextField 
+                        name="littlebellsf"
+                        style={styles.resultTruthTextField}
+                        disabled={true}
+                        value={this.props.musicalChanges.littleBellsFront} 
+                    />
+                </div>
+                <div className="col-sm-4">
+                    <span className="text-field-results-label">
+                        Little Bells (Back)
+                    </span>
+                    <TextField 
+                        name="littlebellsb"
+                        style={styles.resultTruthTextField}
+                        disabled={true}
+                        value={this.props.musicalChanges.littleBellsBack} 
+                    />
+                </div>
+            </div>
+        );
+    }
+
     getChanges = (rowArray: string[]) => {
         return rowArray.map((row: string, index: number) => (
             <div key={index} className="row important-changes-row">
@@ -113,7 +186,14 @@ class Results extends React.Component<IResultProps> {
     render() {
         return (
             <div className="results-wrapper">
+                <div className="row group-heading">
+                    <h4>Statistics</h4>
+                </div>
                 {this.getCompositionStats()}
+                <div className="row group-heading">
+                    <h4>Music</h4>
+                </div>
+                {this.getMusicalChanges()}
                 {this.getImportantChanges()}
             </div>
         );
