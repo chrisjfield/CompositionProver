@@ -1,8 +1,10 @@
 import { Action, IResultReducerState } from '../interfaces/Interfaces';
 
+import { getInitialResults } from '../helpers/stagesHelper';
+
 import { SET_RESULTS } from '../actions/resultsActions';
 
-function resultsReducer(state: IResultReducerState = null, action: Action) {
+function resultsReducer(state: IResultReducerState = getInitialResults(6).results, action: Action) {
     switch (action.type) {
     case SET_RESULTS:
         return {

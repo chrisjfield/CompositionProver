@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
-import { IResultProps } from '../interfaces/Interfaces';
+import { IStore, IResultProps } from '../interfaces/Interfaces';
 
 class Results extends React.Component<IResultProps> {
 
     displayRows = () => {
-        return this.props.rows.map((row: string, index: number) => (
+        return this.props.grid.map((row: string, index: number) => (
             <div key={index}>{String(index) + ' - ' + row}</div>
         ));
     }
@@ -23,14 +24,27 @@ class Results extends React.Component<IResultProps> {
     render() {
         return (
             <div>
-                {this.props.rows.length > 1 ? this.displayTruth() : null} 
+                {this.props.grid.length > 1 ? this.displayTruth() : null} 
                 <br/>
-                {this.props.rows.length > 1 ? this.displayRows() : null}
+                {this.props.grid.length > 1 ? this.displayRows() : null}
                 <br/>
-                {this.props.rows.length > 1 ? this.displayLeadEnds() : null}
+                {this.props.grid.length > 1 ? this.displayLeadEnds() : null}
             </div>
         );
     }
 }
 
-export default Results;
+const mapStateToProps = (store: IStore) => {
+    return {
+        grid: store.resultReducer.grid,
+        leadEnds: store.resultReducer.leadEnds,
+        courseEnds: store.resultReducer.courseEnds,
+        partEnds: store.resultReducer.partEnds,
+        numberOfChanges: store.resultReducer.numberOfChanges,
+        changesOfMethod: store.resultReducer.changesOfMethod,
+        truth: store.resultReducer.truth,
+    };
+};
+  
+const ConnectedResults = connect(mapStateToProps)(Results);
+export default ConnectedResults;

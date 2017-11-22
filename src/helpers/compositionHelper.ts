@@ -15,8 +15,7 @@ export function generateResults() {
         const lastPart: boolean = i === currentStore.compositionReducer.parts;
         resultsHelper = generatePart(currentStore, resultsHelper, lastPart);
     }
-
-    console.log(resultsHelper);
+    console.log(resultsHelper.results);
     store.dispatch(updateResults(resultsHelper.results)); 
 }
 
@@ -50,7 +49,9 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
     for (let i = 0, len = leadPlaceNotation.length; i < len; i += 1) {
         leadHelper = generateRows(currentStore, leadHelper, leadPlaceNotation[i]);
 
-        if (lastLead && leadHelper.latestChange.toString() === leadHelper.initialChange.toString()) {
+        // if it comes round in the last lead stop calculating - it's a snap finish
+        if (lastLead && i !== leadPlaceNotation.length - 1 
+            && leadHelper.latestChange.toString() === leadHelper.initialChange.toString()) {
             return leadHelper;
         }
     }
@@ -67,7 +68,7 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
 
 function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSymbol: string) {
     const method = currentStore.methodReducer.methods.find(method => method.methodSymbol === methodSymbol);
-    const placeNotationArray: string[] = method.methodPlaceNotation.split('.');
+    const placeNotationArray: string[] = method && method.methodPlaceNotation ? method.methodPlaceNotation.split('.') : [];
     const call = currentStore.callReducer.calls.find(call => call.callSymbol === callSymbol);  
 
     if (call && call.callNotation) {

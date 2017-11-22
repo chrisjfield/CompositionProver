@@ -71,7 +71,7 @@ export function getInitialResults(stage: number) {
             courseEnds: [],
             partEnds: [],
             numberOfChanges: 0,
-            truth: true,
+            truth: undefined,
         },
     };
 

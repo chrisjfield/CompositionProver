@@ -6,34 +6,14 @@ export interface Action {
 }
 
 export interface IStore {
-    appReducer: IAppReducerState;
     callReducer: ICallReducerState;
     methodReducer: IMethodReducerState;
     compositionReducer: ICompositionReducerState;
-    resultReducerState: IResultReducerState;
+    resultReducer: IResultReducerState;
 }
 
-export interface IAppReducerState {
-    single: string;
-    bob: string;
-    extreme: string;
-    stage: number;
-    placeNotation: string;
-    composition: string;
-    rows: string[];
-    initialChange: number[];
-    leadEnds: string[];
-    truth: boolean;
-}
-
-export interface IAppProps extends IAppReducerState {
+export interface IResultProps extends IResultReducerState {
     dispatch: Dispatch<{}>;
-}
-
-export interface IResultProps {
-    leadEnds: string[];
-    rows: string[];
-    truth: boolean;
 }
 
 export interface ICallProps extends ICallReducerState {
