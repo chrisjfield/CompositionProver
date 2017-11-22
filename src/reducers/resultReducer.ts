@@ -16,6 +16,8 @@ function resultsReducer(state: IResultReducerState = getInitialResults(6).result
             numberOfChanges: action.payload.numberOfChanges,
             changesOfMethod: action.payload.changesOfMethod,
             truth: action.payload.truth,
+            initialChangeString: action.payload.initialChangeString,
+            musicalChanges: action.payload.musicalChanges,
         };
     default:
         return state;

@@ -1,0 +1,32 @@
+.results-wrapper {
+    padding: 15px;
+}
+
+.text-field-results-label {
+    width: 140px;
+    display: inline-block;
+}
+
+.text-field-changes-label {
+    text-align: center;
+    text-decoration: underline;
+}
+
+.important-changes-row {
+    text-align: center;
+    font-size: 16px;
+}
+
+.important-changes-row-header {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.results-hr {
+    margin: auto;
+    width: 160px;
+    border-color: black;
+    border-width: 2px;
+    padding: 2px;
+}

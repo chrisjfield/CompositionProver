@@ -50,14 +50,25 @@ export interface IResultReducerState {
     numberOfChanges: number;
     changesOfMethod: number;
     truth: boolean;
+    initialChangeString: string;
+    musicalChanges: IMusicalChanges;
 }
 
 export interface IResultsHelper {
     results: IResultReducerState;
-    latestChange: number[];
+    latestChange: string[];
     latestMethod: string;
     latestRow: string;
-    initialChange: number[];
+    initialChange: string[];
+}
+
+export interface IMusicalChanges {
+    queens: number;
+    tittums: number;
+    rollupsFront: number;
+    rollupsBack: number;
+    littleBellsFront: number;
+    littleBellsBack: number;
 }
 
 export interface ICall {
@@ -85,3 +96,4 @@ export interface IStageEnum {
     stage: string;
     numberOfBells: number;
 }
+

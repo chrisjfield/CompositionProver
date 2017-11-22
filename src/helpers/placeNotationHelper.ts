@@ -16,3 +16,22 @@ export function getPositionFromNotationCharacter(character: string) {
 
     return position;
 }
+
+export function getNotationCharacterFromPosition(position: number) {
+    let character: string;
+    switch (position) {
+    case 10:
+        character = '0';
+        break;
+    case 11:
+        character = 'E';
+        break;
+    case 12:
+        character = 'T';
+        break;
+    default: 
+        character = String(position);
+    }
+
+    return character;
+}

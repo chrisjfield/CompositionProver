@@ -19,6 +19,15 @@ const styles: { [name: string]: React.CSSProperties } = {
         width: '100%',
         maxWidth: 320,
     },
+    resultTruthTextField: {
+        width: 60,
+    },
+    truthFieldTrue: {
+        color: 'green',
+    },
+    truthFieldFalse: {
+        color: 'red',
+    },
 };
 
 export default styles;

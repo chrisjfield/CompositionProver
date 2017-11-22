@@ -1,9 +1,12 @@
 import store from './store';
 
-import { IStore, IResultsHelper } from '../interfaces/Interfaces';
+import { IStore, IResultsHelper, IMusicalChanges } from '../interfaces/Interfaces';
 
-import { getPositionFromNotationCharacter } from '../helpers/placeNotationHelper';
-import { getInitialResults } from '../helpers/stagesHelper';
+import { getPositionFromNotationCharacter, getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
+import { 
+    getInitialResults, getStageQueens, getStageTittums,
+    getStageRollupsForward, getStageRollupsBackward, 
+} from '../helpers/stagesHelper';
 
 import { updateResults } from '../actions/resultsActions';
 
@@ -15,7 +18,9 @@ export function generateResults() {
         const lastPart: boolean = i === currentStore.compositionReducer.parts;
         resultsHelper = generatePart(currentStore, resultsHelper, lastPart);
     }
-    console.log(resultsHelper.results);
+    resultsHelper.results.numberOfChanges = resultsHelper.results.grid.length;
+    resultsHelper.results.musicalChanges = getMusicalChanges(currentStore.compositionReducer.stage, resultsHelper.results.grid);
+
     store.dispatch(updateResults(resultsHelper.results)); 
 }
 
@@ -59,7 +64,8 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
     leadHelper.results.leadEnds.push(leadHelper.latestRow);
 
     // Add the course end if the change ends with the tenor
-    if (leadHelper.latestChange[leadHelper.latestChange.length - 1] === currentStore.compositionReducer.stage) {
+    if (leadHelper.latestChange[leadHelper.latestChange.length - 1] 
+        === getNotationCharacterFromPosition(currentStore.compositionReducer.stage)) {
         leadHelper.results.courseEnds.push(leadHelper.latestRow);
     }
 
@@ -89,9 +95,9 @@ function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSy
 export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper, notation: string) {
     const rowHelper: IResultsHelper = resultsHelper;
     const numberOfBells: number = currentStore.compositionReducer.stage;
-    const latestChange: number[] = rowHelper.latestChange;
-    const nextChange: number[] = [];
-    const coverBell: string = (numberOfBells % 2) ? ' ' + String(numberOfBells + 1) : '';
+    const latestChange: string[] = rowHelper.latestChange;
+    const nextChange: string[] = [];
+    const coverBell: number = (numberOfBells % 2) ? numberOfBells + 1 : undefined;
     
     for (let i = 0, len = notation.length; i < len; i += 1) {
         const position: number = getPositionFromNotationCharacter(notation[i]);
@@ -112,8 +118,53 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
     }
     
     rowHelper.latestChange = nextChange;
-    rowHelper.latestRow = nextChange.join(' ') + coverBell;
+
+    // Add in the cover bell smf set the latest row as string
+    if (coverBell) {
+        nextChange.push(getNotationCharacterFromPosition(coverBell));
+    }
+    rowHelper.latestRow = nextChange.join(' ');
     rowHelper.results.grid.push(rowHelper.latestRow);
 
     return rowHelper;
+}
+
+function getMusicalChanges(stage: number, rows: string[]) {
+    const queens: string = getStageQueens(stage);
+    const tittums: string = getStageTittums(stage);
+    const rollupsForward: string = getStageRollupsForward(stage);
+    const rollupsBackward: string = getStageRollupsBackward(stage);
+    const frontBellRunForward: string = '1 2 3 4';
+    const frontBellRunBackward: string = '4 3 2 1';
+    const musicalChanges: IMusicalChanges = {
+        queens: getExactChangeCount(rows, queens),
+        tittums: getExactChangeCount(rows, tittums),
+        littleBellsBack: getBackChangeCount(rows, frontBellRunForward, frontBellRunBackward),
+        littleBellsFront: getFrontChangeCount(rows, frontBellRunForward, frontBellRunBackward),
+        rollupsBack: getBackChangeCount(rows, rollupsForward, rollupsBackward),
+        rollupsFront: getFrontChangeCount(rows, rollupsForward, rollupsBackward),
+    };
+
+    return musicalChanges;
+}
+
+function getExactChangeCount(rows: string[], change1: string) {
+    const filteredRows: string[] = rows.filter(row => row === change1);
+    const count: number = filteredRows ? filteredRows.length : 0;
+
+    return count;
+}
+
+function getFrontChangeCount(rows: string[], change1: string, change2: string) {
+    const filteredRows: string[] = rows.filter(row => row.startsWith(change1) || row.startsWith(change2));
+    const count: number = filteredRows ? filteredRows.length : 0;
+
+    return count;
+}
+
+function getBackChangeCount(rows: string[], change1: string, change2: string) {
+    const filteredRows: string[] = rows.filter(row => row.endsWith(change1) || row.endsWith(change2));
+    const count: number = filteredRows ? filteredRows.length : 0;
+
+    return count;
 }
