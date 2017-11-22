@@ -1,13 +1,4 @@
-Lookup methods
-How to Use tab
-
-composition page
-default stages
-
-bobs with multiple notations
 repeating notations (with comma) (split on comma, keep le change, pop and push)
-
-allow method splicing
 
 results page show:
 * row count
@@ -16,7 +7,17 @@ results page show:
 * course ends
 * musical changes count
 * grid
+* highlight false rows in red
+
+Top row: truth, changes, change of method count
+Row 2: musical changes, queens, tittumns, reverse rounds, rollups, front bell runs (1234) (lookup what people send up)
+Row 3: end changes - part ends, course ends, lead ends
+Row 4: grid
 
 publish and check mobile (tabs?)
 
+set defaults
+Lookup methods
+How to Use tab
+validation
 save setups

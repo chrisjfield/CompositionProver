@@ -5,7 +5,7 @@ import Paper from 'material-ui/Paper';
 import { Tabs, Tab } from 'material-ui/Tabs';
 
 import { IAppProps, IStore } from '../interfaces/Interfaces';
-import { generateRows } from '../helpers/compositionHelper';
+import { generateResults } from '../helpers/compositionHelper';
 
 import Results from './Results';
 import Composition from './Composition';
@@ -13,11 +13,6 @@ import Calls from './Calls';
 import Methods from './Methods';
 
 class App extends React.Component<IAppProps> {
-
-    compose = () => {
-        generateRows(this.props.dispatch, this.props.composition, this.props.stage, this.props.placeNotation, this.props.initialChange,
-                     this.props.bob, this.props.extreme, this.props.single);
-    }
 
     render() {
         return (
@@ -39,7 +34,7 @@ class App extends React.Component<IAppProps> {
                                 <Calls />
                             </div>
                         </Tab>
-                        <Tab label="Results" onActive={this.compose}>
+                        <Tab label="Results" onActive={generateResults}>
                             <div className="compose-tab">
                                 <Results leadEnds={this.props.leadEnds} rows={this.props.rows} truth={this.props.truth}/>
                             </div>

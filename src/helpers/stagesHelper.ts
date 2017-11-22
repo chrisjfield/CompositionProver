@@ -1,4 +1,4 @@
-import { IStageEnum, IStage } from '../interfaces/Interfaces';
+import { IStageEnum, IStage, IResultsHelper } from '../interfaces/Interfaces';
 import { minimus, doubles, minor, triples, major, caters, royal, cinques, maximus } from '../defaults';
 
 export const ringingStages: IStageEnum[] = [
@@ -46,4 +46,34 @@ export function getStageDefaults(stage: number) {
     }
 
     return stageDefault;
+}
+
+export function getInitialResults(stage: number) {
+    // add a cover bell if needed
+    const stageWithCover: number = (stage % 2) ? stage + 1 : stage;
+
+    // generate the initial array and string
+    const initialChange: number[] = [];
+    for (let i = 1; i <= stageWithCover; i += 1) { 
+        initialChange.push(i);
+    }
+    const initialChangeString: string = initialChange.join(' ');
+
+    const resultsDefault: IResultsHelper = {
+        initialChange,
+        latestChange: initialChange,
+        latestMethod: undefined,
+        latestRow: undefined,
+        results: {
+            changesOfMethod: 0,
+            grid: [initialChangeString],
+            leadEnds: [],
+            courseEnds: [],
+            partEnds: [],
+            numberOfChanges: 0,
+            truth: true,
+        },
+    };
+
+    return resultsDefault;
 }

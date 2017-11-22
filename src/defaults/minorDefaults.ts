@@ -4,7 +4,7 @@ const minor: IStage = {
     methods: [
         { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'X.16.X.16.X.16.X.16.X.16.X.12', coreMethod: true },
         { methodId: 2, methodSymbol: 'og', methodName: 'Original', methodPlaceNotation: 'X.16.X.16.X.16.X.16.X.16.X.16', coreMethod: true },
-        { methodId: 3, methodSymbol: 'cm', methodName: 'Cambridge Surprise Minor', methodPlaceNotation: 'X.36.X.14.X.12.X.36.X.14.X.56.X.36.X.14.X.12.X.36.X.14.X.12', coreMethod: true },
+        { methodId: 3, methodSymbol: 'cm', methodName: 'Cambridge Surprise Minor', methodPlaceNotation: 'X.36.X.14.X.12.X.36.X.14.X.56.X.14.X.36.X.12.X.14.X.36.X.12', coreMethod: true },
         { methodId: 4, coreMethod: true },
     ],
     calls: [

@@ -10,6 +10,7 @@ export interface IStore {
     callReducer: ICallReducerState;
     methodReducer: IMethodReducerState;
     compositionReducer: ICompositionReducerState;
+    resultReducerState: IResultReducerState;
 }
 
 export interface IAppReducerState {
@@ -59,6 +60,24 @@ export interface ICompositionReducerState {
     stage: number;
     parts: number;
     composition: string;
+}
+
+export interface IResultReducerState {
+    grid: string[];
+    leadEnds: string[];
+    courseEnds: string[];
+    partEnds: string[];
+    numberOfChanges: number;
+    changesOfMethod: number;
+    truth: boolean;
+}
+
+export interface IResultsHelper {
+    results: IResultReducerState;
+    latestChange: number[];
+    latestMethod: string;
+    latestRow: string;
+    initialChange: number[];
 }
 
 export interface ICall {
