@@ -39,3 +39,12 @@
     border-width: 2px;
     padding: 2px;
 }
+
+.grid-row {
+    text-align: center;
+    font-size: 16px;
+}
+
+.grid-row-bell {
+    padding: 2px;
+}

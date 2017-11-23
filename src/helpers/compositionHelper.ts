@@ -124,7 +124,9 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
     if (coverBell) {
         nextChange.push(getNotationCharacterFromPosition(coverBell));
     }
+    
     rowHelper.latestRow = nextChange.join(' ');
+    rowHelper.results.rows.push(nextChange);
     rowHelper.results.grid.push(rowHelper.latestRow);
 
     return rowHelper;

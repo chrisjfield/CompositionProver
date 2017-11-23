@@ -43,6 +43,7 @@ export interface ICompositionReducerState {
 }
 
 export interface IResultReducerState {
+    rows: string[][];
     grid: string[];
     leadEnds: string[];
     courseEnds: string[];

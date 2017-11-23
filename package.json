@@ -1,5 +1,6 @@
 {
-  "name": "compose",
+  "homepage": "http://compositionprover.surge.sh/",
+  "name": "compositionprover",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,13 +22,15 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "deploy": "npm run build && cd ./build && rename index.html 200.html && surge -p ./ -d compositionprover.surge.sh"
   },
   "devDependencies": {
     "@types/jest": "^21.1.6",
     "@types/node": "^8.0.51",
     "@types/react": "^16.0.22",
     "@types/react-dom": "^16.0.3",
+    "surge": "^0.19.0",
     "tslint": "^5.8.0",
     "tslint-config-airbnb": "^5.3.1",
     "tslint-react": "^3.2.0"

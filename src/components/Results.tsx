@@ -8,22 +8,6 @@ import styles from '../styles';
 
 class Results extends React.Component<IResultProps> {
 
-    displayRows = () => {
-        return this.props.grid.map((row: string, index: number) => (
-            <div key={index}>{String(index) + ' - ' + row}</div>
-        ));
-    }
-
-    displayLeadEnds = () => {
-        return this.props.leadEnds.map((leadEnd: string, index: number) => (
-            <div key={index}>{String(index + 1) + ' - ' + leadEnd}</div>
-        ));
-    }
-    
-    displayTruth = () => {
-        return this.props.truth ? 'True' : 'False';
-    }
-
     getCompositionStats = () => {
         return (
             <div className="row">
@@ -183,6 +167,35 @@ class Results extends React.Component<IResultProps> {
         ));
     }
 
+    getGrid = () => {
+        return (
+            <div>
+                <div key="initial" className="row important-changes-row-header">
+                    {this.props.initialChangeString}
+                </div>
+                <hr className="results-hr"/>
+                {this.getGridRow()}
+            </div>
+        );
+    }
+
+    getGridRow = () => {
+        return this.props.rows.map((row: string[], index: number) => (
+            <div key={index} className="row grid-row">
+                {row.map((bell: string) => this.getGridBell(bell, index))}
+            </div>
+            
+        ));
+    }
+
+    getGridBell = (bell: string, rowIndex: number) => {
+        return (
+            <span key={String(rowIndex) + bell} className={'grid-row-bell grid-row-' + rowIndex + '-' + bell}>
+                {bell}
+            </span>
+        );
+    }
+
     render() {
         return (
             <div className="results-wrapper">
@@ -194,7 +207,14 @@ class Results extends React.Component<IResultProps> {
                     <h4>Music</h4>
                 </div>
                 {this.getMusicalChanges()}
+                <div className="row group-heading">
+                    <h4>Section Ends</h4>
+                </div>
                 {this.getImportantChanges()}
+                <div className="row group-heading">
+                    <h4>Grid</h4>
+                </div>
+                {this.getGrid()}
             </div>
         );
     }
@@ -202,6 +222,7 @@ class Results extends React.Component<IResultProps> {
 
 const mapStateToProps = (store: IStore) => {
     return {
+        rows: store.resultReducer.rows,
         grid: store.resultReducer.grid,
         leadEnds: store.resultReducer.leadEnds,
         courseEnds: store.resultReducer.courseEnds,
