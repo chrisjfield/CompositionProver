@@ -64,9 +64,12 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
     // Add the lead end to the results
     leadHelper.results.leadEnds.push(leadHelper.latestRow);
 
+    const lastBell: string = (currentStore.compositionReducer.stage % 2 === 0) 
+        ? leadHelper.latestChange[leadHelper.latestChange.length - 1] 
+        : leadHelper.latestChange[leadHelper.latestChange.length - 2];
+
     // Add the course end if the change ends with the tenor
-    if (leadHelper.latestChange[leadHelper.latestChange.length - 1] 
-        === getNotationCharacterFromPosition(currentStore.compositionReducer.stage)) {
+    if (lastBell === getNotationCharacterFromPosition(currentStore.compositionReducer.stage)) {
         leadHelper.results.courseEnds.push(leadHelper.latestRow);
     }
 

@@ -3,9 +3,7 @@ import { IStage } from '../interfaces/Interfaces';
 const minimus: IStage = {
     methods: [
         { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'X.14.X.14.X.14.X.12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'og', methodName: 'Original', methodPlaceNotation: 'X.14.X.14.X.14.X.14', coreMethod: true },
-        { methodId: 3, coreMethod: true },
-        { methodId: 4, coreMethod: true },
+        { methodId: 2, methodSymbol: 'rc', methodName: 'Reverse Caterbury', methodPlaceNotation: '34.14.X.14.X.14.34.12', coreMethod: true },
     ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', coreCall: true },
