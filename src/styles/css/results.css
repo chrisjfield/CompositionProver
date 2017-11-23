@@ -32,6 +32,12 @@
     font-weight: bold;
 }
 
+.grid-header {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
 .results-hr {
     margin: auto;
     width: 160px;
@@ -47,4 +53,8 @@
 
 .grid-row-bell {
     padding: 2px;
+}
+
+.grid-column {
+    margin-bottom: 70px;
 }

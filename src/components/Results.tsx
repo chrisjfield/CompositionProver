@@ -168,23 +168,42 @@ class Results extends React.Component<IResultProps> {
     }
 
     getGrid = () => {
+        const changesPerColumn: number = 100;
+        const rowsArray = this.props.rows;
+        const columnArray: string[][][] = [];
+
+        for (let i = 0, len = this.props.numberOfChanges; i < len; i += changesPerColumn) {
+            columnArray.push(rowsArray.slice(i , i + changesPerColumn));
+        }
+
         return (
             <div>
-                <div key="initial" className="row important-changes-row-header">
-                    {this.props.initialChangeString}
+                <div key="initial" className="row">
+                    <div className="col-lg-2 col-md-3 col-sm-4 grid-header">
+                        {this.props.initialChangeString}
+                        <hr className="results-hr"/>
+                    </div>
                 </div>
-                <hr className="results-hr"/>
-                {this.getGridRow()}
+                <div className="row">
+                    {columnArray.map((rows: string[][]) => this.getGridColumns(rows))}
+                </div>
             </div>
         );
     }
 
-    getGridRow = () => {
-        return this.props.rows.map((row: string[], index: number) => (
+    getGridColumns = (rows: string[][]) => {
+        return (
+            <div className="col-lg-2 col-md-3 col-sm-4 grid-column">
+                {this.getGridRow(rows)}
+            </div>
+        );
+    }
+
+    getGridRow = (rows: string[][]) => {
+        return rows.map((row: string[], index: number) => (
             <div key={index} className="row grid-row">
                 {row.map((bell: string) => this.getGridBell(bell, index))}
             </div>
-            
         ));
     }
 
