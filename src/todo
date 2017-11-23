@@ -1,11 +1,9 @@
 persist
 
-lines for grid
 set defaults
 Lookup methods - repeating notations? see what i need to use
 How to Use tab
 scrollable tabs for mobile
 validation
 save setups
-
-str=str.replace(/4/g,"<font color='red'>4</font>");
+lines for grid

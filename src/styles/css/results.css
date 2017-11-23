@@ -58,3 +58,38 @@
 .grid-column {
     margin-bottom: 70px;
 }
+
+.grid-highlighted-treble {
+    color: red;
+}
+
+.grid-highlighted-bell {
+    color: blue;
+    font-weight: bold;
+}
+
+.grid-toggle {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.grid-options-first {
+    margin-top: 15px;
+}
+
+.text-field-results-grid-options-treble {
+    width: 150px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.grid-selected-bell {
+    display: inline-block;
+}
+
+.text-field-results-grid-options-inside {
+    width: 150px;
+    display: inline-block;
+    padding-bottom: 25px;
+    vertical-align: bottom;
+}

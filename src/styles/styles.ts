@@ -28,6 +28,10 @@ const styles: { [name: string]: React.CSSProperties } = {
     truthFieldFalse: {
         color: 'red',
     },
+    resultWorkingBellField: {
+        width: 100,
+        textAlign: 'right',
+    },
 };
 
 export default styles;

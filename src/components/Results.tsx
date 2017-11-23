@@ -2,11 +2,28 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 
 import { IStore, IResultProps } from '../interfaces/Interfaces';
 import styles from '../styles';
+import { getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
 
-class Results extends React.Component<IResultProps> {
+interface IResultState {
+    showTreble: boolean;
+    showWorkingBell: string;
+}
+
+class Results extends React.Component<IResultProps, IResultState> {
+    constructor(props: IResultProps) {
+        super(props);
+
+        this.state = {
+            showTreble: true,
+            showWorkingBell: '2',
+        };
+    }
 
     getCompositionStats = () => {
         return (
@@ -208,11 +225,80 @@ class Results extends React.Component<IResultProps> {
     }
 
     getGridBell = (bell: string, rowIndex: number) => {
+        const showTreblePath: string = (bell === '1' && this.state.showTreble && this.state.showWorkingBell !== bell) 
+            ? ' grid-highlighted-treble' 
+            : '';
+        const highlightPath: string = (bell === this.state.showWorkingBell) ? ' grid-highlighted-bell' : '';
+
         return (
-            <span key={String(rowIndex) + bell} className={'grid-row-bell grid-row-' + rowIndex + '-' + bell}>
+            <span key={String(rowIndex) + bell} 
+                className={'grid-row-bell grid-row-' + rowIndex + '-' + bell + highlightPath + showTreblePath}>
                 {bell}
             </span>
         );
+    }
+
+    getGridOptions = () => {
+        return (
+            <div>
+                <div className="row grid-options-first">
+                    <div className="col-sm-6">
+                        <span className="text-field-results-grid-options-treble">
+                            Hightlight Treble Path
+                        </span>
+                        <div className="grid-toggle">
+                            <Toggle 
+                                toggled={this.state.showTreble} 
+                                onToggle={(event, isInputChecked) => this.toggle(isInputChecked)}/>
+                        </div>
+                    </div>  
+                </div>
+                <div className="row grid-options">
+                    <div className="col-sm-6">
+                        <div className="text-field-results-grid-options-inside">
+                            Hightlight Working Bell
+                        </div>
+                        <div className="grid-selected-bell">
+                            <SelectField 
+                                value={this.state.showWorkingBell} 
+                                onChange={(event, index, newValue) => this.showBell(newValue)} 
+                                style={styles.resultWorkingBellField}
+                            >
+                                <MenuItem key={null} value={null} primaryText={'none'} />
+                                {this.getWorkingBells()}
+                            </SelectField>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        );
+    }
+
+    getWorkingBells = () => {
+        const bellsArray: string[] = [];
+        const numberOfBells: number = this.props.rows[0] ? this.props.rows[0].length : 0;
+
+        for (let i = 1; i <= numberOfBells; i += 1) {
+            bellsArray.push(getNotationCharacterFromPosition(i));
+        }
+
+        return bellsArray.map((bell: string, index: number) => {
+            return (
+                <MenuItem key={bell} value={bell} primaryText={bell} />
+            );
+        });
+    }
+
+    toggle = (isInputChecked: boolean) => {
+        this.setState({
+            showTreble: isInputChecked,
+        });
+    }
+
+    showBell = (bell: string) => {
+        this.setState({
+            showWorkingBell: bell,
+        });
     }
 
     render() {
@@ -233,6 +319,7 @@ class Results extends React.Component<IResultProps> {
                 <div className="row group-heading">
                     <h4>Grid</h4>
                 </div>
+                {this.getGridOptions()}
                 {this.getGrid()}
             </div>
         );
