@@ -184,16 +184,16 @@ class Results extends React.Component<IResultProps> {
                         <hr className="results-hr"/>
                     </div>
                 </div>
-                <div className="row">
-                    {columnArray.map((rows: string[][]) => this.getGridColumns(rows))}
+                <div key="columns" className="row">
+                    {columnArray.map((rows: string[][], index: number) => this.getGridColumns(rows, index))}
                 </div>
             </div>
         );
     }
 
-    getGridColumns = (rows: string[][]) => {
+    getGridColumns = (rows: string[][], index: number) => {
         return (
-            <div className="col-lg-2 col-md-3 col-sm-4 grid-column">
+            <div key={index} className="col-lg-2 col-md-3 col-sm-4 grid-column">
                 {this.getGridRow(rows)}
             </div>
         );
