@@ -1,6 +1,6 @@
 import store from './store';
 
-import { IStore, IResultsHelper, IMusicalChanges } from '../interfaces/Interfaces';
+import { IStore, IResultsHelper, IMusicalChanges, ILeadResults } from '../interfaces/Interfaces';
 
 import { getPositionFromNotationCharacter, getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
 import { 
@@ -43,6 +43,12 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
     let leadHelper = resultsHelper;
     const call: string = leadCall.substr(leadCall.length - 1);
     const method: string = leadCall.substr(0, leadCall.length - 1);
+    const leadResults: ILeadResults = {
+        call,
+        method,
+        leadEnd: null,
+        rows: [],
+    };
     const leadPlaceNotation: string[] = getLeadPlaceNotation(currentStore, method, call);
     
     // add to change of method if new method differs from previous and it's not the first.
@@ -54,7 +60,7 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
 
     for (let i = 0, len = leadPlaceNotation.length; i < len; i += 1) {
         leadHelper = generateRows(currentStore, leadHelper, leadPlaceNotation[i]);
-
+        leadResults.rows.push(leadHelper.latestChange);
         // if it comes round in the last lead stop calculating - it's a snap finish
         if (lastLead && i !== leadPlaceNotation.length - 1 
             && leadHelper.latestChange.toString() === leadHelper.initialChange.toString()) {
@@ -62,7 +68,8 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
         }
     }
     // Add the lead end to the results
-    leadHelper.results.leadEnds.push(leadHelper.latestRow);
+    leadResults.leadEnd = leadHelper.latestRow;
+    leadHelper.results.leads.push(leadResults);
 
     const lastBell: string = (currentStore.compositionReducer.stage % 2 === 0) 
         ? leadHelper.latestChange[leadHelper.latestChange.length - 1] 
@@ -77,8 +84,22 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
 }
 
 function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSymbol: string) {
+
     const method = currentStore.methodReducer.methods.find(method => method.methodSymbol === methodSymbol);
-    const placeNotationArray: string[] = method && method.methodPlaceNotation ? method.methodPlaceNotation.split('.') : [];
+    if (!method || ! method.methodPlaceNotation) {
+        throw 'help';
+    }
+
+    // if it has a comma then shortened notation is being used
+    // in that case need to filp, remove half lead and add in the lead end notations
+    const shortNotation: string[] = method.methodPlaceNotation.split(',');
+    let placeNotationArray: string[] = shortNotation[0].split(/(x)|\./g).filter(x => x);
+
+    if (shortNotation.length > 1) {
+        const reverseNotation: string[] = [...placeNotationArray].reverse().slice(1);
+        reverseNotation.push(shortNotation[1]);
+        placeNotationArray = placeNotationArray.concat(reverseNotation);
+    }
     const call = currentStore.callReducer.calls.find(call => call.callSymbol === callSymbol);  
 
     if (call && call.callNotation) {

@@ -93,3 +93,21 @@
     padding-bottom: 25px;
     vertical-align: bottom;
 }
+
+.important-changes-leadend-row-call {
+    display: inline-block;
+    width: 30px;
+    padding-left: 5px;
+    text-align: left;
+}
+
+.important-changes-leadend-row-method {
+    display: inline-block;
+    width: 30px;
+    padding-right: 5px;
+    text-align: right;
+}
+
+.important-changes-leadend-row-changes {
+    display: inline-block;
+}

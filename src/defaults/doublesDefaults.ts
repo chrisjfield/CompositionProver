@@ -2,7 +2,7 @@ import { IStage } from '../interfaces/Interfaces';
 
 const doubles: IStage = {
     methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: '5.1.5.1.5.1.5.1.5.125', coreMethod: true },
+        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: '5.1.5.1.5,125', coreMethod: true },
         { methodId: 2, methodSymbol: 'gs', methodName: 'Grandsire', methodPlaceNotation: '3.1.5.1.5.1.5.1.5.1', coreMethod: true },
         { methodId: 3, methodSymbol: 'sd', methodName: 'Stedman', methodPlaceNotation: '3.1.5.3.1.3.1.3.5.1.3.1', coreMethod: true },
     ],

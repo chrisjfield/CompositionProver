@@ -2,8 +2,8 @@ import { IStage } from '../interfaces/Interfaces';
 
 const major: IStage = {
     methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'X.18.X.18.X.18.X.18.X.18.X.18.X.18.X.12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', methodPlaceNotation: 'X.38.X.14.X.1258.X.36.X.14.X.58.X.16.X.78.X.16.X.58.X.14.X.36.X.1258.X.14.X.38.X.12', coreMethod: true },
+        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x18x18x18x18,12', coreMethod: true },
+        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', methodPlaceNotation: 'x38x14x1258x36x14x58x16x78,12', coreMethod: true },
     ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },

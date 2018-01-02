@@ -2,9 +2,8 @@ import { IStage } from '../interfaces/Interfaces';
 
 const cinques: IStage = {
     methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'X.1T.X.1T.X.1T.X.1T.X.1T.X.1T.X.1T.X.1T.X.1T.X.1T.X.1T.X.12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', 
-            methodPlaceNotation: 'X.3T.X.14.X.125T.X.36.X.147T.X.58.X.169T.X.70.X.18.X.9T.X.10.X.ET.X.10.X.9T.X.18.X.70.X.169T.X.58.X.147T.X.36.X.125T.X.14.X.3T.X.12', coreMethod: true },
+        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x1Tx1Tx1Tx1Tx1Tx1T,12', coreMethod: true },
+        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', methodPlaceNotation: 'x3Tx14x125Tx36x147Tx58x169Tx70x18x9Tx10xET,12', coreMethod: true },
     ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },

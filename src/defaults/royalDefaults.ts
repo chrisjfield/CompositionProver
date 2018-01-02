@@ -2,9 +2,8 @@ import { IStage } from '../interfaces/Interfaces';
 
 const royal: IStage = {
     methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'X.10.X.10.X.10.X.10.X.10.X.10.X.10.X.10.X.10.X.12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', 
-            methodPlaceNotation: 'X.30.X.14.X.1250.X.36.X.1470.X.58.X.16.X.70.X.18.X.90.X.18.X.70.X.16.X.58.X.1470.X.36.X.1250.X.14.X.30.X.12', coreMethod: true },
+        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x10x10x10x10x10,12', coreMethod: true },
+        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', methodPlaceNotation: 'x30x14x1250x36x1470x58x16x70x18x90,12', coreMethod: true },
     ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },

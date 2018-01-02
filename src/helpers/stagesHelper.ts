@@ -68,9 +68,9 @@ export function getInitialResults(stage: number) {
         results: {
             initialChangeString,
             changesOfMethod: 0,
+            leads: [],
             rows: [],
             grid: [],
-            leadEnds: [],
             courseEnds: [],
             partEnds: [],
             numberOfChanges: 0,

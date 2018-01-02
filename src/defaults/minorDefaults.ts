@@ -2,8 +2,8 @@ import { IStage } from '../interfaces/Interfaces';
 
 const minor: IStage = {
     methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'X.16.X.16.X.16.X.16.X.16.X.12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'cm', methodName: 'Cambridge Surprise Minor', methodPlaceNotation: 'X.36.X.14.X.12.X.36.X.14.X.56.X.14.X.36.X.12.X.14.X.36.X.12', coreMethod: true },
+        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x16x16x16,12', coreMethod: true },
+        { methodId: 2, methodSymbol: 'cm', methodName: 'Cambridge Surprise Minor', methodPlaceNotation: 'x36x14x12x36x14x56,12', coreMethod: true },
     ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },

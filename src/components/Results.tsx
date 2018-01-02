@@ -6,7 +6,7 @@ import Toggle from 'material-ui/Toggle';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 
-import { IStore, IResultProps } from '../interfaces/Interfaces';
+import { IStore, IResultProps, ILeadResults } from '../interfaces/Interfaces';
 import styles from '../styles';
 import { getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
 
@@ -97,7 +97,7 @@ class Results extends React.Component<IResultProps, IResultState> {
                         {this.props.initialChangeString}
                     </div>
                     <hr className="results-hr"/>
-                    {this.getChanges(this.props.leadEnds)}
+                    {this.getLeadEndChanges(this.props.leads)}
                 </div>
             </div>
         );
@@ -180,6 +180,22 @@ class Results extends React.Component<IResultProps, IResultState> {
         return rowArray.map((row: string, index: number) => (
             <div key={index} className="row important-changes-row">
                 {row}
+            </div>
+        ));
+    }
+
+    getLeadEndChanges = (lead: ILeadResults[]) => {
+        return lead.map((leadReults: ILeadResults, index: number) => (
+            <div key={index} className="row important-changes-row">
+                <div className="important-changes-leadend-row-method">
+                    <b>{leadReults.method + '  '}</b>
+                </div>
+                <div className="important-changes-leadend-row-changes">
+                    {leadReults.leadEnd}
+                </div>
+                <div className="important-changes-leadend-row-call">
+                    <b>{'  ' + leadReults.call}</b>
+                </div>
             </div>
         ));
     }
@@ -328,9 +344,9 @@ class Results extends React.Component<IResultProps, IResultState> {
 
 const mapStateToProps = (store: IStore) => {
     return {
+        leads: store.resultReducer.leads,
         rows: store.resultReducer.rows,
         grid: store.resultReducer.grid,
-        leadEnds: store.resultReducer.leadEnds,
         courseEnds: store.resultReducer.courseEnds,
         partEnds: store.resultReducer.partEnds,
         numberOfChanges: store.resultReducer.numberOfChanges,

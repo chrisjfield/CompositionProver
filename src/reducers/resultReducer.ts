@@ -9,9 +9,9 @@ function resultsReducer(state: IResultReducerState = getInitialResults(6).result
     case SET_RESULTS:
         return {
             ...state,
+            leads: action.payload.leads,
             rows: action.payload.rows,
             grid: action.payload.grid,
-            leadEnds: action.payload.leadEnds,
             courseEnds: action.payload.courseEnds,
             partEnds: action.payload.partEnds,
             numberOfChanges: action.payload.numberOfChanges,

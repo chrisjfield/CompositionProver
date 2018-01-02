@@ -5,7 +5,6 @@ export const UPDATE_STAGE = 'UPDATE_STAGE';
 export const UPDATE_PLACENOTATION = 'UPDATE_PLACENOTATION';
 export const UPDATE_COMPOSITION = 'UPDATE_COMPOSITION';
 export const UPDATE_ROWS = 'UPDATE_ROWS';
-export const UPDATE_LEADENDS = 'UPDATE_LEADENDS';
 export const UPDATE_TRUTH = 'UPDATE_TRUTH';
 
 export function updateSingle(notation: string) {
@@ -54,13 +53,6 @@ export function updateRows(rows: string[]) {
     return {
         type: UPDATE_ROWS,
         payload: rows,
-    };
-}
-
-export function updateLeadEnds(leadEnds: string[]) {
-    return {
-        type: UPDATE_LEADENDS,
-        payload: leadEnds,
     };
 }
 

@@ -44,8 +44,8 @@ export interface ICompositionReducerState {
 
 export interface IResultReducerState {
     rows: string[][];
+    leads: ILeadResults[];
     grid: string[];
-    leadEnds: string[];
     courseEnds: string[];
     partEnds: string[];
     numberOfChanges: number;
@@ -61,6 +61,13 @@ export interface IResultsHelper {
     latestMethod: string;
     latestRow: string;
     initialChange: string[];
+}
+
+export interface ILeadResults {
+    rows: string[][];
+    leadEnd: string;
+    method: string;
+    call: string;
 }
 
 export interface IMusicalChanges {
