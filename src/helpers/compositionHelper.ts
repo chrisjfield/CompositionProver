@@ -150,7 +150,6 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
     }
     
     rowHelper.latestRow = nextChange.join(' ');
-    rowHelper.results.rows.push(nextChange);
     rowHelper.results.grid.push(rowHelper.latestRow);
 
     return rowHelper;

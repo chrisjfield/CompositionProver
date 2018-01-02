@@ -4,7 +4,6 @@ export const UPDATE_EXTREME = 'UPDATE_EXTREME';
 export const UPDATE_STAGE = 'UPDATE_STAGE';
 export const UPDATE_PLACENOTATION = 'UPDATE_PLACENOTATION';
 export const UPDATE_COMPOSITION = 'UPDATE_COMPOSITION';
-export const UPDATE_ROWS = 'UPDATE_ROWS';
 export const UPDATE_TRUTH = 'UPDATE_TRUTH';
 
 export function updateSingle(notation: string) {
@@ -46,13 +45,6 @@ export function updateComposition(composition: string) {
     return {
         type: UPDATE_COMPOSITION,
         payload: composition,
-    };
-}
-
-export function updateRows(rows: string[]) {
-    return {
-        type: UPDATE_ROWS,
-        payload: rows,
     };
 }
 

@@ -185,30 +185,29 @@ class Results extends React.Component<IResultProps, IResultState> {
     }
 
     getLeadEndChanges = (lead: ILeadResults[]) => {
-        return lead.map((leadReults: ILeadResults, index: number) => (
-            <div key={index} className="row important-changes-row">
-                <div className="important-changes-leadend-row-method">
-                    <b>{leadReults.method + '  '}</b>
+        let previousMethod: string = '';
+
+        return lead.map((leadResults: ILeadResults, index: number) => {
+            const methodChanged: boolean = previousMethod !== leadResults.method;
+            previousMethod = leadResults.method;
+            return (
+                <div key={index} className="row important-changes-row">
+                    <div className="important-changes-leadend-row-method">
+                        <b>{methodChanged && (leadResults.method + '  ')}</b>
+                    </div>
+                    <div className="important-changes-leadend-row-changes">
+                        {leadResults.leadEnd}
+                    </div>
+                    <div className="important-changes-leadend-row-call">
+                        <b>{leadResults.call !== 'p' && '  ' + leadResults.call}</b>
+                    </div>
                 </div>
-                <div className="important-changes-leadend-row-changes">
-                    {leadReults.leadEnd}
-                </div>
-                <div className="important-changes-leadend-row-call">
-                    <b>{'  ' + leadReults.call}</b>
-                </div>
-            </div>
-        ));
+            );
+        });
     }
 
     getGrid = () => {
-        const changesPerColumn: number = 100;
-        const rowsArray = this.props.rows;
-        const columnArray: string[][][] = [];
-
-        for (let i = 0, len = this.props.numberOfChanges; i < len; i += changesPerColumn) {
-            columnArray.push(rowsArray.slice(i , i + changesPerColumn));
-        }
-
+        let previousMethod: string = null;
         return (
             <div>
                 <div key="initial" className="row">
@@ -218,24 +217,37 @@ class Results extends React.Component<IResultProps, IResultState> {
                     </div>
                 </div>
                 <div key="columns" className="row">
-                    {columnArray.map((rows: string[][], index: number) => this.getGridColumns(rows, index))}
+                    {this.props.leads.map((lead: ILeadResults, index: number) => {
+                        const methodChanged: boolean = previousMethod !== lead.method;
+                        previousMethod = lead.method;
+                        
+                        return this.getGridColumns(lead, index, methodChanged);
+                    })}
                 </div>
             </div>
         );
     }
 
-    getGridColumns = (rows: string[][], index: number) => {
+    getGridColumns = (lead: ILeadResults, index: number, methodChanged: boolean) => {
         return (
             <div key={index} className="col-lg-2 col-md-3 col-sm-4 grid-column">
-                {this.getGridRow(rows)}
+                {this.getGridRow(lead, methodChanged)}
             </div>
         );
     }
 
-    getGridRow = (rows: string[][]) => {
-        return rows.map((row: string[], index: number) => (
+    getGridRow = (lead: ILeadResults, methodChanged: boolean) => {
+        return lead.rows.map((row: string[], index: number) => (
             <div key={index} className="row grid-row">
-                {row.map((bell: string) => this.getGridBell(bell, index))}
+                <div className="important-changes-leadend-row-method">
+                    <b>{index === 0 && methodChanged && (lead.method + '  ')}</b>
+                </div>
+                <div className="important-changes-leadend-row-changes">
+                    {row.map((bell: string) => this.getGridBell(bell, index))}
+                </div>
+                <div className="important-changes-leadend-row-call">
+                    <b>{index === lead.rows.length - 1 && lead.call !== 'p' && '  ' + lead.call}</b>
+                </div>
             </div>
         ));
     }
@@ -292,7 +304,7 @@ class Results extends React.Component<IResultProps, IResultState> {
 
     getWorkingBells = () => {
         const bellsArray: string[] = [];
-        const numberOfBells: number = this.props.rows[0] ? this.props.rows[0].length : 0;
+        const numberOfBells: number = this.props.leads[0] && this.props.leads[0].rows[0] ? this.props.leads[0].rows[0].length : 0;
 
         for (let i = 1; i <= numberOfBells; i += 1) {
             bellsArray.push(getNotationCharacterFromPosition(i));
@@ -345,7 +357,6 @@ class Results extends React.Component<IResultProps, IResultState> {
 const mapStateToProps = (store: IStore) => {
     return {
         leads: store.resultReducer.leads,
-        rows: store.resultReducer.rows,
         grid: store.resultReducer.grid,
         courseEnds: store.resultReducer.courseEnds,
         partEnds: store.resultReducer.partEnds,

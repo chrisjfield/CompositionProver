@@ -10,7 +10,6 @@ function resultsReducer(state: IResultReducerState = getInitialResults(6).result
         return {
             ...state,
             leads: action.payload.leads,
-            rows: action.payload.rows,
             grid: action.payload.grid,
             courseEnds: action.payload.courseEnds,
             partEnds: action.payload.partEnds,
