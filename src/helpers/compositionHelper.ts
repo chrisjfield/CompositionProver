@@ -160,8 +160,8 @@ function getMusicalChanges(stage: number, rows: string[]) {
     const tittums: string = getStageTittums(stage);
     const rollupsForward: string = getStageRollupsForward(stage);
     const rollupsBackward: string = getStageRollupsBackward(stage);
-    const frontBellRunForward: string = '1 2 3 4';
-    const frontBellRunBackward: string = '4 3 2 1';
+    const frontBellRunForward: string = '2 3 4 5';
+    const frontBellRunBackward: string = '5 4 3 2';
     const musicalChanges: IMusicalChanges = {
         queens: getExactChangeCount(rows, queens),
         tittums: getExactChangeCount(rows, tittums),

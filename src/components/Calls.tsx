@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
 
+import validationHelper from '../helpers/validationHelper';
 import { IStore, ICallProps, ICall } from '../interfaces/Interfaces';
 import { updateCalls, addCall, deleteCall } from '../actions/callActions';
 import styles from '../styles';
@@ -21,6 +22,7 @@ class Calls extends React.Component<ICallProps> {
                     style={styles.callTextField}
                     hintText="Place Notation" 
                     value={call.callNotation ? call.callNotation : ''} 
+                    errorText={validationHelper.validateCall(call.callNotation)}
                     onChange={(event, newValue) => this.handleCallChange(call, newValue)}
                 />
                 {call.coreCall ? null : this.getDeleteButton(call)}

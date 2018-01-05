@@ -1,0 +1,10 @@
+.help-header {
+    text-decoration: underline;
+    padding-left: 30px;
+    padding-top: 15px;
+    font-weight: bold;
+}
+
+.help-text {
+    padding-left: 30px;
+}

@@ -1,6 +1,8 @@
 .text-field-call-label {
     width: 120px;
     display: inline-block;
+    vertical-align: top;
+    padding-top: 15px;
 }
 
 .text-field-call-text {
@@ -20,5 +22,9 @@
 }
 
 .text-field-row-wrapper {
-    padding: 15px
+    padding: 15px;
+}
+
+.text-field-call {
+    height: 80px;
 }

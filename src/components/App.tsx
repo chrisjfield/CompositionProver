@@ -13,6 +13,7 @@ import Results from './Results';
 import Composition from './Composition';
 import Calls from './Calls';
 import Methods from './Methods';
+import Help from './Help';
 
 const persistConfig: PersistorConfig = {
     blacklist: ['resultReducer'],
@@ -48,6 +49,11 @@ class App extends React.Component<{}> {
                         <Tab label="Results" onActive={generateResults}>
                             <div className="compose-tab">
                                 <Results />
+                            </div>
+                        </Tab>
+                        <Tab label="Help">
+                            <div className="compose-tab">
+                                <Help />
                             </div>
                         </Tab>
                     </Tabs>
