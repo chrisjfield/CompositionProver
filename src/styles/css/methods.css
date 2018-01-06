@@ -22,11 +22,12 @@
 }
 
 .method-break {
-    width: calc(100% + 15px);
+    width: calc(100% - 30px);
     margin-top: 5px;
     margin-bottom: 5px; 
+    margin-left: 15px;
     border-width: 1px;
-    border-color: #0000006e
+    border-color: rgb(0, 188, 212)
 }
 
 .text-field-method {

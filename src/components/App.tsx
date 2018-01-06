@@ -30,28 +30,28 @@ class App extends React.Component<{}> {
         return (
             <div key="react-app" className="container-fluid compose-app" >
                 <Paper zDepth={2}>
-                    <Tabs>
-                        <Tab label="Composition" >
+                    <Tabs className="tab-wrapper">
+                        <Tab label="Compositions" className="tab-compositions">
                             <div className="compose-tab">
                                 <Composition />
                             </div>
                         </Tab>
-                        <Tab label="Methods" >
+                        <Tab label="Methods" className="tab-methods">
                             <div className="compose-tab">
                                 <Methods />
                             </div>
                         </Tab>
-                        <Tab label="Calls" >
+                        <Tab label="Calls" className="tab-calls">
                             <div className="compose-tab">
                                 <Calls />
                             </div>
                         </Tab>
-                        <Tab label="Results" onActive={generateResults}>
+                        <Tab label="Results" onActive={generateResults} className="tab-results">
                             <div className="compose-tab">
                                 <Results />
                             </div>
                         </Tab>
-                        <Tab label="Help">
+                        <Tab label="Help" className="tab-help">
                             <div className="compose-tab">
                                 <Help />
                             </div>

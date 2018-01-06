@@ -9,17 +9,40 @@ body {
 }
 
 .compose-app {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding: 0;
 }
 
 .compose-tab {
     overflow-y: auto;
-    max-height: calc(100vh - 78px);
+    max-height: calc(100vh - 48px);
     padding-left: 15px;
     padding-right: 15px;
 }
 
 h4 {
     font-size: 16px;
+}
+
+.tab-wrapper > div {
+    overflow-y: auto;
+}
+
+.tab-compositions {
+    min-width: 130px;
+}
+
+.tab-methods {
+    min-width: 75px;
+}
+
+.tab-calls {
+    min-width: 75px;
+}
+
+.tab-results {
+    min-width: 75px;
+}
+
+.tab-help {
+    min-width: 75px;
 }
