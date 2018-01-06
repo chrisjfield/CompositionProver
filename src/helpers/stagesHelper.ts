@@ -73,7 +73,10 @@ export function getInitialResults(stage: number) {
             courseEnds: [],
             partEnds: [],
             numberOfChanges: 0,
-            truth: false,
+            truth: {
+                firstFalseRow: null,
+                true: false,
+            },
             musicalChanges: {
                 queens: 0,
                 tittums: 0,

@@ -1,6 +1,6 @@
 import store from './store';
 
-import { IStore, IResultsHelper, IMusicalChanges, ILeadResults } from '../interfaces/Interfaces';
+import { IStore, IResultsHelper, IMusicalChanges, ILeadResults, ITruth } from '../interfaces/Interfaces';
 
 import { getPositionFromNotationCharacter, getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
 import { 
@@ -10,7 +10,7 @@ import {
 
 import { updateResults } from '../actions/resultsActions';
 
-export function generateResults() {
+export async function generateResults() {
     const currentStore: IStore = <IStore>store.getState();
     let resultsHelper: IResultsHelper = getInitialResults(currentStore.compositionReducer.stage);
 
@@ -196,8 +196,11 @@ function getBackChangeCount(rows: string[], change1: string, change2: string) {
 }
 
 function getTruth(stage: number, rows: string[]) {
-    let truth: boolean = true;
     let rowsToCheck: string[] = rows;
+    const truth: ITruth = {
+        true: true,
+        firstFalseRow: null,
+    };
     const numberOfRows: number = rows.length;
     const extent: number = getFactorial(stage);
     // plus one to account for exact multiples of an extent - these will have 0 allowed of the next repeat number)
@@ -209,7 +212,7 @@ function getTruth(stage: number, rows: string[]) {
     // therefore take a change, check if it repeats the right number of times, if so remove all instances from array.
     // if it repeats max times, take 1 from number of repeats
     // if it repeats outside the allowed range or number of max repeats drops below 0 it is false.
-    while (truth && rowsToCheck.length > 0) {
+    while (truth.true && rowsToCheck.length > 0) {
         const rowToCheck: string = rowsToCheck[0];
         const countOfRows: number = rowsToCheck.filter(row => row === rowToCheck).length;
 
@@ -219,12 +222,14 @@ function getTruth(stage: number, rows: string[]) {
         } else if (countOfRows === maxNumberOfEachChanges - 1) {
             numberOfMaxRepeatsLeft = numberOfMaxRepeatsLeft;
         } else {
-            truth = false;
+            truth.true = false;
+            truth.firstFalseRow = rowToCheck;
         }
 
         // check if we have gone over the max number or maximum repeats
         if (numberOfMaxRepeatsLeft < 0) {
-            truth = false;
+            truth.true = false;
+            truth.firstFalseRow = rowToCheck;
         }
 
         // filter the rows left to check

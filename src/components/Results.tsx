@@ -12,6 +12,8 @@ import { getNotationCharacterFromPosition } from '../helpers/placeNotationHelper
 
 interface IResultState {
     showTreble: boolean;
+    showGrid: boolean;
+    showSectionEnds: boolean;
     showWorkingBell: string;
 }
 
@@ -21,8 +23,17 @@ class Results extends React.Component<IResultProps, IResultState> {
 
         this.state = {
             showTreble: true,
+            showGrid: false,
+            showSectionEnds: false,
             showWorkingBell: '2',
         };
+    }
+
+    componentWillReceiveProps(nextProps: IResultProps) {
+        this.setState({
+            showGrid: nextProps.numberOfChanges > 500 ? false : true,
+            showSectionEnds: nextProps.leads.length > 40 ? false : true,
+        });
     }
 
     getCompositionStats = () => {
@@ -36,8 +47,8 @@ class Results extends React.Component<IResultProps, IResultState> {
                         name="truth"
                         style={styles.resultTruthTextField}
                         disabled={true}
-                        value={this.props.truth ? 'True' : 'False'} 
-                        inputStyle={this.props.truth ? styles.truthFieldTrue : styles.truthFieldFalse}
+                        value={this.props.truth.true ? 'True' : 'False'} 
+                        inputStyle={this.props.truth.true ? styles.truthFieldTrue : styles.truthFieldFalse}
                     />
                 </div>
                 <div className="col-sm-4">
@@ -61,6 +72,25 @@ class Results extends React.Component<IResultProps, IResultState> {
                         disabled={true}
                         value={this.props.changesOfMethod} 
                     />
+                </div>
+            </div>
+        );
+    }
+
+    getImportantChangesOptions = () => {
+        return (
+            <div>
+                <div className="row grid-options-first">
+                    <div className="col-sm-6">
+                        <span className="text-field-results-grid-options-treble">
+                            Show Section Ends
+                        </span>
+                        <div className="grid-toggle">
+                            <Toggle 
+                                toggled={this.state.showSectionEnds} 
+                                onToggle={(event, isInputChecked) => this.toggleShowSectionEnds(isInputChecked)}/>
+                        </div>
+                    </div>  
                 </div>
             </div>
         );
@@ -237,19 +267,25 @@ class Results extends React.Component<IResultProps, IResultState> {
     }
 
     getGridRow = (lead: ILeadResults, methodChanged: boolean) => {
-        return lead.rows.map((row: string[], index: number) => (
-            <div key={index} className="row grid-row">
-                <div className="important-changes-leadend-row-method">
-                    <b>{index === 0 && methodChanged && (lead.method + '  ')}</b>
+        return lead.rows.map((row: string[], index: number) => {
+            const falseRow: string = this.props.truth.firstFalseRow === row.join(' ')
+                ? ' false-row'
+                : '';
+
+            return (
+                <div key={index} className="row grid-row">
+                    <div className="important-changes-leadend-row-method">
+                        <b>{index === 0 && methodChanged && (lead.method + '  ')}</b>
+                    </div>
+                    <div className={'important-changes-leadend-row-changes' + falseRow}>
+                        {row.map((bell: string) => this.getGridBell(bell, index))}
+                    </div>
+                    <div className="important-changes-leadend-row-call">
+                        <b>{index === lead.rows.length - 1 && lead.call !== 'p' && '  ' + lead.call}</b>
+                    </div>
                 </div>
-                <div className="important-changes-leadend-row-changes">
-                    {row.map((bell: string) => this.getGridBell(bell, index))}
-                </div>
-                <div className="important-changes-leadend-row-call">
-                    <b>{index === lead.rows.length - 1 && lead.call !== 'p' && '  ' + lead.call}</b>
-                </div>
-            </div>
-        ));
+            );
+        });
     }
 
     getGridBell = (bell: string, rowIndex: number) => {
@@ -272,12 +308,24 @@ class Results extends React.Component<IResultProps, IResultState> {
                 <div className="row grid-options-first">
                     <div className="col-sm-6">
                         <span className="text-field-results-grid-options-treble">
+                            Show Grid
+                        </span>
+                        <div className="grid-toggle">
+                            <Toggle 
+                                toggled={this.state.showGrid} 
+                                onToggle={(event, isInputChecked) => this.toggleShowGrid(isInputChecked)}/>
+                        </div>
+                    </div>  
+                </div>
+                <div className="row grid-options-first">
+                    <div className="col-sm-6">
+                        <span className="text-field-results-grid-options-treble">
                             Hightlight Treble Path
                         </span>
                         <div className="grid-toggle">
                             <Toggle 
                                 toggled={this.state.showTreble} 
-                                onToggle={(event, isInputChecked) => this.toggle(isInputChecked)}/>
+                                onToggle={(event, isInputChecked) => this.toggleShowTreble(isInputChecked)}/>
                         </div>
                     </div>  
                 </div>
@@ -317,9 +365,21 @@ class Results extends React.Component<IResultProps, IResultState> {
         });
     }
 
-    toggle = (isInputChecked: boolean) => {
+    toggleShowTreble = (isInputChecked: boolean) => {
         this.setState({
             showTreble: isInputChecked,
+        });
+    }
+
+    toggleShowGrid = (isInputChecked: boolean) => {
+        this.setState({
+            showGrid: isInputChecked,
+        });
+    }
+
+    toggleShowSectionEnds = (isInputChecked: boolean) => {
+        this.setState({
+            showSectionEnds: isInputChecked,
         });
     }
 
@@ -343,12 +403,13 @@ class Results extends React.Component<IResultProps, IResultState> {
                 <div className="row group-heading">
                     <h4>Section Ends</h4>
                 </div>
-                {this.getImportantChanges()}
+                {this.getImportantChangesOptions()}
+                {this.state.showSectionEnds && this.getImportantChanges()}
                 <div className="row group-heading">
                     <h4>Grid</h4>
                 </div>
                 {this.getGridOptions()}
-                {this.getGrid()}
+                {this.state.showGrid && this.getGrid()}
             </div>
         );
     }

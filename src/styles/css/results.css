@@ -111,3 +111,7 @@
 .important-changes-leadend-row-changes {
     display: inline-block;
 }
+
+.false-row {
+    background-color: #ff000057;
+}

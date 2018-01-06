@@ -49,7 +49,7 @@ export interface IResultReducerState {
     partEnds: string[];
     numberOfChanges: number;
     changesOfMethod: number;
-    truth: boolean;
+    truth: ITruth;
     initialChangeString: string;
     musicalChanges: IMusicalChanges;
 }
@@ -104,3 +104,7 @@ export interface IStageEnum {
     numberOfBells: number;
 }
 
+export interface ITruth {
+    true: boolean;
+    firstFalseRow: string;
+}
