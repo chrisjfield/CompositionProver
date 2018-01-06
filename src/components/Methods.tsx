@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
 
+import validationHelper from '../helpers/validationHelper';
 import { IStore, IMethodProps, IMethod } from '../interfaces/Interfaces';
 import { addMethod, updateMethods, deleteMethod } from '../actions/methodActions';
 import styles from '../styles';
@@ -19,7 +20,8 @@ class Methods extends React.Component<IMethodProps> {
                         <TextField 
                             style={styles.methodNameTextField}
                             hintText="Name" 
-                            value={method.methodName ? method.methodName : ''} 
+                            value={method.methodName ? method.methodName : ''}
+                            errorText={validationHelper.validateMethodName(method.methodName)} 
                             onChange={(event, newValue) => this.updateMethodName(method, newValue)}
                         />
                     </div>
@@ -28,6 +30,7 @@ class Methods extends React.Component<IMethodProps> {
                             style={styles.methodSymbolTextField}
                             hintText="Code" 
                             value={method.methodSymbol ? method.methodSymbol : ''} 
+                            errorText={validationHelper.validateMethodSymbol(method.methodSymbol, this.props.methods)} 
                             onChange={(event, newValue) => this.updateMethodSymbol(method, newValue)}
                         />
                     </div>
@@ -36,6 +39,7 @@ class Methods extends React.Component<IMethodProps> {
                             style={styles.methodPlaceNotationTextField}
                             hintText="Place Notation" 
                             value={method.methodPlaceNotation ? method.methodPlaceNotation : ''}
+                            errorText={validationHelper.validatePlaceNotation(method.methodPlaceNotation)}
                             onChange={(event, newValue) => this.updateMethodPlaceNotation(method, newValue)}
                         />
                         {method.coreMethod ? null : this.getDeleteButton(method)}
@@ -52,7 +56,7 @@ class Methods extends React.Component<IMethodProps> {
     }
 
     updateMethodSymbol = (method: IMethod, newValue: string) => {
-        const updatedMethod: IMethod = { ...method, methodSymbol: newValue };
+        const updatedMethod: IMethod = { ...method, methodSymbol: newValue.toLowerCase() };
         this.updateMethod(updatedMethod);
     }
 

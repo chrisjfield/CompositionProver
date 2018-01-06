@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
+import validationHelper from '../helpers/validationHelper';
 import { IStore, ICompositionProps, IStageEnum } from '../interfaces/Interfaces';
 import { updateComposition, updateParts } from '../actions/compositionActions';
 import { setStageDefaults } from '../actions/stageActions';
@@ -31,11 +32,12 @@ class Composition extends React.Component<ICompositionProps, {}> {
     }
 
     handlePartsChange = (value: string) => {
-        this.props.dispatch(updateParts(Number(value))); 
+        const numericParts : number = Number(value) ? Number(value) : 0;
+        this.props.dispatch(updateParts(numericParts)); 
     }
 
     handleCompositionChange = (value: string) => { 
-        this.props.dispatch(updateComposition(value));
+        this.props.dispatch(updateComposition(value.toLowerCase()));
     }
     
     render() {
@@ -69,6 +71,7 @@ class Composition extends React.Component<ICompositionProps, {}> {
                         style={styles.compositionCompositionField}
                         hintText="Composition"
                         value={this.props.composition}
+                        errorText={validationHelper.validateComposition(this.props.composition)} 
                         onChange={(event, newValue) => this.handleCompositionChange(newValue)}
                         multiLine={true}
                         rows={3}
