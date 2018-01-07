@@ -85,6 +85,7 @@ export function getInitialResults(stage: number) {
                 rollupsBack: 0,
                 rollupsFront: 0,
             },
+            calculationError: null,
         },
     };
 

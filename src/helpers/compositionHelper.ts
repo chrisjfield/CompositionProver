@@ -10,7 +10,7 @@ import {
 
 import { updateResults } from '../actions/resultsActions';
 
-export async function generateResults() {
+export function generateResults() {
     const currentStore: IStore = <IStore>store.getState();
     let resultsHelper: IResultsHelper = getInitialResults(currentStore.compositionReducer.stage);
 
@@ -86,8 +86,10 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
 function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSymbol: string) {
 
     const method = currentStore.methodReducer.methods.find(method => method.methodSymbol === methodSymbol);
-    if (!method || ! method.methodPlaceNotation) {
-        throw 'help';
+    if (!method) {
+        throw 'Could not find a method for the code: "' + methodSymbol + '"';
+    } else if (method && !method.methodPlaceNotation) {
+        throw 'No place notation found for method: "' + method.methodName + '"';
     }
 
     // if it has a comma then shortened notation is being used
@@ -101,6 +103,11 @@ function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSy
         placeNotationArray = placeNotationArray.concat(reverseNotation);
     }
     const call = currentStore.callReducer.calls.find(call => call.callSymbol === callSymbol);  
+    if (!call && callSymbol !== 'p') {
+        throw 'Could not find a call for the code: "' + callSymbol + '"';
+    } else if (call && !call.callNotation && callSymbol !== 'p') {
+        throw 'No place notation found for call: "' + call.callName + '"';
+    }
 
     if (call && call.callNotation) {
         const callNotationArray: string[] = call.callNotation.split('.');  
@@ -126,6 +133,9 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
     
     for (let i = 0, len = notation.length; i < len; i += 1) {
         const position: number = getPositionFromNotationCharacter(notation[i]);
+        if (notation[i] !== 'x' && (!position || position > 12)) {
+            throw 'Place notation: "' + notation + '" could not be parsed - contains invalid notation.';
+        }
 
         if (position) {
             nextChange[position - 1] = latestChange[position - 1];

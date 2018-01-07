@@ -389,7 +389,7 @@ class Results extends React.Component<IResultProps, IResultState> {
         });
     }
 
-    render() {
+    getResults = () => {
         return (
             <div className="results-wrapper">
                 <div className="row group-heading">
@@ -413,6 +413,34 @@ class Results extends React.Component<IResultProps, IResultState> {
             </div>
         );
     }
+
+    showError = () => {
+        return (
+            <div className="results-wrapper">
+                <div className="row results-error">
+                    {this.props.calculationError}
+                </div>
+                <div className="row group-heading">
+                    <h4>Statistics</h4>
+                </div>
+                <div className="row group-heading">
+                    <h4>Music</h4>
+                </div>
+                <div className="row group-heading">
+                    <h4>Section Ends</h4>
+                </div>
+                <div className="row group-heading">
+                    <h4>Grid</h4>
+                </div>
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            this.props.calculationError ? this.showError() : this.getResults()
+        );
+    }
 }
 
 const mapStateToProps = (store: IStore) => {
@@ -426,6 +454,7 @@ const mapStateToProps = (store: IStore) => {
         truth: store.resultReducer.truth,
         initialChangeString: store.resultReducer.initialChangeString,
         musicalChanges: store.resultReducer.musicalChanges,
+        calculationError: store.resultReducer.calculationError,
     };
 };
   

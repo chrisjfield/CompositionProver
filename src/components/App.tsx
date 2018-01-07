@@ -9,6 +9,7 @@ import store from '../helpers/store';
 import { persistStore, PersistorConfig } from 'redux-persist';
 import * as localForage from 'localforage';
 
+import { addError } from '../actions/appActions';
 import Results from './Results';
 import Composition from './Composition';
 import Calls from './Calls';
@@ -24,6 +25,14 @@ class App extends React.Component<{}> {
 
     componentWillMount() {
         persistStore(store, persistConfig);
+    }
+
+    calculateResults = () => {
+        try {
+            generateResults();
+        } catch (error) {
+            store.dispatch(addError(error));
+        }
     }
 
     render() {
@@ -46,7 +55,7 @@ class App extends React.Component<{}> {
                                 <Calls />
                             </div>
                         </Tab>
-                        <Tab label="Results" onActive={generateResults} className="tab-results">
+                        <Tab label="Results" onActive={this.calculateResults} className="tab-results">
                             <div className="compose-tab">
                                 <Results />
                             </div>

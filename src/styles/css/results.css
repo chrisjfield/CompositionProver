@@ -115,3 +115,11 @@
 .false-row {
     background-color: #ff000057;
 }
+
+.results-error {
+    color: red;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    background-color: bisque;
+}

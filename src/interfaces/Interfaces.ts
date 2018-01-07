@@ -52,6 +52,7 @@ export interface IResultReducerState {
     truth: ITruth;
     initialChangeString: string;
     musicalChanges: IMusicalChanges;
+    calculationError: string;
 }
 
 export interface IResultsHelper {
