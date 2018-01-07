@@ -3,13 +3,13 @@ import { IMethod } from '../interfaces/Interfaces';
 class validationHelper {
     static validateCall = (call: string) => {
         let validationMessage: string = null;
-        const regexp: RegExp = new RegExp('^[0-9ET]+$');
+        const regexp: RegExp = new RegExp('^[0-9ET.]+$');
         const test: Boolean = regexp.test(call);
 
         if (!call) {
             validationMessage = null;
         } else if (!test) {
-            validationMessage = 'notation may only contain 0-9, E & T';
+            validationMessage = 'notation may only contain 0-9, E, T & .';
         }
 
         return validationMessage;
