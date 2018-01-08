@@ -6,11 +6,24 @@ import RaisedButton from 'material-ui/RaisedButton';
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
 
 import validationHelper from '../helpers/validationHelper';
-import { IStore, IMethodProps, IMethod } from '../interfaces/Interfaces';
+import { IStore, IMethodProps, IMethodState, IMethod } from '../interfaces/Interfaces';
 import { addMethod, updateMethods, deleteMethod } from '../actions/methodActions';
 import styles from '../styles';
 
-class Methods extends React.Component<IMethodProps> {
+class Methods extends React.Component<IMethodProps, IMethodState> {
+
+    constructor(props: IMethodProps) {
+        super(props);
+        this.state = {
+            methods: props.methods.filter((method: IMethod) => method.stage === props.stage),
+        };
+    }
+
+    componentWillReceiveProps(nextProps: IMethodProps) {
+        this.setState({
+            methods: nextProps.methods.filter((method: IMethod) => method.stage === nextProps.stage),
+        });
+    }
 
     generateMethodHTML = (method: IMethod, index: number) => {
         return (
@@ -30,7 +43,7 @@ class Methods extends React.Component<IMethodProps> {
                             style={styles.methodSymbolTextField}
                             hintText="Code" 
                             value={method.methodSymbol ? method.methodSymbol : ''} 
-                            errorText={validationHelper.validateMethodSymbol(method.methodSymbol, this.props.methods)} 
+                            errorText={validationHelper.validateMethodSymbol(method.methodSymbol, this.state.methods)} 
                             onChange={(event, newValue) => this.updateMethodSymbol(method, newValue)}
                         />
                     </div>
@@ -91,6 +104,7 @@ class Methods extends React.Component<IMethodProps> {
         });
         const newMethod: IMethod = {
             methodId: maxMethodId.methodId + 1,
+            stage: this.props.stage,
         };
 
         this.props.dispatch(addMethod(newMethod));
@@ -100,7 +114,8 @@ class Methods extends React.Component<IMethodProps> {
         return (
             <div>
                 <div className="row">
-                    {this.props.methods.map((method: IMethod, index: number) => this.generateMethodHTML(method, index))}
+                    {this.state && this.state.methods && this.state.methods.map(
+                        (method: IMethod, index: number) => this.generateMethodHTML(method, index))}
                 </div>
                 <div className="row method-button">
                     <RaisedButton
@@ -119,6 +134,7 @@ class Methods extends React.Component<IMethodProps> {
 const mapStateToProps = (store: IStore) => {
     return {
         methods: store.methodReducer.methods,
+        stage: store.compositionReducer.stage,
     };
 };
   

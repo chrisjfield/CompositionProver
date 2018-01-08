@@ -1,10 +1,6 @@
 import { IStage } from '../interfaces/Interfaces';
 
 const major: IStage = {
-    methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x18x18x18x18,12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'ca', methodName: 'Cambridge', methodPlaceNotation: 'x38x14x1258x36x14x58x16x78,12', coreMethod: true },
-    ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },
         { callSymbol: 's', callName: 'Single', callNotation: '1234', coreCall: true },

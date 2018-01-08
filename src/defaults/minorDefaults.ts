@@ -1,10 +1,6 @@
 import { IStage } from '../interfaces/Interfaces';
 
 const minor: IStage = {
-    methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x16x16x16,12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'cm', methodName: 'Cambridge Surprise Minor', methodPlaceNotation: 'x36x14x12x36x14x56,12', coreMethod: true },
-    ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },
         { callSymbol: 's', callName: 'Single', callNotation: '1234', coreCall: true },

@@ -1,10 +1,6 @@
 import { IStage } from '../interfaces/Interfaces';
 
 const minimus: IStage = {
-    methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'x14x14,12', coreMethod: true },
-        { methodId: 2, methodSymbol: 'rc', methodName: 'Reverse Caterbury', methodPlaceNotation: '34.14x14,12', coreMethod: true },
-    ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', coreCall: true },
         { callSymbol: 's', callName: 'Single', coreCall: true },

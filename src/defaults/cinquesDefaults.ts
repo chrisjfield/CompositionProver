@@ -1,11 +1,6 @@
 import { IStage } from '../interfaces/Interfaces';
 
 const cinques: IStage = {
-    methods: [
-        { methodId: 1, methodSymbol: 'pb', methodName: 'Plain Bob', methodPlaceNotation: 'E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.12E', coreMethod: true },
-        { methodId: 2, methodSymbol: 'gs', methodName: 'Grandsire', methodPlaceNotation: '3.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1', coreMethod: true },
-        { methodId: 3, methodSymbol: 'sd', methodName: 'Stedman', methodPlaceNotation: '3.1.E.3.1.3.1.3.E.1.3.1', coreMethod: true },
-    ],
     calls: [
         { callSymbol: 'b', callName: 'Bob', callNotation: '14', coreCall: true },
         { callSymbol: 's', callName: 'Single', callNotation: '1234', coreCall: true },

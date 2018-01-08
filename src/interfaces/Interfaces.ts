@@ -12,6 +12,10 @@ export interface IStore {
     resultReducer: IResultReducerState;
 }
 
+export interface IAppState {
+    rehydrated: boolean;
+}
+
 export interface IResultProps extends IResultReducerState {
     dispatch: Dispatch<{}>;
 }
@@ -24,6 +28,10 @@ export interface IMethodProps extends IMethodReducerState {
     dispatch: Dispatch<{}>;
 }
 
+export interface IMethodState {
+    methods: IMethod[];
+}
+
 export interface ICompositionProps extends ICompositionReducerState {
     dispatch: Dispatch<{}>;
 }
@@ -34,6 +42,7 @@ export interface ICallReducerState {
 
 export interface IMethodReducerState {
     methods: IMethod[];
+    stage: number;
 }
 
 export interface ICompositionReducerState {
@@ -92,10 +101,10 @@ export interface IMethod {
     methodName?: string;
     methodPlaceNotation?: string;
     coreMethod?: boolean;
+    stage: number;
 }
 
 export interface IStage {
-    methods: IMethod[];
     calls: ICall[];
     numberOfBells: number;
 }

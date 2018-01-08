@@ -1,3 +1,4 @@
+export { default as methodDefaults } from './methodDefaults';
 export { default as minimus } from './minimusDefaults';
 export { default as doubles } from './doublesDefaults';
 export { default as minor } from './minorDefaults';

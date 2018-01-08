@@ -9,22 +9,31 @@ import store from '../helpers/store';
 import { persistStore, PersistorConfig } from 'redux-persist';
 import * as localForage from 'localforage';
 
+import { IAppState } from '../interfaces/Interfaces';
 import { addError } from '../actions/appActions';
 import Results from './Results';
 import Composition from './Composition';
 import Calls from './Calls';
 import Methods from './Methods';
 import Help from './Help';
+import { AppLoading } from './AppLoading';
 
 const persistConfig: PersistorConfig = {
     blacklist: ['resultReducer'],
     storage: localForage,
 };
 
-class App extends React.Component<{}> {
+class App extends React.Component<{}, IAppState> {
+
+    constructor(props: {}) {
+        super(props);
+        this.state = { rehydrated: false };
+    }
 
     componentWillMount() {
-        persistStore(store, persistConfig);
+        persistStore(store, persistConfig, () => {
+            this.setState({ rehydrated: true });
+        });
     }
 
     calculateResults = () => {
@@ -35,7 +44,7 @@ class App extends React.Component<{}> {
         }
     }
 
-    render() {
+    getApp() {
         return (
             <div key="react-app" className="container-fluid compose-app" >
                 <Paper zDepth={2}>
@@ -69,6 +78,10 @@ class App extends React.Component<{}> {
                 </Paper>
             </div>
         );
+    }
+
+    render() {
+        return this.state.rehydrated ? this.getApp() : <AppLoading/>; 
     }
 }
 

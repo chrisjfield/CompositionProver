@@ -14,6 +14,12 @@ export function generateResults() {
     const currentStore: IStore = <IStore>store.getState();
     let resultsHelper: IResultsHelper = getInitialResults(currentStore.compositionReducer.stage);
 
+    if (!currentStore.compositionReducer.composition) {
+        throw 'No composition found';
+    } else if (!currentStore.compositionReducer.parts) {
+        throw 'Composition has 0 parts';
+    }
+
     for (let i = 1; i <= currentStore.compositionReducer.parts; i += 1) {
         const lastPart: boolean = i === currentStore.compositionReducer.parts;
         resultsHelper = generatePart(currentStore, resultsHelper, lastPart);
@@ -84,8 +90,8 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
 }
 
 function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSymbol: string) {
-
-    const method = currentStore.methodReducer.methods.find(method => method.methodSymbol === methodSymbol);
+    const stage: number = currentStore.compositionReducer.stage;
+    const method = currentStore.methodReducer.methods.find(method => method.methodSymbol === methodSymbol && method.stage === stage);
     if (!method) {
         throw 'Could not find a method for the code: "' + methodSymbol + '"';
     } else if (method && !method.methodPlaceNotation) {
