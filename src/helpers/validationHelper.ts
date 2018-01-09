@@ -17,13 +17,13 @@ class validationHelper {
 
     static validateMethodName = (methodName: string) => {
         let validationMessage: string = null;
-        const regexp: RegExp = new RegExp('^[a-zA-Z\\s]+$');
+        const regexp: RegExp = new RegExp('^[0-9a-zA-Z.\\s]+$');
         const test: Boolean = regexp.test(methodName);
 
         if (!methodName) {
             validationMessage = null;
         } else if (!test) {
-            validationMessage = 'method names may only contain letters';
+            validationMessage = 'method names may only contain letters and numbers';
         }
 
         return validationMessage;
