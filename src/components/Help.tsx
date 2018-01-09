@@ -26,7 +26,7 @@ function Help() {
                     Help on each tab can be found below in detail.
                     <br/>
                     <br/>
-                    Any comments, bugs or feedback please <a href="https://github.com/chrisjfield/CompositionProver/issues">go here</a> and crete an issue.
+                    Any comments, bugs or feedback please <a href="https://github.com/chrisjfield/CompositionProver/issues">go here</a> and create an issue.
                 </p>
             </div>
             <div className="row">
