@@ -1,11 +1,15 @@
+import 'mdn-polyfills/Array.prototype.find';
+import 'mdn-polyfills/String.prototype.endsWith';
+import 'mdn-polyfills/String.prototype.startsWith';
+
 import store from './store';
 
 import { IStore, IResultsHelper, IMusicalChanges, ILeadResults, ITruth } from '../interfaces/Interfaces';
 
 import { getPositionFromNotationCharacter, getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
-import { 
+import {
     getInitialResults, getStageQueens, getStageTittums,
-    getStageRollupsForward, getStageRollupsBackward, 
+    getStageRollupsForward, getStageRollupsBackward,
 } from '../helpers/stagesHelper';
 
 import { updateResults } from '../actions/resultsActions';
@@ -28,7 +32,7 @@ export function generateResults() {
     resultsHelper.results.truth = getTruth(currentStore.compositionReducer.stage, resultsHelper.results.grid);
     resultsHelper.results.musicalChanges = getMusicalChanges(currentStore.compositionReducer.stage, resultsHelper.results.grid);
 
-    store.dispatch(updateResults(resultsHelper.results)); 
+    store.dispatch(updateResults(resultsHelper.results));
 }
 
 function generatePart(currentStore: IStore, resultsHelper: IResultsHelper, lastPart: boolean) {
@@ -56,19 +60,19 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
         rows: [],
     };
     const leadPlaceNotation: string[] = getLeadPlaceNotation(currentStore, method, call);
-    
+
     // add to change of method if new method differs from previous and it's not the first.
-    leadHelper.results.changesOfMethod = 
+    leadHelper.results.changesOfMethod =
         (leadHelper.latestMethod && leadHelper.latestMethod !== method)
-        ? leadHelper.results.changesOfMethod + 1 
-        : leadHelper.results.changesOfMethod;
+            ? leadHelper.results.changesOfMethod + 1
+            : leadHelper.results.changesOfMethod;
     leadHelper.latestMethod = method;
 
     for (let i = 0, len = leadPlaceNotation.length; i < len; i += 1) {
         leadHelper = generateRows(currentStore, leadHelper, leadPlaceNotation[i]);
         leadResults.rows.push(leadHelper.latestChange);
         // if it comes round in the last lead stop calculating - it's a snap finish
-        if (lastLead && i !== leadPlaceNotation.length - 1 
+        if (lastLead && i !== leadPlaceNotation.length - 1
             && leadHelper.latestChange.toString() === leadHelper.initialChange.toString()) {
             return leadHelper;
         }
@@ -77,8 +81,8 @@ function generateLead(currentStore: IStore, resultsHelper: IResultsHelper, leadC
     leadResults.leadEnd = leadHelper.latestRow;
     leadHelper.results.leads.push(leadResults);
 
-    const lastBell: string = (currentStore.compositionReducer.stage % 2 === 0) 
-        ? leadHelper.latestChange[leadHelper.latestChange.length - 1] 
+    const lastBell: string = (currentStore.compositionReducer.stage % 2 === 0)
+        ? leadHelper.latestChange[leadHelper.latestChange.length - 1]
         : leadHelper.latestChange[leadHelper.latestChange.length - 2];
 
     // Add the course end if the change ends with the tenor
@@ -108,7 +112,7 @@ function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSy
         reverseNotation.push(shortNotation[1]);
         placeNotationArray = placeNotationArray.concat(reverseNotation);
     }
-    const call = currentStore.callReducer.calls.find(call => call.callSymbol === callSymbol);  
+    const call = currentStore.callReducer.calls.find(call => call.callSymbol === callSymbol);
     if (!call && callSymbol !== 'p') {
         throw 'Could not find a call for the code: "' + callSymbol + '"';
     } else if (call && !call.callNotation && callSymbol !== 'p') {
@@ -116,7 +120,7 @@ function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSy
     }
 
     if (call && call.callNotation) {
-        const callNotationArray: string[] = call.callNotation.split('.');  
+        const callNotationArray: string[] = call.callNotation.split('.');
 
         // adjust for the lead call
         for (let i = 0, len = callNotationArray.length; i < len; i += 1) {
@@ -126,7 +130,7 @@ function getLeadPlaceNotation(currentStore: IStore, methodSymbol: string, callSy
             placeNotationArray.push(callNotationArray[i]);
         }
     }
-    
+
     return placeNotationArray;
 }
 
@@ -136,7 +140,7 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
     const latestChange: string[] = rowHelper.latestChange;
     const nextChange: string[] = [];
     const coverBell: number = (numberOfBells % 2) ? numberOfBells + 1 : undefined;
-    
+
     for (let i = 0, len = notation.length; i < len; i += 1) {
         const position: number = getPositionFromNotationCharacter(notation[i]);
         if (notation[i] !== 'x' && (!position || position > 12)) {
@@ -147,7 +151,7 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
             nextChange[position - 1] = latestChange[position - 1];
         }
     }
-            
+
     for (let j = 0; j < numberOfBells; j += 1) {
         // If it already has a value ignore it, if it has a neigbour with no value switch it, else keep it as it was
         if (!nextChange[j] && !nextChange[j + 1] && numberOfBells >= j + 2) {
@@ -157,14 +161,14 @@ export function generateRows(currentStore: IStore, resultsHelper: IResultsHelper
             nextChange[j] = latestChange[j];
         }
     }
-    
+
     rowHelper.latestChange = nextChange;
 
     // Add in the cover bell smf set the latest row as string
     if (coverBell) {
         nextChange.push(getNotationCharacterFromPosition(coverBell));
     }
-    
+
     rowHelper.latestRow = nextChange.join(' ');
     rowHelper.results.grid.push(rowHelper.latestRow);
 
