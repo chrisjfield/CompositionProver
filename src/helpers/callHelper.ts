@@ -1,5 +1,14 @@
 import { getStageRegex } from "../defaults/stages";
 
-export const isValidCallNotation = (notation: string, stage: number) => {
-    const stageregex = getStageRegex(stage);
+export const isValidCallNotation = (stage: number, notation?: string) => {
+    let valid = true;
+
+    if (notation) {
+        const stageRegex = getStageRegex(stage);
+        const validCallRegex = RegExp(`^(?!\\.)(${stageRegex}){1}([\\.]{1}${stageRegex})*$`);
+        valid = validCallRegex.test(notation);
+        console.log(validCallRegex);
+    }
+
+    return valid;
 }

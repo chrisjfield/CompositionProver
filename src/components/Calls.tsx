@@ -8,6 +8,7 @@ import { ICallState, ICallActionTypes, ICall } from '../interfaces/interfaces';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import { isValidCallNotation } from '../helpers/callHelper';
 
 const Calls = (props: ICallState) => {
     const getCallRows = () => {
@@ -53,13 +54,17 @@ const Calls = (props: ICallState) => {
     }
 
     const handleHalfLeadChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        call.halfLeadPlaceNotation = event.target.value;
-        props.editCall(call);
+        if (isValidCallNotation(call.stage, event.target.value)) {
+            call.halfLeadPlaceNotation = event.target.value;
+            props.editCall(call);
+        }
     };
 
     const handleLeadEndChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        call.leadEndPlaceNotation = event.target.value;
-        props.editCall(call);
+        if (isValidCallNotation(call.stage, event.target.value)) {
+            call.leadEndPlaceNotation = event.target.value;
+            props.editCall(call);
+        }
     };
 
     return (

@@ -14,8 +14,8 @@ export const ringingStages: IStage[] = [
 
 export const getStageRegex = (stage: number) => {
     let regexString = '';
-    for (let i = 4; i <= stage; i++) {
-        regexString += getStageCharacter(i);
+    for (let i = 1; i <= stage; i++) {
+        regexString += `[${getStageCharacter(i)}]?`;
     }
 
     return regexString;
