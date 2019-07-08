@@ -1,21 +1,19 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-
-import { Provider } from 'react-redux';
-import store from './helpers/store';
-
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import './styles/css/app.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import CircularProgress from '@material-ui/core/CircularProgress';
+import store from './redux/store';
 import App from './components/App';
+import './css/index.css';
+
+const rootElement = document.getElementById('root')
 
 ReactDOM.render(
-    <Provider store={store}>
-        <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+    <Provider store={store().store}>
+        <PersistGate loading={<CircularProgress />} persistor={store().persistor}>
             <App />
-        </MuiThemeProvider>
+        </PersistGate>
     </Provider>,
-    document.getElementById('root') as HTMLElement,
-);
+    rootElement
+)

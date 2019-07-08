@@ -1,98 +1,83 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
+import React, { Dispatch } from 'react';
+import { connect } from "react-redux";
+import { IAppState } from '../redux/reducers/rootReducer';
+import { getCalls } from '../redux/selectors/callSelectors';
+import { editCall } from '../redux/actions/actions';
+import { ICallState, ICallActionTypes, ICall } from '../interfaces/interfaces';
 
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 
-import validationHelper from '../helpers/validationHelper';
-import { IStore, ICallProps, ICall } from '../interfaces/Interfaces';
-import { updateCalls, addCall, deleteCall } from '../actions/callActions';
-import styles from '../styles';
+const Calls = (props: ICallState) => {
+    const getCallRows = () => {
+        return props.calls.map((call) => {
+            return (
+                <Grid key={call.abbreviation} item xs={12} md={6} lg={4}>
+                    <Paper>
+                        {`${call.name} (${call.abbreviation})`}
+                        {getLeadEndField(call)}
+                        {getHalfEndField(call)}
+                    </Paper>
+                </Grid>
+            )
+        })
+    }
 
-class Calls extends React.Component<ICallProps> {
-
-    generateCallHTML = (call: ICall, index: number) => {
+    const getLeadEndField = (call: ICall) => {
         return (
-            <div className={'text-field-call col-lg-4 col-sm-6'} key={call.callSymbol}>
-                <span className="text-field-call-label">
-                    {call.callName + ' (' + call.callSymbol + ')'} 
-                </span>
-                <TextField 
-                    style={styles.callTextField}
-                    hintText="Place Notation" 
-                    value={call.callNotation ? call.callNotation : ''} 
-                    errorText={validationHelper.validateCall(call.callNotation)}
-                    onChange={(event, newValue) => this.handleCallChange(call, newValue)}
-                />
-                {call.coreCall ? null : this.getDeleteButton(call)}
-            </div>
-        );
+            <TextField
+                disabled={!call.editable}
+                id="outlined-leadend"
+                label="Lead End Notation"
+                value={call.leadEndPlaceNotation ? call.leadEndPlaceNotation : ''}
+                margin="normal"
+                variant="outlined"
+                onChange={call.editable ? handleLeadEndChange(call) : undefined}
+            />
+        )
     }
 
-    handleCallChange = (call: ICall, newValue: string) => {
-        const updatedCall: ICall = { ...call, callNotation: newValue };
-
-        const updatedCalls = this.props.calls.map((call: ICall) => {
-            return call.callSymbol === updatedCall.callSymbol ? updatedCall : call;
-        });
-
-        this.props.dispatch(updateCalls(updatedCalls));
+    const getHalfEndField = (call: ICall) => {
+        return (call.editable || call.halfLeadPlaceNotation) && (
+            <TextField
+                disabled={!call.editable}
+                id="outlined-halflead"
+                label="Half Lead Notation"
+                value={call.halfLeadPlaceNotation ? call.halfLeadPlaceNotation : ''}
+                margin="normal"
+                variant="outlined"
+                onChange={call.editable ? handleHalfLeadChange(call) : undefined}
+            />
+        )
     }
 
-    getDeleteButton = (call: ICall) => {
-        return (
-            <div className="text-field-call-delete" onClick={() => this.deleteCall(call)}>
-                x
-            </div>
-        );
-    }
+    const handleHalfLeadChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        call.halfLeadPlaceNotation = event.target.value;
+        props.editCall(call);
+    };
 
-    deleteCall = (call: ICall) => {
-        this.props.dispatch(deleteCall(call));
-    }
+    const handleLeadEndChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        call.leadEndPlaceNotation = event.target.value;
+        props.editCall(call);
+    };
 
-    addCall = () => {
-        const maxCall: ICall = this.props.calls.reduce((prev, current) => {
-            const currentCallNumber: number = Number(current.callSymbol) ? Number(current.callSymbol) : 0;
-            const prevCallNumber: number = Number(prev.callSymbol) ? Number(prev.callSymbol) : 0;
+    return (
+        <Grid container spacing={3}>
+            {getCallRows()}
+        </Grid>
+    )
+}
 
-            return (prevCallNumber > currentCallNumber) ? prev : current;
-        });
-        const maxCallSymbol: string = String(Number(maxCall.callSymbol) ? Number(maxCall.callSymbol) + 1 : 1);
-        const newCall: ICall = {
-            callSymbol: maxCallSymbol,
-            callName: 'other call ' + maxCallSymbol,
-        };
+const mapStateToProps = (state: IAppState) => {
+    const calls = getCalls(state);
+    return { calls };
+};
 
-        this.props.dispatch(addCall(newCall));
-    }
-    
-    render() {
-        return (
-            <div>
-                <div className="row text-field-row-wrapper">
-                    {this.props.calls.map((call: ICall, index: number) => this.generateCallHTML(call, index))}
-                </div>
-                <div className="row call-button">
-                    <RaisedButton
-                        label="Add Call"
-                        labelPosition="after"
-                        primary={true}
-                        icon={<AddIcon />}
-                        onClick={this.addCall}
-                    />
-                </div>
-            </div>
-        );
+const mapDispatchToProps = (dispatch: Dispatch<ICallActionTypes>) => {
+    return {
+        editCall: (call: ICall) => dispatch(editCall(call)),
     }
 }
 
-const mapStateToProps = (store: IStore) => {
-    return {
-        calls: store.callReducer.calls,
-    };
-};
-  
-const ConnectedCalls = connect(mapStateToProps)(Calls);
-export default ConnectedCalls;
+export default connect(mapStateToProps, mapDispatchToProps)(Calls);
