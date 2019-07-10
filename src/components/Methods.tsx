@@ -16,8 +16,8 @@ import getSettingsStage from '../redux/selectors/settingSelectors';
 
 const Methods = (props: IMethodState) => {
     const getCallDropdownValues = (searchString: string) => {
-        const filteredCalls = props.calls.filter((call) => 
-            call.name.includes(searchString) 
+        const filteredCalls = props.calls.filter((call) =>
+            call.name.includes(searchString)
             || call.name.includes('user')
         );
 
@@ -27,7 +27,7 @@ const Methods = (props: IMethodState) => {
     }
 
     const handleChange = (property: IMethodProperty, method: IMethod) => (
-        event: React.ChangeEvent<{ value: unknown}>
+        event: React.ChangeEvent<{ value: unknown }>
     ) => {
         method[property] = String(event.target.value);
         props.editMethod(method);
@@ -138,10 +138,11 @@ const Methods = (props: IMethodState) => {
                 <AddIcon />
                 Custom
             </Button>
-        </div>        
+        </div>
     )
 }
-
+// add dialog with virtualised list and search box fixed at the top
+// progress until data loaded, then add method on click, should all be in component state, no redux.
 const mapStateToProps = (state: IAppState) => {
     const methods = getMethods(state);
     const calls = getCalls(state);
