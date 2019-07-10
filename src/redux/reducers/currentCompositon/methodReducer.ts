@@ -8,7 +8,9 @@ export default function (state: IMethod[] = defaultMethods, action: IMethodActio
       return [...state, action.payload];
     }
     case EDIT_METHOD: {
-      return action.payload;
+        return [...state.map((method) => {
+            return method.abbreviation === action.payload.abbreviation ? action.payload : method;
+          })]
     }
     case DELETE_METHOD: {
       return [...state.filter((method) => method.abbreviation !== action.payload)];

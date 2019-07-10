@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { IAppState } from '../redux/reducers/rootReducer';
 import { getCalls } from '../redux/selectors/callSelectors';
 import { editCall } from '../redux/actions/actions';
-import { ICallState, ICallActionTypes, ICall } from '../interfaces/interfaces';
+import { ICallState, ICallActionTypes, ICall, ICallProperty } from '../interfaces/interfaces';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -33,8 +33,7 @@ const Calls = (props: ICallState) => {
                 label="Lead End Notation"
                 value={call.leadEndPlaceNotation ? call.leadEndPlaceNotation : ''}
                 margin="normal"
-                variant="outlined"
-                onChange={call.editable ? handleLeadEndChange(call) : undefined}
+                onChange={call.editable ? handleChange('leadEndPlaceNotation', call) : undefined}
             />
         )
     }
@@ -47,22 +46,14 @@ const Calls = (props: ICallState) => {
                 label="Half Lead Notation"
                 value={call.halfLeadPlaceNotation ? call.halfLeadPlaceNotation : ''}
                 margin="normal"
-                variant="outlined"
-                onChange={call.editable ? handleHalfLeadChange(call) : undefined}
+                onChange={call.editable ? handleChange('halfLeadPlaceNotation', call) : undefined}
             />
         )
     }
 
-    const handleHalfLeadChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (property: ICallProperty, call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
         if (isValidCallNotation(call.stage, event.target.value)) {
-            call.halfLeadPlaceNotation = event.target.value;
-            props.editCall(call);
-        }
-    };
-
-    const handleLeadEndChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isValidCallNotation(call.stage, event.target.value)) {
-            call.leadEndPlaceNotation = event.target.value;
+            call[property] = event.target.value;
             props.editCall(call);
         }
     };
