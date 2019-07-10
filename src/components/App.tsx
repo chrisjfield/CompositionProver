@@ -6,6 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Help from './Help';
 import StageSelector from './StageSelector';
 import Calls from './Calls';
+import Methods from './Methods';
 
 const App: React.FC = () => {
   const [value, setValue] = React.useState(0);
@@ -26,7 +27,7 @@ const App: React.FC = () => {
         </Tabs>
       </AppBar>
       {value === 0 && "Compositions"}
-      {value === 1 && <StageSelector />}
+      {value === 1 && (<div><StageSelector /> <Methods /></div>)}
       {value === 2 && (<div><StageSelector /> <Calls /></div>)}
       {value === 3 && "Results"}
       {value === 4 && <Help />}

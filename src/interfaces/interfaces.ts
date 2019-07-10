@@ -10,6 +10,8 @@ export interface ICall {
     editable: boolean;
 }
 
+export type ICallProperty = 'leadEndPlaceNotation'|'halfLeadPlaceNotation'
+
 export interface IStage {
     name: string;
     stage: number;
@@ -20,10 +22,11 @@ export interface IMethod {
     abbreviation: string;
     placeNotation: string;
     stage: number;
-    editable: boolean;
-    defaultBob?: string;
-    defaultSingle?: string;
+    defaultBob: string;
+    defaultSingle: string;
 }
+
+export type IMethodProperty = 'name'|'abbreviation'|'placeNotation'|'defaultBob'|'defaultSingle'
 
 export interface IComposition {
     numberOfBells: number;
@@ -39,17 +42,17 @@ export interface IEditCallAction {
 
 export type ICallActionTypes = IEditCallAction
 
-interface IEditMethodAction {
+export interface IEditMethodAction {
     type: typeof EDIT_METHOD;
-    payload: IMethod[];
+    payload: IMethod;
 }
 
-interface IAddMethodAction {
+export interface IAddMethodAction {
     type: typeof ADD_METHOD;
     payload: IMethod;
 }
 
-interface IDeleteMethodAction {
+export interface IDeleteMethodAction {
     type: typeof DELETE_METHOD;
     payload: string;
 }
@@ -105,4 +108,13 @@ export interface IStageSelectorState {
 export interface ICallState {
     calls: ICall[];
     editCall(call: ICall): void;
+}
+
+export interface IMethodState {
+    methods: IMethod[];
+    calls: ICall[];
+    stage: number;
+    addMethod(method: IMethod): void;
+    editMethod(method: IMethod): void;
+    deleteMethod(abbreviation: string): void;
 }
