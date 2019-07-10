@@ -54,15 +54,15 @@ const Calls = (props: ICallState) => {
     }
 
     const handleHalfLeadChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isValidCallNotation(call.stage, event.target.value)) {
-            call.halfLeadPlaceNotation = event.target.value;
+        if (isValidCallNotation(call.stage, event.target.value.toUpperCase())) {
+            call.halfLeadPlaceNotation = event.target.value.toUpperCase();
             props.editCall(call);
         }
     };
 
     const handleLeadEndChange = (call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isValidCallNotation(call.stage, event.target.value)) {
-            call.leadEndPlaceNotation = event.target.value;
+        if (isValidCallNotation(call.stage, event.target.value.toUpperCase())) {
+            call.leadEndPlaceNotation = event.target.value.toUpperCase();
             props.editCall(call);
         }
     };
