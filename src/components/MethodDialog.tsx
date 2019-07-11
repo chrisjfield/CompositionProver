@@ -1,34 +1,48 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { Dialog, DialogTitle, ListItem, ListItemText, CircularProgress } from "@material-ui/core";
 import { getMethodListForStage } from '../helpers/methodHelper';
-import { IMethod } from '../interfaces/interfaces';
+import { IMethod, IMethodActionTypes } from '../interfaces/interfaces';
 import { FixedSizeList, ListChildComponentProps  } from 'react-window';
+import { addMethod } from '../redux/actions/actions';
+import { connect } from "react-redux";
 
 export interface MethodDialogProps {
     open: boolean;
     stage: number;
     onClose: () => void;
+    addMethod(method: IMethod): void;
 }
 
 const MethodDialog = (props: MethodDialogProps) => {
     const [loading, setLoading] = React.useState(true);
     const [methods, setMethods] = React.useState<IMethod[]>([]);
+    const [filteredMethods, setFilteredMethods] = React.useState<IMethod[]>([]);
 
     const setMethodProps = (methods: IMethod[]) => {
+        methods.sort((a, b) => {
+            const textA = a.name.toUpperCase();
+            const textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
         setMethods(methods);
+        setFilteredMethods(methods);
         setLoading(false);
-        console.log(methods.length);
     }
 
-    loading && getMethodListForStage(props.stage, setMethodProps);
+    (loading && props.open) && getMethodListForStage(props.stage, setMethodProps);
     
-    const Row = (props: ListChildComponentProps) => {
-        const method = props.data[props.index];
-        console.log(props.index);
-        console.log(method);
+    const addLookedUpMethod = (method: IMethod) => (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        props.addMethod(method);
+        props.onClose();
+    }
+
+    const Row = (rowProps: ListChildComponentProps) => {
+        const method = rowProps.data[rowProps.index];
         return (
-          <ListItem button key={props.index}>
-            <ListItemText primary={props.isScrolling ? 'Scrolling' : method.name} />
+          <ListItem button onClick={addLookedUpMethod(method)} key={rowProps.index} style={rowProps.style}>
+            <ListItemText primary={rowProps.isScrolling ? 'Loading' : method.name} />
           </ListItem>
         );
     }
@@ -41,12 +55,12 @@ const MethodDialog = (props: MethodDialogProps) => {
         } else {
             return (
                 <FixedSizeList
-                    height={500}
-                    itemCount={methods.length}
-                    itemSize={35}
-                    width={300}
+                    height={800}
+                    itemCount={filteredMethods.length}
+                    itemSize={50}
+                    width={500}
                     useIsScrolling={true}
-                    itemData={methods}
+                    itemData={filteredMethods}
                 >
                     {Row}
                 </FixedSizeList>
@@ -62,4 +76,10 @@ const MethodDialog = (props: MethodDialogProps) => {
     );
 }
 
-export default MethodDialog;
+const mapDispatchToProps = (dispatch: Dispatch<IMethodActionTypes>) => {
+    return {
+        addMethod: (method: IMethod) => dispatch(addMethod(method)),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(MethodDialog);
