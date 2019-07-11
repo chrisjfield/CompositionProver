@@ -49,7 +49,6 @@ const Methods = (props: IMethodState) => {
     const addCustomMethod = () => (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
-        console.log('test');
         const newMethod: IMethod = {
             name: 'New Custom Method',
             abbreviation: 'ncm' + props.stage.toString(),

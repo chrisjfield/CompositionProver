@@ -1,7 +1,8 @@
 import React from 'react';
-import { Dialog, DialogTitle, List, ListItem, ListItemText, CircularProgress } from "@material-ui/core";
+import { Dialog, DialogTitle, ListItem, ListItemText, CircularProgress } from "@material-ui/core";
 import { getMethodListForStage } from '../helpers/methodHelper';
 import { IMethod } from '../interfaces/interfaces';
+import { FixedSizeList, ListChildComponentProps  } from 'react-window';
 
 export interface MethodDialogProps {
     open: boolean;
@@ -16,18 +17,20 @@ const MethodDialog = (props: MethodDialogProps) => {
     const setMethodProps = (methods: IMethod[]) => {
         setMethods(methods);
         setLoading(false);
+        console.log(methods.length);
     }
 
     loading && getMethodListForStage(props.stage, setMethodProps);
     
-    const getListItems = () => {
-        return methods.map((method) => {
-            return (
-                <ListItem button onClick={() => console.log(method.name)}>
-                    <ListItemText primary={method.name} />
-                </ListItem>
-            )
-        })
+    const Row = (props: ListChildComponentProps) => {
+        const method = props.data[props.index];
+        console.log(props.index);
+        console.log(method);
+        return (
+          <ListItem button key={props.index}>
+            <ListItemText primary={props.isScrolling ? 'Scrolling' : method.name} />
+          </ListItem>
+        );
     }
 
     const getDiaglogContents = () => {
@@ -37,12 +40,16 @@ const MethodDialog = (props: MethodDialogProps) => {
             )
         } else {
             return (
-                <List>
-                    {getListItems()}
-                    <ListItem button onClick={() => console.log('test')}>
-                        <ListItemText primary="Method test" />
-                    </ListItem>
-                </List>
+                <FixedSizeList
+                    height={500}
+                    itemCount={methods.length}
+                    itemSize={35}
+                    width={300}
+                    useIsScrolling={true}
+                    itemData={methods}
+                >
+                    {Row}
+                </FixedSizeList>
             )
         }
     }
@@ -50,7 +57,7 @@ const MethodDialog = (props: MethodDialogProps) => {
     return (
         <Dialog onClose={props.onClose} aria-labelledby="simple-dialog-title" open={props.open}>
             <DialogTitle id="simple-dialog-title">Select Method</DialogTitle>
-            {getDiaglogContents}
+            {getDiaglogContents()}
         </Dialog>
     );
 }
