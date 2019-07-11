@@ -1,9 +1,10 @@
 import { IMethod } from "../interfaces/interfaces";
 
-export const getMethodListForStage = (stage: number) => {
+export async function getMethodListForStage(stage: number, callBack: (methods: IMethod[]) => void) {
     const methodsUrl: string = `${window.location.origin.toString()}/methodsList.xml`;
     fetch(methodsUrl).then(response => response.text())
         .then(methodsText => processMethodSets(stage, methodsText))
+        .then(methods => callBack(methods))
 };
 
 const processMethodSets = (stage: number, methodsText: string) => {

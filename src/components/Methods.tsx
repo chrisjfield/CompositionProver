@@ -13,8 +13,11 @@ import { Select, OutlinedInput, FormControl, InputLabel, Button, IconButton } fr
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import getSettingsStage from '../redux/selectors/settingSelectors';
+import MethodDialog from './MethodDialog';
 
 const Methods = (props: IMethodState) => {
+    const [open, setOpen] = React.useState(false);
+
     const getCallDropdownValues = (searchString: string) => {
         const filteredCalls = props.calls.filter((call) =>
             call.name.includes(searchString)
@@ -32,6 +35,16 @@ const Methods = (props: IMethodState) => {
         method[property] = String(event.target.value);
         props.editMethod(method);
     };
+
+    const lookupMethod = () => (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
 
     const addCustomMethod = () => (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -130,7 +143,7 @@ const Methods = (props: IMethodState) => {
     return (
         <div>
             {getMethodRows()}
-            <Button variant="contained" color="default">
+            <Button variant="contained" color="default" onClick={lookupMethod()}>
                 <AddIcon />
                 Lookup
             </Button>
@@ -138,6 +151,7 @@ const Methods = (props: IMethodState) => {
                 <AddIcon />
                 Custom
             </Button>
+            <MethodDialog open={open} stage={props.stage} onClose={handleClose}/>
         </div>
     )
 }
