@@ -1,65 +1,70 @@
 import React, { Dispatch } from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { IAppState } from '../redux/reducers/rootReducer';
 import { getCalls } from '../redux/selectors/callSelectors';
 import { editCall } from '../redux/actions/actions';
 import { ICallState, ICallActionTypes, ICall, ICallProperty } from '../interfaces/interfaces';
 
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import { isValidCallNotation } from '../helpers/callHelper';
+import useStyles from '../styles/styles';
+import { Box, Divider } from '@material-ui/core';
 
 const Calls = (props: ICallState) => {
+    const styles = useStyles();
+
     const getCallRows = () => {
         return props.calls.map((call) => {
+            const callKey = call.abbreviation + String(call.stage);
+            const callText = `${call.name} (${call.abbreviation})`;
+            
             return (
-                <Grid key={call.abbreviation} item xs={12} md={6} lg={4}>
-                    <Paper>
-                        {`${call.name} (${call.abbreviation})`}
-                        {getLeadEndField(call)}
-                        {getHalfEndField(call)}
-                    </Paper>
+                <Grid container item key={callKey} className={styles.callContainer} spacing={1} xs={12} lg={6} xl={4}>
+                    <Grid item sm={4} xs={12}>
+                        <Box fontWeight='fontWeightMedium' display='inline-flex' className={styles.callText} >
+                            {callText}
+                        </Box>
+                    </Grid>
+                    <Grid item sm={4} xs={12}>
+                        {getCallEditableField(call,'leadEndPlaceNotation', 'Lead End Notation')}
+                    </Grid>
+                    <Grid item sm={4} xs={12}>
+                        {getCallEditableField(call, 'halfLeadPlaceNotation', 'Half Lead Notation')}
+                    </Grid>
+                    <Grid item sm={false} xs={12}>
+                        <Divider variant="middle" />
+                    </Grid>
                 </Grid>
             )
         })
     }
 
-    const getLeadEndField = (call: ICall) => {
-        return (
-            <TextField
-                disabled={!call.editable}
-                id="outlined-leadend"
-                label="Lead End Notation"
-                value={call.leadEndPlaceNotation ? call.leadEndPlaceNotation : ''}
-                margin="normal"
-                onChange={call.editable ? handleChange('leadEndPlaceNotation', call) : undefined}
-            />
-        )
-    }
+    const getCallEditableField = (call: ICall, property: ICallProperty, label: string) => {
+        const validNotation = isValidCallNotation(call.stage, call[property]);
 
-    const getHalfEndField = (call: ICall) => {
-        return (call.editable || call.halfLeadPlaceNotation) && (
-            <TextField
-                disabled={!call.editable}
-                id="outlined-halflead"
-                label="Half Lead Notation"
-                value={call.halfLeadPlaceNotation ? call.halfLeadPlaceNotation : ''}
-                margin="normal"
-                onChange={call.editable ? handleChange('halfLeadPlaceNotation', call) : undefined}
-            />
-        )
+        return (call.editable || call[property]) 
+            ?  (<TextField
+                    disabled={!call.editable}
+                    error={!validNotation}
+                    id={`call-field-${property.toString()}`}
+                    className={styles.callField}
+                    margin='normal'
+                    label={label}
+                    value={call[property]}
+                    onChange={handleChange(property, call)}
+                    helperText={!validNotation && 'Invalid place notation'}
+                />) 
+            : null;
     }
 
     const handleChange = (property: ICallProperty, call: ICall) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isValidCallNotation(call.stage, event.target.value.toUpperCase())) {
-            call[property] = event.target.value.toUpperCase();
-            props.editCall(call);
-        }
+        call[property] = event.target.value.toUpperCase();
+        props.editCall(call);
     };
 
     return (
-        <Grid container spacing={3}>
+        <Grid container>
             {getCallRows()}
         </Grid>
     )

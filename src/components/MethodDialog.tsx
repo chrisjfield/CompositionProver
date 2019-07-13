@@ -22,7 +22,6 @@ function usePrevious<T>(value: T) {
   }
 
 const MethodDialog = (props: MethodDialogProps) => {
-    console.log(props.stage);
     const [loading, setLoading] = React.useState(true);
     const prevStage = usePrevious(props.stage);
     const [methods, setMethods] = React.useState<IMethod[]>([]);

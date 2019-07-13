@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react';
-import { connect } from "react-redux";
-import { MenuItem, TextField, Container } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { MenuItem, TextField } from '@material-ui/core';
 import { IAppState } from '../redux/reducers/rootReducer';
 import getSettingsStage from '../redux/selectors/settingSelectors';
 import { editSettingsStage } from '../redux/actions/actions';
@@ -9,6 +9,8 @@ import { ringingStages } from '../defaults/stages';
 import useStyles from '../styles/styles';
 
 const StageSelector = (props: IStageSelectorState) => {
+    const styles = useStyles();
+
     const getStageDropdownOptions = () => {
         return ringingStages.map((stage) => (
             <MenuItem key={stage.stage} value={stage.stage}>
@@ -24,20 +26,18 @@ const StageSelector = (props: IStageSelectorState) => {
     };
 
     return (
-        <Container maxWidth={false}>
-            <TextField
-                select
-                id="stage-selector-dropdown"
-                className={useStyles().stageDropdown}
-                label="Stage"
-                value={props.stage}
-                onChange={handleChange()}
-                margin="normal"
-                variant="outlined"
-            >
-                {getStageDropdownOptions()}
-            </TextField>
-        </Container>
+        <TextField
+            select
+            id='stage-selector-dropdown'
+            className={styles.stageDropdown}
+            label='Stage'
+            value={props.stage}
+            onChange={handleChange()}
+            margin='normal'
+            variant='outlined'
+        >
+            {getStageDropdownOptions()}
+        </TextField>
     )
 }
 
