@@ -1,5 +1,5 @@
-import React, { Dispatch } from 'react';
-import { Dialog, DialogTitle, ListItem, ListItemText, CircularProgress } from "@material-ui/core";
+import React, { Dispatch, useEffect, useRef } from 'react';
+import { Dialog, DialogTitle, ListItem, ListItemText, CircularProgress, TextField } from "@material-ui/core";
 import { getMethodListForStage } from '../helpers/methodHelper';
 import { IMethod, IMethodActionTypes } from '../interfaces/interfaces';
 import { FixedSizeList, ListChildComponentProps  } from 'react-window';
@@ -13,10 +13,27 @@ export interface MethodDialogProps {
     addMethod(method: IMethod): void;
 }
 
+function usePrevious<T>(value: T) {
+    const ref = useRef<T>();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
 const MethodDialog = (props: MethodDialogProps) => {
+    console.log(props.stage);
     const [loading, setLoading] = React.useState(true);
+    const prevStage = usePrevious(props.stage);
     const [methods, setMethods] = React.useState<IMethod[]>([]);
     const [filteredMethods, setFilteredMethods] = React.useState<IMethod[]>([]);
+    const [search, setSearch] = React.useState('');
+
+    if (prevStage !== props.stage && !loading) {
+        setLoading(true);
+        setMethods([]);
+        setFilteredMethods([]);
+    }
 
     const setMethodProps = (methods: IMethod[]) => {
         methods.sort((a, b) => {
@@ -68,9 +85,31 @@ const MethodDialog = (props: MethodDialogProps) => {
         }
     }
 
+    const handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const search = event.target.value.toLowerCase();
+        const filteredMethods = methods
+            .filter((method) => method.name.toLowerCase().includes(search))
+            .sort((a, b) => {
+                const textA = a.name.toUpperCase();
+                const textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+
+        setSearch(event.target.value);
+        setFilteredMethods(filteredMethods);
+    }
+
     return (
         <Dialog onClose={props.onClose} aria-labelledby="simple-dialog-title" open={props.open}>
             <DialogTitle id="simple-dialog-title">Select Method</DialogTitle>
+            <TextField
+                id="outlined-search"
+                label="Search"
+                type="search"
+                onChange={handleChange()}
+                margin="normal"
+                variant="outlined"
+            />
             {getDiaglogContents()}
         </Dialog>
     );

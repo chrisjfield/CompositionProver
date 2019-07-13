@@ -1,44 +1,43 @@
 import React, { Dispatch } from 'react';
 import { connect } from "react-redux";
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import { MenuItem, TextField, Container } from '@material-ui/core';
 import { IAppState } from '../redux/reducers/rootReducer';
 import getSettingsStage from '../redux/selectors/settingSelectors';
-import { ringingStages } from '../defaults/stages';
 import { editSettingsStage } from '../redux/actions/actions';
 import { IStageSelectorState, ISettingsActionTypes } from '../interfaces/interfaces';
+import { ringingStages } from '../defaults/stages';
+import useStyles from '../styles/styles';
 
 const StageSelector = (props: IStageSelectorState) => {
-    const getSelections = () => {
+    const getStageDropdownOptions = () => {
         return ringingStages.map((stage) => (
-            <option value={stage.stage} key={stage.stage}>{stage.name}</option>
+            <MenuItem key={stage.stage} value={stage.stage}>
+                {stage.name}
+            </MenuItem>
         ));
     }
 
     const handleChange = () => (
-        event: React.ChangeEvent<{ value: unknown }>
+        event: React.ChangeEvent<HTMLInputElement>
     ) => {
         props.setStage(Number(event.target.value));
     };
 
     return (
-        <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-age-native-simple">
-                Stage
-            </InputLabel>
-            <Select
-                native
+        <Container maxWidth={false}>
+            <TextField
+                select
+                id="stage-selector-dropdown"
+                className={useStyles().stageDropdown}
+                label="Stage"
                 value={props.stage}
                 onChange={handleChange()}
-                input={
-                    <OutlinedInput name="stage" labelWidth={44} id="outlined-age-native-simple" />
-                }
+                margin="normal"
+                variant="outlined"
             >
-                {getSelections()}
-            </Select>
-        </FormControl>
+                {getStageDropdownOptions()}
+            </TextField>
+        </Container>
     )
 }
 
