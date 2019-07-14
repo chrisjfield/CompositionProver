@@ -17,7 +17,19 @@ const useStyles = makeStyles({
         padding: '0 10px',
     },
     callContainer: {
-        padding: '4px 20px'
+        padding: '4px 20px',
+    },
+    methodDialogPaper: {
+        height: '600px',
+    },
+    methodDialogSearch: {
+        margin: '0 15px 15px 15px',
+    },
+    methodDialogTitle: {
+        textAlign: 'center',
+    },
+    loading: {
+        margin: '50px auto',
     },
 });
 

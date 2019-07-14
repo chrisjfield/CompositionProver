@@ -17,13 +17,18 @@ export interface IStage {
     stage: number;
 }
 
-export interface IMethod {
+export interface INewMethod {
     name: string;
     abbreviation: string;
     placeNotation: string;
     stage: number;
     defaultBob: string;
     defaultSingle: string;
+}
+
+
+export interface IMethod extends INewMethod {
+    id: number;
 }
 
 export type IMethodProperty = 'name'|'abbreviation'|'placeNotation'|'defaultBob'|'defaultSingle'
@@ -49,12 +54,12 @@ export interface IEditMethodAction {
 
 export interface IAddMethodAction {
     type: typeof ADD_METHOD;
-    payload: IMethod;
+    payload: INewMethod;
 }
 
 export interface IDeleteMethodAction {
     type: typeof DELETE_METHOD;
-    payload: string;
+    payload: number;
 }
 
 export type IMethodActionTypes = IEditMethodAction | IAddMethodAction | IDeleteMethodAction
@@ -114,7 +119,14 @@ export interface IMethodState {
     methods: IMethod[];
     calls: ICall[];
     stage: number;
-    addMethod(method: IMethod): void;
+    addMethod(method: INewMethod): void;
     editMethod(method: IMethod): void;
-    deleteMethod(abbreviation: string): void;
+    deleteMethod(id: number): void;
+}
+
+export interface IMethodDialogState {
+    open: boolean;
+    stage: number;
+    onClose: () => void;
+    addMethod(method: INewMethod): void;
 }

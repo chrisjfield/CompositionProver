@@ -1,5 +1,5 @@
 import { EDIT_SETTINGS, EDIT_CALL, EDIT_METHOD, ADD_METHOD, DELETE_METHOD } from "./actionTypes";
-import { IEditSettingsAction, ICall, IEditCallAction, IMethod, IEditMethodAction, IAddMethodAction, IDeleteMethodAction } from "../../interfaces/interfaces";
+import { IEditSettingsAction, ICall, IEditCallAction, IMethod, IEditMethodAction, IAddMethodAction, IDeleteMethodAction, INewMethod } from "../../interfaces/interfaces";
 
 export const editSettingsStage = (stage: number): IEditSettingsAction => ({
     type: EDIT_SETTINGS,
@@ -16,12 +16,12 @@ export const editMethod = (method: IMethod): IEditMethodAction => ({
     payload: method,
 });
 
-export const addMethod = (method: IMethod): IAddMethodAction => ({
+export const addMethod = (method: INewMethod): IAddMethodAction => ({
     type: ADD_METHOD,
     payload: method,
 });
 
-export const deleteMethod = (abbreviation: string): IDeleteMethodAction => ({
+export const deleteMethod = (id: number): IDeleteMethodAction => ({
     type: DELETE_METHOD,
-    payload: abbreviation,
+    payload: id,
 });

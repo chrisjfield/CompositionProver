@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import { connect } from "react-redux";
 import { IAppState } from '../redux/reducers/rootReducer';
 import { editMethod, addMethod, deleteMethod } from '../redux/actions/actions';
-import { IMethodState, IMethodActionTypes, IMethod, IMethodProperty } from '../interfaces/interfaces';
+import { IMethodState, IMethodActionTypes, IMethod, IMethodProperty, INewMethod } from '../interfaces/interfaces';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -21,7 +21,7 @@ const Methods = (props: IMethodState) => {
     const getCallDropdownValues = (searchString: string) => {
         const filteredCalls = props.calls.filter((call) =>
             call.name.includes(searchString)
-            || call.name.includes('user')
+            || call.name.includes('User')
         );
 
         return filteredCalls.map((call) => (
@@ -49,7 +49,7 @@ const Methods = (props: IMethodState) => {
     const addCustomMethod = () => (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
-        const newMethod: IMethod = {
+        const newMethod: INewMethod = {
             name: 'New Custom Method',
             abbreviation: 'ncm' + props.stage.toString(),
             stage: props.stage,
@@ -108,7 +108,7 @@ const Methods = (props: IMethodState) => {
                                     <OutlinedInput name="default-bob" labelWidth={88} id="outlined-age-native-simple" />
                                 }
                             >
-                                {getCallDropdownValues('bob')}
+                                {getCallDropdownValues('Bob')}
                             </Select>
                         </FormControl>
                     </Grid>
@@ -125,12 +125,12 @@ const Methods = (props: IMethodState) => {
                                     <OutlinedInput name="default-single" labelWidth={104} id="outlined-age-native-simple" />
                                 }
                             >
-                                {getCallDropdownValues('single')}
+                                {getCallDropdownValues('Single')}
                             </Select>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} md={6} lg={1}>
-                        <IconButton aria-label="Delete" onClick={() => (props.deleteMethod(method.abbreviation))}>
+                        <IconButton aria-label="Delete" onClick={() => (props.deleteMethod(method.id))}>
                             <DeleteIcon />
                         </IconButton>
                     </Grid>
@@ -165,9 +165,9 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<IMethodActionTypes>) => {
     return {
-        addMethod: (method: IMethod) => dispatch(addMethod(method)),
+        addMethod: (method: INewMethod) => dispatch(addMethod(method)),
         editMethod: (method: IMethod) => dispatch(editMethod(method)),
-        deleteMethod: (abbreviation: string) => dispatch(deleteMethod(abbreviation)),
+        deleteMethod: (id: number) => dispatch(deleteMethod(id)),
     }
 }
 

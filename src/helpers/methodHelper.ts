@@ -1,6 +1,6 @@
-import { IMethod } from "../interfaces/interfaces";
+import { INewMethod } from "../interfaces/interfaces";
 
-export async function getMethodListForStage(stage: number, callBack: (methods: IMethod[]) => void) {
+export async function getMethodListForStage(stage: number, callBack: (methods: INewMethod[]) => void) {
     const methodsUrl: string = `${window.location.origin.toString()}/methodsList.xml`;
     fetch(methodsUrl).then(response => response.text())
         .then(methodsText => processMethodSets(stage, methodsText))
@@ -8,7 +8,7 @@ export async function getMethodListForStage(stage: number, callBack: (methods: I
 };
 
 const processMethodSets = (stage: number, methodsText: string) => {
-    const methodArray: IMethod[] = [];
+    const methodArray: INewMethod[] = [];
 
     const xmlParser = new DOMParser();
     const document = xmlParser.parseFromString(methodsText, "text/xml");
@@ -25,13 +25,13 @@ const processMethodSets = (stage: number, methodsText: string) => {
     return methodArray;
 }
 
-const processMethods = (stage: number, methods: HTMLCollectionOf<Element>, methodArray: IMethod[]) => {
+const processMethods = (stage: number, methods: HTMLCollectionOf<Element>, methodArray: INewMethod[]) => {
     for (let i = 0; i < methods.length; i++) {
         const methodName = String(methods[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
         const methodPlaceNotation = String(methods[i].getElementsByTagName("notation")[0].childNodes[0].nodeValue);
         const methodAbbreviation = methodName.substring(0, 3) + stage.toString();
 
-        const method: IMethod = {
+        const method: INewMethod = {
             name: methodName,
             abbreviation: methodAbbreviation,
             stage: stage,
