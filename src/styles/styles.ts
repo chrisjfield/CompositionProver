@@ -31,6 +31,23 @@ const useStyles = makeStyles({
     loading: {
         margin: '50px auto',
     },
+    buttonLeft: {
+        margin: '10px 10px 10px 0',
+        width: '180px',
+    },
+    buttonRight: {
+        margin: '10px 0 10px 0',
+        width: '180px',
+    },
+    methodCallDropdown: {
+        width: '200px',
+    },
+    methodList: {
+        margin: '0 15px'
+    },
+    methodDelete: {
+        marginTop: '18px',
+    },
 });
 
 export default useStyles;

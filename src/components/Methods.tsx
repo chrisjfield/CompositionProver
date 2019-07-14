@@ -1,7 +1,7 @@
 import React, { Dispatch } from 'react';
 import { connect } from "react-redux";
 import { IAppState } from '../redux/reducers/rootReducer';
-import { editMethod, addMethod, deleteMethod } from '../redux/actions/actions';
+import { editMethod, addMethod, deleteMethod, newMethod } from '../redux/actions/actions';
 import { IMethodState, IMethodActionTypes, IMethod, IMethodProperty, INewMethod } from '../interfaces/interfaces';
 
 import Grid from '@material-ui/core/Grid';
@@ -9,13 +9,15 @@ import TextField from '@material-ui/core/TextField';
 
 import { getMethods } from '../redux/selectors/methodSelectors';
 import { getCalls } from '../redux/selectors/callSelectors';
-import { Select, OutlinedInput, FormControl, InputLabel, Button, IconButton } from '@material-ui/core';
+import { Select, OutlinedInput, FormControl, InputLabel, Button, IconButton, Fab, MenuItem, Divider } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import getSettingsStage from '../redux/selectors/settingSelectors';
 import MethodDialog from './MethodDialog';
+import useStyles from '../styles/styles';
 
 const Methods = (props: IMethodState) => {
+    const styles = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const getCallDropdownValues = (searchString: string) => {
@@ -25,47 +27,24 @@ const Methods = (props: IMethodState) => {
         );
 
         return filteredCalls.map((call) => (
-            <option value={call.abbreviation} key={call.abbreviation}>{call.name}</option>
+            <MenuItem key={call.abbreviation} value={call.abbreviation}>
+                {call.name}
+            </MenuItem>
         ));
     }
 
     const handleChange = (property: IMethodProperty, method: IMethod) => (
-        event: React.ChangeEvent<{ value: unknown }>
+        event: React.ChangeEvent<HTMLInputElement>
     ) => {
         method[property] = String(event.target.value);
         props.editMethod(method);
     };
 
-    const lookupMethod = () => (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        setOpen(true);
-    }
-
-    const handleClose = () => {
-        setOpen(false);
-    }
-
-    const addCustomMethod = () => (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        const newMethod: INewMethod = {
-            name: 'New Custom Method',
-            abbreviation: 'ncm' + props.stage.toString(),
-            stage: props.stage,
-            placeNotation: '',
-            defaultBob: 'b',
-            defaultSingle: 's',
-        }
-
-        props.addMethod(newMethod);
-    };
-
     const getMethodRows = () => {
         return props.methods.map((method) => {
             return (
-                <Grid key={method.abbreviation} container spacing={3}>
-                    <Grid item xs={12} md={6} lg={3}>
+                <Grid key={method.id} container spacing={2}>
+                    <Grid item xs={12} sm={8} lg={2}>
                         <TextField
                             id="outlined-method-name"
                             label="Name"
@@ -75,7 +54,7 @@ const Methods = (props: IMethodState) => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12} md={6} lg={1}>
+                    <Grid item xs={12} sm={4} lg={1}>
                         <TextField
                             id="outlined-method-abbreviation"
                             label="Abbreviation"
@@ -85,7 +64,7 @@ const Methods = (props: IMethodState) => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12} md={6} lg={5}>
+                    <Grid item xs={12} sm={12} lg={4}>
                         <TextField
                             id="outlined-method-placeNotation"
                             label="Place Notation"
@@ -95,44 +74,44 @@ const Methods = (props: IMethodState) => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12} md={6} lg={1}>
-                        <FormControl variant="outlined">
-                            <InputLabel htmlFor="outlined-age-native-simple">
-                                Default Bob
-                            </InputLabel>
-                            <Select
-                                native
-                                value={method.defaultBob}
-                                onChange={handleChange('defaultBob', method)}
-                                input={
-                                    <OutlinedInput name="default-bob" labelWidth={88} id="outlined-age-native-simple" />
-                                }
-                            >
-                                {getCallDropdownValues('Bob')}
-                            </Select>
-                        </FormControl>
+                    <Grid item xs={12} sm={5} lg={2}>
+                        <TextField
+                            select
+                            id='method-defaultbob-dropdown'
+                            className={styles.methodCallDropdown}
+                            label='Default Bob'
+                            value={method.defaultBob}
+                            onChange={handleChange('defaultBob', method)}
+                            margin='normal'
+                            variant='outlined'
+                        >
+                            {getCallDropdownValues('Bob')}
+                        </TextField>
                     </Grid>
-                    <Grid item xs={12} md={6} lg={1}>
-                        <FormControl variant="outlined">
-                            <InputLabel htmlFor="outlined-age-native-simple">
-                                Default Single
-                            </InputLabel>
-                            <Select
-                                native
-                                value={method.defaultSingle}
-                                onChange={handleChange('defaultSingle', method)}
-                                input={
-                                    <OutlinedInput name="default-single" labelWidth={104} id="outlined-age-native-simple" />
-                                }
-                            >
-                                {getCallDropdownValues('Single')}
-                            </Select>
-                        </FormControl>
+                    <Grid item xs={8} sm={5} lg={2}>
+                        <TextField
+                            select
+                            id='method-defaultsingle-dropdown'
+                            className={styles.methodCallDropdown}
+                            label='Default Single'
+                            value={method.defaultSingle}
+                            onChange={handleChange('defaultSingle', method)}
+                            margin='normal'
+                            variant='outlined'
+                        >
+                            {getCallDropdownValues('Single')}
+                        </TextField>
                     </Grid>
-                    <Grid item xs={12} md={6} lg={1}>
-                        <IconButton aria-label="Delete" onClick={() => (props.deleteMethod(method.id))}>
+                    <Grid item xs={4} sm={2} lg={1}>
+                        <IconButton 
+                            onClick={() => (props.deleteMethod(method.id))}
+                            className={styles.methodDelete}
+                        >
                             <DeleteIcon />
                         </IconButton>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Divider variant="middle" />
                     </Grid>
                 </Grid>
             )
@@ -140,22 +119,31 @@ const Methods = (props: IMethodState) => {
     }
 
     return (
-        <div>
+        <div className={styles.methodList}>
             {getMethodRows()}
-            <Button variant="contained" color="default" onClick={lookupMethod()}>
+            <Fab 
+                variant="extended" 
+                color="primary"
+                onClick={() => (setOpen(true))} 
+                className={styles.buttonLeft}
+            >
                 <AddIcon />
-                Lookup
-            </Button>
-            <Button variant="contained" color="default" onClick={addCustomMethod()}>
+                Lookup Method
+            </Fab>
+            <Fab 
+                variant="extended" 
+                color="primary" 
+                onClick={() => (props.newMethod(props.stage))} 
+                className={styles.buttonRight}
+            >
                 <AddIcon />
-                Custom
-            </Button>
-            <MethodDialog open={open} stage={props.stage} onClose={handleClose}/>
+                Create Method
+            </Fab>
+            <MethodDialog open={open} stage={props.stage} onClose={() => (setOpen(false))}/>
         </div>
     )
 }
-// add dialog with virtualised list and search box fixed at the top
-// progress until data loaded, then add method on click, should all be in component state, no redux.
+
 const mapStateToProps = (state: IAppState) => {
     const methods = getMethods(state);
     const calls = getCalls(state);
@@ -165,6 +153,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<IMethodActionTypes>) => {
     return {
+        newMethod: (stage: number) => dispatch(newMethod(stage)),
         addMethod: (method: INewMethod) => dispatch(addMethod(method)),
         editMethod: (method: IMethod) => dispatch(editMethod(method)),
         deleteMethod: (id: number) => dispatch(deleteMethod(id)),

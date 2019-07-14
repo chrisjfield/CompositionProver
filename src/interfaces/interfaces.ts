@@ -120,6 +120,7 @@ export interface IMethodState {
     calls: ICall[];
     stage: number;
     addMethod(method: INewMethod): void;
+    newMethod(stage: number): void;
     editMethod(method: IMethod): void;
     deleteMethod(id: number): void;
 }

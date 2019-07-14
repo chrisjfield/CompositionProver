@@ -21,6 +21,22 @@ export const addMethod = (method: INewMethod): IAddMethodAction => ({
     payload: method,
 });
 
+export const newMethod = (stage: number): IAddMethodAction => {
+    const newMethod: INewMethod = {
+        name: 'New Custom Method',
+        abbreviation: 'ncm' + stage.toString(),
+        stage: stage,
+        placeNotation: '',
+        defaultBob: 'b',
+        defaultSingle: 's',
+    }
+
+    return {
+        type: ADD_METHOD,
+        payload: newMethod,
+    }
+};
+
 export const deleteMethod = (id: number): IDeleteMethodAction => ({
     type: DELETE_METHOD,
     payload: id,

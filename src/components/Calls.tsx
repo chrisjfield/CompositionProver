@@ -32,7 +32,7 @@ const Calls = (props: ICallState) => {
                     <Grid item sm={4} xs={12}>
                         {getCallEditableField(call, 'halfLeadPlaceNotation', 'Half Lead Notation')}
                     </Grid>
-                    <Grid item sm={false} xs={12}>
+                    <Grid item xs={12}>
                         <Divider variant="middle" />
                     </Grid>
                 </Grid>

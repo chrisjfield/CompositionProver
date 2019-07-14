@@ -29,7 +29,7 @@ const processMethods = (stage: number, methods: HTMLCollectionOf<Element>, metho
     for (let i = 0; i < methods.length; i++) {
         const methodName = String(methods[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
         const methodPlaceNotation = String(methods[i].getElementsByTagName("notation")[0].childNodes[0].nodeValue);
-        const methodAbbreviation = methodName.substring(0, 3) + stage.toString();
+        const methodAbbreviation = String(methodName.replace(/[^a-z0-9+]+/gi, '')).substring(0, 3) + stage.toString();
 
         const method: INewMethod = {
             name: methodName,
