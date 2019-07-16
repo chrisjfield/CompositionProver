@@ -26,6 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import getSettingsStage from '../redux/selectors/settingSelectors';
 import MethodDialog from './MethodDialog';
 import useStyles from '../styles/styles';
+import { isValidMethodNotation } from '../helpers/methodHelper';
 
 const Methods = (props: IMethodState) => {
 	const styles = useStyles();
@@ -70,6 +71,9 @@ const Methods = (props: IMethodState) => {
 					dupe > 0 && (validation = 'Use unique abbreviations');
 					break;
 				case 'placeNotation':
+                    const validNotation = isValidMethodNotation(method.stage, method.placeNotation)
+
+                    !validNotation && (validation = 'Invalid place notation')
 					break;
 			}
 		}

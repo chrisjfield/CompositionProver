@@ -15,6 +15,7 @@ export default function(
 			return [...state, { ...action.payload, id: state.length }];
 		}
 		case EDIT_METHOD: {
+            action.payload.placeNotation = action.payload.placeNotation.toUpperCase();
 			return [
 				...state.map(method => {
 					return method.id === action.payload.id

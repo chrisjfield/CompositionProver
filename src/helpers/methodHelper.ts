@@ -1,4 +1,5 @@
 import { INewMethod } from "../interfaces/interfaces";
+import { getStageNotationRegex } from "../defaults/stages";
 
 export async function getMethodListForStage(stage: number, callBack: (methods: INewMethod[]) => void) {
     const methodsUrl: string = `${window.location.origin.toString()}/methodsList.xml`;
@@ -35,7 +36,7 @@ const processMethods = (stage: number, methods: HTMLCollectionOf<Element>, metho
             name: methodName,
             abbreviation: methodAbbreviation,
             stage: stage,
-            placeNotation: methodPlaceNotation,
+            placeNotation: methodPlaceNotation.toUpperCase(),
             defaultBob: 'b',
             defaultSingle: 's'
         }
@@ -44,4 +45,17 @@ const processMethods = (stage: number, methods: HTMLCollectionOf<Element>, metho
     }
 
     return methodArray;
+}
+
+export const isValidMethodNotation = (stage: number, notation: string) => {
+    let valid = true;
+
+    const stageRegex = getStageNotationRegex(stage);
+    const validNotationRegex = RegExp(`^[\\-]?${stageRegex}{1}([\\.\\-\\,]{1}${stageRegex})*$`);
+    valid = validNotationRegex.test(notation);
+
+    // regex allows multiple commas so check this is not the case
+    valid =  notation.split(",").length > 2 ? false : valid;
+
+    return valid;
 }
