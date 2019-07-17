@@ -4,3 +4,7 @@ export function getMethods(state: IAppState) {
     const stage = state.currentComposition.settings.methodStage;
     return state.currentComposition.methods.filter((method) => method.stage === stage);
 }
+
+export function getAllMethods(state: IAppState) {
+    return state.currentComposition.methods;
+}

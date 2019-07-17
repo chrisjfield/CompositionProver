@@ -1,5 +1,10 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import { IconButton, Fab, MenuItem, Divider } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { IAppState } from '../redux/reducers/rootReducer';
 import {
 	editMethod,
@@ -14,19 +19,12 @@ import {
 	IMethodProperty,
 	INewMethod,
 } from '../interfaces/interfaces';
-
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-
-import { getMethods } from '../redux/selectors/methodSelectors';
+import { getMethods, getAllMethods } from '../redux/selectors/methodSelectors';
 import { getCalls } from '../redux/selectors/callSelectors';
-import { IconButton, Fab, MenuItem, Divider } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
 import getSettingsStage from '../redux/selectors/settingSelectors';
-import MethodDialog from './MethodDialog';
 import useStyles from '../styles/styles';
 import { isValidMethodNotation } from '../helpers/methodHelper';
+import MethodDialog from './MethodDialog';
 
 const Methods = (props: IMethodState) => {
 	const styles = useStyles();
@@ -60,11 +58,11 @@ const Methods = (props: IMethodState) => {
 		} else {
 			switch (property) {
 				case 'abbreviation':
-					const dupe = props.methods.filter(methodToCheck => {
+					const dupe = props.allMethods.filter(methodToCheck => {
 						return (
 							methodToCheck.abbreviation ===
 								method.abbreviation &&
-							methodToCheck.id < method.id
+							(methodToCheck.stage !== method.stage || methodToCheck.id < method.id)
 						);
 					}).length;
 
@@ -195,10 +193,11 @@ const Methods = (props: IMethodState) => {
 };
 
 const mapStateToProps = (state: IAppState) => {
+    const allMethods = getAllMethods(state);
 	const methods = getMethods(state);
 	const calls = getCalls(state);
 	const stage = getSettingsStage(state);
-	return { methods, calls, stage };
+	return { allMethods, methods, calls, stage };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<IMethodActionTypes>) => {

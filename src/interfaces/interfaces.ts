@@ -116,6 +116,7 @@ export interface ICallState {
 }
 
 export interface IMethodState {
+    allMethods: IMethod[];
     methods: IMethod[];
     calls: ICall[];
     stage: number;

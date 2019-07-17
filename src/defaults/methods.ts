@@ -2,7 +2,7 @@ import { IMethod } from '../interfaces/interfaces';
 
 const defaultMethods: IMethod[] = [
     {
-        id: 1,
+        id: 0,
         name: 'Plain Bob Doubles',
         abbreviation: 'pb5',
         placeNotation: '5.1.5.1.5,125',
@@ -11,7 +11,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 2,
+        id: 1,
         name: 'Plain Bob Minor',
         abbreviation: 'pb6',
         placeNotation: '-16-16-16,12',
@@ -20,7 +20,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 3,
+        id: 2,
         name: 'Plain Bob Triples',
         abbreviation: 'pb7',
         placeNotation: '7.1.7.1.7.1.7.1.7.1.7.1.7.127',
@@ -29,7 +29,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 4,
+        id: 3,
         name: 'Plain Bob Major',
         abbreviation: 'pb8',
         placeNotation: '-18-18-18-18,12',
@@ -38,7 +38,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 5,
+        id: 4,
         name: 'Plain Bob Caters',
         abbreviation: 'pb9',
         placeNotation: '9.1.9.1.9.1.9.1.9.1.9.1.9.1.9.1.9.129',
@@ -47,7 +47,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 6,
+        id: 5,
         name: 'Plain Bob Royal',
         abbreviation: 'pb10',
         placeNotation: '-10-10-10-10-10,12',
@@ -56,7 +56,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 7,
+        id: 6,
         name: 'Plain Bob Cinques',
         abbreviation: 'pb11',
         placeNotation: 'E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.12E',
@@ -65,7 +65,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 8,
+        id: 7,
         name: 'Plain Bob Maximus',
         abbreviation: 'pb12',
         placeNotation: '-1T-1T-1T-1T-1T-1T,12',
@@ -74,7 +74,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 's',
     },
     {
-        id: 9,
+        id: 8,
         name: 'Stedman Triples',
         abbreviation: 'st7',
         placeNotation: '3.1.7.3.1.3.1.3.7.1.3.1',
@@ -83,7 +83,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 'n',
     },
     {
-        id: 10,
+        id: 9,
         name: 'Grandsire Triples',
         abbreviation: 'gr7',
         placeNotation: '3.1.7.1.7.1.7.1.7.1.7.1.7.1',
@@ -92,7 +92,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 'h',
     },
     {
-        id: 11,
+        id: 10,
         name: 'Stedman Caters',
         abbreviation: 'st9',
         placeNotation: '3.1.9.3.1.3.1.3.9.1.3.1',
@@ -101,7 +101,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 'n',
     },
     {
-        id: 12,
+        id: 11,
         name: 'Grandsire Caters',
         abbreviation: 'gr9',
         placeNotation: '3.1.9.1.9.1.9.1.9.1.9.1.9.1.9.1.9.1',
@@ -110,7 +110,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 'h',
     },
     {
-        id: 13,
+        id: 12,
         name: 'Stedman Cinques',
         abbreviation: 'st11',
         placeNotation: '3.1.E.3.1.3.1.3.E.1.3.1',
@@ -119,7 +119,7 @@ const defaultMethods: IMethod[] = [
         defaultSingle: 'n',
     },
     {
-        id: 14,
+        id: 13,
         name: 'Grandsire Cinques',
         abbreviation: 'gr11',
         placeNotation: '3.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1.E.1',
