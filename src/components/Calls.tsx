@@ -1,15 +1,14 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import { Box, Divider } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 import { IAppState } from '../redux/reducers/rootReducer';
 import { getCalls } from '../redux/selectors/callSelectors';
 import { editCall } from '../redux/actions/actions';
 import { ICallState, ICallActionTypes, ICall, ICallProperty } from '../interfaces/interfaces';
-
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import { isValidCallNotation } from '../helpers/callHelper';
 import useStyles from '../styles/styles';
-import { Box, Divider } from '@material-ui/core';
 
 const Calls = (props: ICallState) => {
     const styles = useStyles();

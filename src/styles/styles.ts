@@ -48,6 +48,10 @@ const useStyles = makeStyles({
     methodDelete: {
         marginTop: '18px',
     },
+    helpContainer: {
+        marginTop: '20px',
+        marginBottom: '20px',
+    },
 });
 
 export default useStyles;
