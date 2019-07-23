@@ -52,6 +52,16 @@ const useStyles = makeStyles({
         marginTop: '20px',
         marginBottom: '20px',
     },
+    compositionSettingField: {
+        width: '150px',
+    },
+    compositionCheckbox: {
+        marginTop: '24px',
+    },
+    compositionContainer: {
+        marginTop: '10px',
+        marginBottom: '20px',
+    },
 });
 
 export default useStyles;

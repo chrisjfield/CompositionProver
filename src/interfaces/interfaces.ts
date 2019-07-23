@@ -10,7 +10,7 @@ export interface ICall {
     editable: boolean;
 }
 
-export type ICallProperty = 'leadEndPlaceNotation'|'halfLeadPlaceNotation'
+export type ICallProperty = 'leadEndPlaceNotation' | 'halfLeadPlaceNotation'
 
 export interface IStage {
     name: string;
@@ -31,14 +31,19 @@ export interface IMethod extends INewMethod {
     id: number;
 }
 
-export type IMethodProperty = 'name'|'abbreviation'|'placeNotation'|'defaultBob'|'defaultSingle'
+export type IMethodProperty = 'name' | 'abbreviation' | 'placeNotation' | 'defaultBob' | 'defaultSingle'
+
+export type ICompositionTypes = 'full' | 'numerical' | 'positional'
 
 export interface IComposition {
     numberOfBells: number;
-    style: 'full' | 'numeric' | 'positional';
+    type: ICompositionTypes;
     parts: number;
+    halfLead: boolean;
     composition?: string;
 }
+
+export type ICompositionNumericProperty = 'numberOfBells' | 'parts'
 
 export interface IEditCallAction {
     type: typeof EDIT_CALL;
@@ -65,7 +70,7 @@ export interface IDeleteMethodAction {
 export type IMethodActionTypes = IEditMethodAction | IAddMethodAction | IDeleteMethodAction
 
 
-interface ICompositionAction {
+export interface ICompositionAction {
     type: typeof EDIT_CURRENT_COMPOSITION;
     payload: IComposition;
 }
@@ -131,4 +136,9 @@ export interface IMethodDialogState {
     stage: number;
     onClose: () => void;
     addMethod(method: INewMethod): void;
+}
+
+export interface ICompositionSettingsState {
+    composition: IComposition;
+    editComposition(composition: IComposition): void;
 }

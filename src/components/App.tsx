@@ -7,6 +7,7 @@ import Help from './Help';
 import StageSelector from './StageSelector';
 import Calls from './Calls';
 import Methods from './Methods';
+import CompositionSettings from './CompositionSettings';
 
 const App: React.FC = () => {
   const [value, setValue] = React.useState(0);
@@ -26,7 +27,7 @@ const App: React.FC = () => {
           <Tab label="Help" />
         </Tabs>
       </AppBar>
-      {value === 0 && "Compositions"}
+      {value === 0 && (<div><CompositionSettings /></div>)}
       {value === 1 && (<div><StageSelector /> <Methods /></div>)}
       {value === 2 && (<div><StageSelector /> <Calls /></div>)}
       {value === 3 && "Results"}

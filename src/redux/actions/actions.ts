@@ -1,5 +1,5 @@
-import { EDIT_SETTINGS, EDIT_CALL, EDIT_METHOD, ADD_METHOD, DELETE_METHOD } from "./actionTypes";
-import { IEditSettingsAction, ICall, IEditCallAction, IMethod, IEditMethodAction, IAddMethodAction, IDeleteMethodAction, INewMethod } from "../../interfaces/interfaces";
+import { EDIT_SETTINGS, EDIT_CALL, EDIT_METHOD, ADD_METHOD, DELETE_METHOD, EDIT_CURRENT_COMPOSITION } from "./actionTypes";
+import { IEditSettingsAction, ICall, IEditCallAction, IMethod, IEditMethodAction, IAddMethodAction, IDeleteMethodAction, INewMethod, IComposition, ICompositionAction } from "../../interfaces/interfaces";
 
 export const editSettingsStage = (stage: number): IEditSettingsAction => ({
     type: EDIT_SETTINGS,
@@ -41,3 +41,8 @@ export const deleteMethod = (id: number): IDeleteMethodAction => ({
     type: DELETE_METHOD,
     payload: id,
 });
+
+export const editCurrentComposition = (composition: IComposition): ICompositionAction => ({
+    type: EDIT_CURRENT_COMPOSITION,
+    payload: composition,
+})
