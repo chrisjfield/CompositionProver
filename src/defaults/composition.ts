@@ -1,7 +1,7 @@
 import { IComposition } from '../interfaces/interfaces';
 
 const defaultComposition: IComposition = {
-    type: 'full',
+    type: 'Full',
     numberOfBells: 8,
     parts: 3,
     halfLead: false,

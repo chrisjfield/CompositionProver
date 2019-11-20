@@ -1,4 +1,5 @@
 import { getStageNotationRegex } from "../defaults/stages";
+import { ICall } from "../interfaces/interfaces";
 
 export const isValidCallNotation = (stage: number, notation?: string) => {
     let valid = true;
@@ -10,4 +11,15 @@ export const isValidCallNotation = (stage: number, notation?: string) => {
     }
 
     return valid;
+}
+
+export const getCallAbbreviationRegex = (calls: ICall[]) => {
+    let regex = ''
+
+    if (calls.length > 0) {
+        calls.forEach(call => regex += `${call.abbreviation}|`)
+        regex += 'p';
+    }
+
+    return regex;
 }

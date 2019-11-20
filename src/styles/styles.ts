@@ -62,6 +62,9 @@ const useStyles = makeStyles({
         marginTop: '10px',
         marginBottom: '20px',
     },
+    compositionCompositionField: {
+        maxWidth: '600px',
+    }
 });
 
 export default useStyles;

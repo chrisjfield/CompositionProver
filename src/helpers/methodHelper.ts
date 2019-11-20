@@ -1,4 +1,4 @@
-import { INewMethod } from "../interfaces/interfaces";
+import { INewMethod, IMethod } from "../interfaces/interfaces";
 import { getStageNotationRegex } from "../defaults/stages";
 
 export async function getMethodListForStage(stage: number, callBack: (methods: INewMethod[]) => void) {
@@ -55,7 +55,18 @@ export const isValidMethodNotation = (stage: number, notation: string) => {
     valid = validNotationRegex.test(notation);
 
     // regex allows multiple commas so check this is not the case
-    valid =  notation.split(",").length > 2 ? false : valid;
+    valid = notation.split(",").length > 2 ? false : valid;
 
     return valid;
+}
+
+export const getMethodAbbreviationRegex = (methods: IMethod[]) => {
+    let regex = ''
+
+    if (methods.length > 0) {
+        methods.forEach(method => regex += `${method.abbreviation}|`)
+        regex = regex.slice(0, -1);
+    }
+
+    return regex;
 }

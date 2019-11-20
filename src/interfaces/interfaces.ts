@@ -33,7 +33,7 @@ export interface IMethod extends INewMethod {
 
 export type IMethodProperty = 'name' | 'abbreviation' | 'placeNotation' | 'defaultBob' | 'defaultSingle'
 
-export type ICompositionTypes = 'full' | 'numerical' | 'positional'
+export type ICompositionTypes = 'Full' | 'Numerical' | 'Positional'
 
 export interface IComposition {
     numberOfBells: number;
@@ -140,5 +140,7 @@ export interface IMethodDialogState {
 
 export interface ICompositionSettingsState {
     composition: IComposition;
+    methods: IMethod[];
+    calls: ICall[];
     editComposition(composition: IComposition): void;
 }
