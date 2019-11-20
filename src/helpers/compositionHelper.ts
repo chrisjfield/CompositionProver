@@ -1,12 +1,12 @@
-import { IMethod, ICall } from "../interfaces/interfaces";
+import { IMethod, ICall, IComposition } from "../interfaces/interfaces";
 import { getMethodAbbreviationRegex } from "./methodHelper";
 import { getCallAbbreviationRegex } from "./callHelper";
+import { getStageCallingPositionRegex } from "../defaults/stages";
 
-
-export const isValidFullComposition = (calls: ICall[], methods: IMethod[], composition?: string) => {
+export const isValidComposition = (calls: ICall[], methods: IMethod[], composition: IComposition) => {
     let valid = true;
 
-    if (composition) {
+    if (composition.composition) {
         // compositions can have definitions at the start in the form: part=x.x;
         // compositions are all in the form x.x, or part.part, or a combination i.e. part.x
 
@@ -15,11 +15,36 @@ export const isValidFullComposition = (calls: ICall[], methods: IMethod[], compo
         // Second check the final element is valid where x can be the "x" definition or a part
         // const stageRegex = getStageNotationRegex(stage);
 
-        const methodRegex = getMethodAbbreviationRegex(methods);
+        const methodRegex = getMethodAbbreviationRegex(methods, composition.numberOfBells);
         const callRegex = getCallAbbreviationRegex(calls);
+
+        let baseRegex = '';
+        switch (composition.type) {
+            case 'Full':
+                baseRegex = `(${methodRegex}){1}(${callRegex})?`;
+                break;
+            case 'Numerical':
+                baseRegex = `(${callRegex})?([0-9]+)`;
+                break;
+            case 'Positional':
+                if (!composition.startingMethod) {
+                    return false;
+                }
+
+                const method = methods.find(method => method.abbreviation === composition.startingMethod);
+                if (!method) {
+                    return false;
+                }
+
+                const callingPositionRegex = getStageCallingPositionRegex(method.stage);
+
+                baseRegex = `([0-9]?)(${callRegex})?(${callingPositionRegex}){1}`;
+                break
+        }
+
         let partRegex: String = '';
 
-        const compositionParts = composition.replace(/[\n\r]+/g, '').replace(/\s{2,10}/g, ' ').split(';');
+        const compositionParts = composition.composition.replace(/[\n\r\s]+/g, '').split(';');
         const setInvalid = () => { valid = false };
 
         for (let i = 0; i < compositionParts.length; i++) {
@@ -45,9 +70,9 @@ export const isValidFullComposition = (calls: ICall[], methods: IMethod[], compo
 
             let validNotationRegex: RegExp;
             if (partRegex) {
-                validNotationRegex = RegExp(`^(((${methodRegex}){1}(${callRegex})?)|(${partRegex}))$`);
+                validNotationRegex = RegExp(`^((${baseRegex})|(${partRegex}))$`);
             } else {
-                validNotationRegex = RegExp(`^(${methodRegex}){1}(${callRegex})?$`);
+                validNotationRegex = RegExp(`^(${baseRegex})?$`);
             }
 
             notation.split('.').forEach(element => {
@@ -61,30 +86,6 @@ export const isValidFullComposition = (calls: ICall[], methods: IMethod[], compo
             }
         }
     }
-
-    return valid;
-}
-
-export const isValidNumericalComposition = (composition?: string) => {
-    let valid = true;
-
-    // if (composition) {
-    //     const stageRegex = getStageNotationRegex(stage);
-    //     const validCallRegex = RegExp(`^${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
-    //     valid = validCallRegex.test(notation);
-    // }
-
-    return valid;
-}
-
-export const isValidPositionalComposition = (composition?: string) => {
-    let valid = true;
-
-    // if (composition) {
-    //     const stageRegex = getStageNotationRegex(stage);
-    //     const validCallRegex = RegExp(`^${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
-    //     valid = validCallRegex.test(notation);
-    // }
 
     return valid;
 }

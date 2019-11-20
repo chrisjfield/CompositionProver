@@ -60,13 +60,23 @@ export const isValidMethodNotation = (stage: number, notation: string) => {
     return valid;
 }
 
-export const getMethodAbbreviationRegex = (methods: IMethod[]) => {
+export const getMethodAbbreviationRegex = (methods: IMethod[], numberOfBells: Number) => {
     let regex = ''
 
     if (methods.length > 0) {
-        methods.forEach(method => regex += `${method.abbreviation}|`)
+        methods.forEach(method => regex += `${method.abbreviation}|`);
         regex = regex.slice(0, -1);
     }
 
     return regex;
+}
+
+export const sortMethods = (methodA: IMethod, methodB: IMethod) => {
+    if (methodA.stage < methodB.stage) {
+        return 1;
+    } else if (methodA.stage === methodB.stage && methodA.name > methodB.name) {
+        return 1;
+    } else {
+        return -1;
+    }
 }

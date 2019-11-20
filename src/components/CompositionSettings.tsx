@@ -5,11 +5,12 @@ import { ICompositionSettingsState, IComposition, ICompositionActionTypes, } fro
 import useStyles from '../styles/styles';
 import { IAppState } from '../redux/reducers/rootReducer';
 import { getCalls } from '../redux/selectors/callSelectors';
-import { getAllMethods } from '../redux/selectors/methodSelectors';
+import { getCompositionMethods } from '../redux/selectors/methodSelectors';
 import { getCurrentComposition } from '../redux/selectors/compositionSelectors';
 import { editCurrentComposition } from '../redux/actions/actions';
 import { TextField, MenuItem, FormControlLabel, Checkbox, Grid, Container } from '@material-ui/core';
-import { isValidFullComposition, isValidNumericalComposition, isValidPositionalComposition } from '../helpers/compositionHelper'
+import { isValidComposition } from '../helpers/compositionHelper'
+import { sortMethods } from '../helpers/methodHelper';
 
 const CompositionSettings = (props: ICompositionSettingsState) => {
     const styles = useStyles();
@@ -18,6 +19,14 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
         return array.map((item) => (
             <MenuItem key={item.toString()} value={item}>
                 {item.toString()}
+            </MenuItem>
+        ));
+    }
+
+    const getMethodDropdownOptions = () => {
+        return props.methods.sort((a, b) => sortMethods(a, b)).map((method) => (
+            <MenuItem key={method.abbreviation} value={method.abbreviation}>
+                {method.name}
             </MenuItem>
         ));
     }
@@ -33,23 +42,14 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
     const compositionValidation = (composition: IComposition) => {
         let validation: String = '';
 
-        switch (composition.type) {
-            case 'Full':
-                !isValidFullComposition(props.calls, props.methods, composition.composition) && (validation = 'Invalid Full Type Composition');
-                break;
-            case 'Numerical':
-                !isValidNumericalComposition(composition.composition) && (validation = 'Invalid Numerical Type Composition');
-                break;
-            case 'Positional':
-                !isValidPositionalComposition(composition.composition) && (validation = 'Invalid Positional Type Composition');
-                break;
-        }
+        !isValidComposition(props.calls, props.methods, composition) && (validation = 'Invalid Full Type Composition');
 
         return validation;
     }
 
+    const methodNotSet = props.composition.type !== 'Full' && !props.composition.startingMethod;
     const validation = compositionValidation(props.composition);
-    const error = validation ? true : false;
+    const error = validation && !methodNotSet ? true : false;
 
     return (
         <Container className={styles.compositionContainer}>
@@ -110,6 +110,23 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
                         label="Half Leads"
                     />
                 </Grid>
+                {props.composition.type !== 'Full' &&
+                    (<Grid item xs={6}>
+                        <TextField
+                            select
+                            fullWidth
+                            id='composition-method-dropdown'
+                            className={styles.compositionMethodField}
+                            label='Method'
+                            value={props.composition.startingMethod}
+                            onChange={handleChange('startingMethod')}
+                            margin='normal'
+                            variant='outlined'
+                        >
+                            {getMethodDropdownOptions()}
+                        </TextField>
+                    </Grid>)
+                }
                 <Grid item xs={12}>
                     <TextField
                         id='composition-composition-text'
@@ -118,7 +135,8 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
                         value={props.composition.composition}
                         onChange={handleChange('composition')}
                         error={error}
-                        helperText={validation}
+                        helperText={methodNotSet ? 'Please choose a method' : validation}
+                        disabled={methodNotSet}
                         multiline
                         fullWidth
                         rows="8"
@@ -133,7 +151,7 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
 
 const mapStateToProps = (state: IAppState) => {
     const composition = getCurrentComposition(state);
-    const methods = getAllMethods(state);;
+    const methods = getCompositionMethods(state);;
     const calls = getCalls(state);
     return { composition, methods, calls };
 };

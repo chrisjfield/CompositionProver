@@ -40,6 +40,7 @@ export interface IComposition {
     type: ICompositionTypes;
     parts: number;
     halfLead: boolean;
+    startingMethod?: string;
     composition?: string;
 }
 

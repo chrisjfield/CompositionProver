@@ -18,7 +18,7 @@ export const getStageNotationRegex = (stage: number) => {
     let regexString = '';
 
     // get a lookahead to guarantee at least 1 character present
-    if (stage < 10 ) {
+    if (stage < 10) {
         regexString += `(?=[1-${getStageCharacter(stage)}])`;
     } else if (stage === 10) {
         regexString += `(?=[0-9])`;
@@ -54,4 +54,40 @@ export const getStageCharacter = (stage: number) => {
     }
 
     return char;
+}
+
+export const getStageCallingPositionRegex = (stage: number) => {
+    let callingPositionRegex: string = '';
+
+    switch (stage) {
+        case 4:
+            callingPositionRegex = 'I|O|4';
+            break;
+        case 5:
+            callingPositionRegex = 'I|O|4|H';
+            break;
+        case 6:
+            callingPositionRegex = 'I|O|4|W|H';
+            break;
+        case 7:
+            callingPositionRegex = 'I|O|4|M|W|H';
+            break;
+        case 8:
+            callingPositionRegex = 'I|O|4|5|M|W|H';
+            break;
+        case 9:
+            callingPositionRegex = 'I|O|4|5|6|M|W|H';
+            break;
+        case 10:
+            callingPositionRegex = 'I|O|4|5|6|7|M|W|H';
+            break;
+        case 11:
+            callingPositionRegex = 'I|O|4|5|6|7|8|M|W|H';
+            break;
+        case 12:
+            callingPositionRegex = 'I|O|4|5|6|7|8|9|M|W|H';
+            break;
+    }
+
+    return callingPositionRegex;
 }
