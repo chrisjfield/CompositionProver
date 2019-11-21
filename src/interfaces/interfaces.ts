@@ -145,3 +145,53 @@ export interface ICompositionSettingsState {
     calls: ICall[];
     editComposition(composition: IComposition): void;
 }
+
+export interface IResultsState {
+    composition: IComposition;
+    methods: IMethod[];
+    calls: ICall[];
+}
+
+export interface IResult {
+    leads: ILeadResults[];
+    grid: string[];
+    courseEnds: string[];
+    partEnds: string[];
+    numberOfChanges: number;
+    changesOfMethod: number;
+    truth: ITruth;
+    musicalChanges: IMusicalChanges;
+}
+
+export interface IResultHelper {
+    result: IResult;
+    highestMethodStage: number;
+    initialChange: string;
+    currentChange: string;
+    expandedComposition: string;
+    halfLeadsOn: boolean;
+    halfLeadNext: boolean;
+    baseMethod: string;
+    currentMethod: string;
+}
+
+export interface ILeadResults {
+    rows: string[];
+    leadEnd: string;
+    method: string;
+    call: string;
+}
+
+export interface IMusicalChanges {
+    queens: number;
+    tittums: number;
+    rollupsFront: number;
+    rollupsBack: number;
+    littleBellsFront: number;
+    littleBellsBack: number;
+}
+
+export interface ITruth {
+    true: boolean;
+    firstFalseRow: string;
+}

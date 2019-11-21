@@ -8,6 +8,7 @@ import StageSelector from './StageSelector';
 import Calls from './Calls';
 import Methods from './Methods';
 import CompositionSettings from './CompositionSettings';
+import Results from './Results';
 
 const App: React.FC = () => {
   const [value, setValue] = React.useState(0);
@@ -19,7 +20,7 @@ const App: React.FC = () => {
   return (
     <div>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} variant="fullWidth">
+        <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="on">
           <Tab label="Compositions" />
           <Tab label="Methods" />
           <Tab label="Calls" />
@@ -30,7 +31,7 @@ const App: React.FC = () => {
       {value === 0 && (<div><CompositionSettings /></div>)}
       {value === 1 && (<div><StageSelector /> <Methods /></div>)}
       {value === 2 && (<div><StageSelector /> <Calls /></div>)}
-      {value === 3 && "Results"}
+      {value === 3 && <Results />}
       {value === 4 && <Help />}
     </div>
   );

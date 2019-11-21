@@ -1,6 +1,15 @@
 import { getStageNotationRegex } from "../defaults/stages";
 import { ICall } from "../interfaces/interfaces";
 
+export const plainCall: ICall = {
+    abbreviation: 'p',
+    editable: false,
+    halfLeadPlaceNotation: '',
+    leadEndPlaceNotation: '',
+    name: 'Plain lead',
+    stage: 0,
+}
+
 export const isValidCallNotation = (stage: number, notation?: string) => {
     let valid = true;
 

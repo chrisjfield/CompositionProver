@@ -68,6 +68,18 @@ const useStyles = makeStyles({
     compositionMethodField: {
         maxWidth: '250px',
     },
+    resultsContainer: {
+        marginTop: '10px',
+        marginBottom: '20px',
+    },
+    loadingText: {
+        marginTop: '25px',
+        marginLeft: '-50px',
+    },
+    errorText: {
+        color: 'red',
+        fontWeight: 'bold',
+    },
 });
 
 export default useStyles;

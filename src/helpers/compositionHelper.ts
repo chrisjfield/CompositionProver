@@ -21,7 +21,7 @@ export const isValidComposition = (calls: ICall[], methods: IMethod[], compositi
         let baseRegex = '';
         switch (composition.type) {
             case 'Full':
-                baseRegex = `(${methodRegex}){1}(${callRegex})?`;
+                baseRegex = `(${methodRegex}){1}(${callRegex}){1}`;
                 break;
             case 'Numerical':
                 baseRegex = `(${callRegex})?([0-9]+)`;

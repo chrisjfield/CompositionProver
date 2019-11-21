@@ -1,4 +1,5 @@
 import { IStage } from "../interfaces/interfaces";
+import { getStageCharacter } from "../helpers/stageHelper";
 
 export const ringingStages: IStage[] = [
     { name: 'Minimus', stage: 4 },
@@ -35,25 +36,6 @@ export const getStageNotationRegex = (stage: number) => {
     regexString += ')';
 
     return regexString;
-}
-
-export const getStageCharacter = (stage: number) => {
-    let char: string = ''
-    switch (stage) {
-        case 10:
-            char = '0';
-            break;
-        case 11:
-            char = 'E';
-            break;
-        case 12:
-            char = 'T';
-            break;
-        default:
-            char = stage.toString();
-    }
-
-    return char;
 }
 
 export const getStageCallingPositionRegex = (stage: number) => {
