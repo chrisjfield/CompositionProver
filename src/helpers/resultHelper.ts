@@ -36,11 +36,6 @@ const emptyResultHelper: IResultHelper = {
 }
 
 export const calculateResult = (composition: IComposition, methods: IMethod[], calls: ICall[], onComplete: (result: IResult) => void) => {
-    var start = new Date().getTime();
-    var end = start;
-    while (end < start + 3000) {
-        end = new Date().getTime();
-    }
     let resultHelper: IResultHelper = JSON.parse(JSON.stringify(emptyResultHelper));
 
     if (!composition.composition) {
