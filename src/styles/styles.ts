@@ -92,6 +92,17 @@ const useStyles = makeStyles({
     resultsText: {
         marginTop: '15px',
     },
+    sectionRow: {
+        letterSpacing: '4px',
+    },
+    resultDivider: {
+        maxWidth: '170px',
+        margin: 'auto',
+    },
+    resultSettingField: {
+        width: '200px',
+        marginTop: '15px',
+    }
 });
 
 export default useStyles;

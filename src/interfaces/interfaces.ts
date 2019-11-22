@@ -161,12 +161,12 @@ export interface IResult {
     changesOfMethod: number;
     truth: ITruth;
     musicalChanges: IMusicalChanges;
+    initialChange: string;
 }
 
 export interface IResultHelper {
     result: IResult;
     highestMethodStage: number;
-    initialChange: string;
     currentChange: string;
     expandedComposition: string;
     halfLeadsOn: boolean;
@@ -197,3 +197,11 @@ export interface ITruth {
     comesRound: boolean;
     firstFalseRow: string;
 }
+
+export interface IResultsSettings {
+    showSections: boolean;
+    showGrid: boolean;
+    showTreble: boolean;
+}
+
+export type IResultsSettingsType = 'showSections' | 'showGrid' | 'showTreble';

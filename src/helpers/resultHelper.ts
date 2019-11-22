@@ -1,41 +1,7 @@
 import { IResult, IComposition, IMethod, ICall, ITruth, IMusicalChanges, IResultHelper, ILeadResults } from "../interfaces/interfaces";
 import { getStageQueens, getStageTittums, getStageRollupsForward, getStageRollupsBackward, getInitialChange, getStageCharacter, getStageNumber, getTenorIndexFromCallPosition } from "./stageHelper";
 import { plainCall } from "./callHelper";
-
-export const emptyResult: IResult = {
-    changesOfMethod: 0,
-    courseEnds: [],
-    grid: [],
-    leads: [],
-    musicalChanges: {
-        littleBellsBack: 0,
-        littleBellsFront: 0,
-        queens: 0,
-        rollupsBack: 0,
-        rollupsFront: 0,
-        tittums: 0,
-    },
-    numberOfChanges: 0,
-    partEnds: [],
-    truth: {
-        firstFalseRow: '',
-        true: true,
-        comesRound: false,
-    }
-};
-
-const emptyResultHelper: IResultHelper = {
-    result: emptyResult,
-    currentChange: '',
-    expandedComposition: '',
-    highestMethodStage: 0,
-    initialChange: '',
-    baseMethod: '',
-    currentMethod: '',
-    halfLeadsOn: false,
-    halfLeadNext: false,
-    courseLeadCounter: 1,
-}
+import { emptyResultHelper } from "../defaults/results";
 
 export const calculateResult = (composition: IComposition, methods: IMethod[], calls: ICall[], onComplete: (result: IResult) => void) => {
     let resultHelper: IResultHelper = JSON.parse(JSON.stringify(emptyResultHelper));
@@ -45,7 +11,7 @@ export const calculateResult = (composition: IComposition, methods: IMethod[], c
     }
 
     // set the initial values
-    resultHelper.initialChange = getInitialChange(composition.numberOfBells);
+    resultHelper.result.initialChange = getInitialChange(composition.numberOfBells);
     resultHelper.expandedComposition = getExpandedComposition(composition.composition);
     resultHelper.halfLeadsOn = composition.halfLead;
     resultHelper.baseMethod = composition.startingMethod ? composition.startingMethod : '';
@@ -58,7 +24,7 @@ export const calculateResult = (composition: IComposition, methods: IMethod[], c
 
     // calculate the key stats - length, musicality and truth.
     resultHelper.result.numberOfChanges = resultHelper.result.grid.length;
-    resultHelper.result.truth = getTruth(resultHelper.highestMethodStage, resultHelper.result.grid, resultHelper.initialChange);
+    resultHelper.result.truth = getTruth(resultHelper.highestMethodStage, resultHelper.result.grid, resultHelper.result.initialChange);
     resultHelper.result.musicalChanges = getMusicalChanges(resultHelper.highestMethodStage, resultHelper.result.grid);
 
     onComplete(resultHelper.result);
@@ -229,7 +195,7 @@ const calculateNumericalElement = (currentResultHelper: IResultHelper, compositi
         do {
             currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
         }
-        while (currentResultHelper.currentChange !== currentResultHelper.initialChange && loopStartChange !== currentResultHelper.currentChange)
+        while (currentResultHelper.currentChange !== currentResultHelper.result.initialChange && loopStartChange !== currentResultHelper.currentChange)
         // no need to throw errors here, can just display the composition with a plain course to finish and no rounds.
     }
 
@@ -329,7 +295,7 @@ const calculatePositionalElement = (currentResultHelper: IResultHelper, composit
         do {
             currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
         }
-        while (currentResultHelper.currentChange !== currentResultHelper.initialChange && loopStartChange !== currentResultHelper.currentChange)
+        while (currentResultHelper.currentChange !== currentResultHelper.result.initialChange && loopStartChange !== currentResultHelper.currentChange)
         // no need to throw errors here, can just display the composition with a plain course to finish and no rounds.
     }
 
@@ -380,7 +346,7 @@ const generateLead = (currentResultHelper: IResultHelper, call: ICall, method: I
         leadResults.rows.push(row);
 
         // if it comes round in the last lead before the end stop calculating - it's a snap finish
-        if (possibleLastLead && i !== placeNotation.length - 1 && row === currentResultHelper.initialChange) {
+        if (possibleLastLead && i !== placeNotation.length - 1 && row === currentResultHelper.result.initialChange) {
             // need to check if the last lead was a change of method and the stage before returning
             if (currentResultHelper.currentMethod && currentResultHelper.currentMethod !== method.abbreviation) {
                 currentResultHelper.result.changesOfMethod += 1;
@@ -427,7 +393,7 @@ const generateLead = (currentResultHelper: IResultHelper, call: ICall, method: I
 }
 
 const generateRow = (currentResultHelper: IResultHelper, placeNotationElement: string, methodStage: number) => {
-    const currentChange: string = currentResultHelper.currentChange ? currentResultHelper.currentChange : currentResultHelper.initialChange;
+    const currentChange: string = currentResultHelper.currentChange ? currentResultHelper.currentChange : currentResultHelper.result.initialChange;
     const rowArray: string[] = Array.from(currentChange);
     const placeNotationArray: string[] = Array.from(placeNotationElement);
     const nextChange: string[] = [];

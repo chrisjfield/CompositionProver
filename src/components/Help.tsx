@@ -68,7 +68,7 @@ const Help = () => {
                             <li><b>Enter the composition!</b> You can now enter your composition and look at the results.</li>
                         </ul>
                         <br />
-                        <Typography variant="subtitle2">Full Compositions</Typography>
+                        <Typography variant="subtitle2"><u>Full Compositions</u></Typography>
                         <br />
                         Full compositions should be entered lead (or half lead) at a time, with each element seperated by a ".".
                         <br />
@@ -78,7 +78,7 @@ const Help = () => {
                         For example <i>pb8p.pb8b</i> would be a plain lead of bob major followed by a bobbed lead.
                         <br />
                         <br />
-                        <Typography variant="subtitle2">Numerical Compositions</Typography>
+                        <Typography variant="subtitle2"><u>Numerical Compositions</u></Typography>
                         <br />
                         Numerical compositions should be entered call by call with each element seperated by a ".".
                         <br />
@@ -88,7 +88,7 @@ const Help = () => {
                         For example, if you set the method to Grandsire Triples and wrote <i>1.3.s4</i> this would give a bob at leads 1 & 3 and a single at lead 4.
                         <br />
                         <br />
-                        <Typography variant="subtitle2">Positional Compositions</Typography>
+                        <Typography variant="subtitle2"><u>Positional Compositions</u></Typography>
                         <br />
                         Positional compositions should be entered call by call with each element seperated by a ".".
                         <br />
@@ -96,7 +96,7 @@ const Help = () => {
                         You may add a leading number if this position is repeated.
                         <br />
                         <br />
-                        For example, if you set the method to Bob Minor and wrote <i>2H.sW</i> this would give a bob when the tenor will become it's home position twice and a single when it will be in the wrong position.
+                        For example, if you set the method to Bob Minor and write <i>2H.sW</i> this would give a bob when the tenor will become it's home position twice and a single when it will be in the wrong position.
                         <br />
                         <br />
                         The calling positions on max are: I,O,4,5,6,7,8,9,M,W,H.
