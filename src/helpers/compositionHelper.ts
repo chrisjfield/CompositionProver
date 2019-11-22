@@ -1,7 +1,7 @@
 import { IMethod, ICall, IComposition } from "../interfaces/interfaces";
 import { getMethodAbbreviationRegex } from "./methodHelper";
 import { getCallAbbreviationRegex } from "./callHelper";
-import { getStageCallingPositionRegex } from "../defaults/stages";
+import { getStageCallingPositionRegex } from "./stageHelper";
 
 export const isValidComposition = (calls: ICall[], methods: IMethod[], composition: IComposition) => {
     let valid = true;
@@ -24,6 +24,10 @@ export const isValidComposition = (calls: ICall[], methods: IMethod[], compositi
                 baseRegex = `(${methodRegex}){1}(${callRegex}){1}`;
                 break;
             case 'Numerical':
+                if (!composition.startingMethod) {
+                    return false;
+                }
+
                 baseRegex = `(${callRegex})?([0-9]+)`;
                 break;
             case 'Positional':

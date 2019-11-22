@@ -36,6 +36,77 @@ export const getStageNumber = (stage: string) => {
     return position;
 }
 
+export const getStageCallingPositionRegex = (stage: number) => {
+    let callingPositionRegex: string = '';
+
+    switch (stage) {
+        case 4:
+            callingPositionRegex = 'I|O|4';
+            break;
+        case 5:
+            callingPositionRegex = 'I|O|4|H';
+            break;
+        case 6:
+            callingPositionRegex = 'I|O|4|W|H';
+            break;
+        case 7:
+            callingPositionRegex = 'I|O|4|M|W|H';
+            break;
+        case 8:
+            callingPositionRegex = 'I|O|4|5|M|W|H';
+            break;
+        case 9:
+            callingPositionRegex = 'I|O|4|5|6|M|W|H';
+            break;
+        case 10:
+            callingPositionRegex = 'I|O|4|5|6|7|M|W|H';
+            break;
+        case 11:
+            callingPositionRegex = 'I|O|4|5|6|7|8|M|W|H';
+            break;
+        case 12:
+            callingPositionRegex = 'I|O|4|5|6|7|8|9|M|W|H';
+            break;
+    }
+
+    return callingPositionRegex;
+}
+
+export const getTenorIndexFromCallPosition = (position: string, stage: number) => {
+    let index: number = 0;
+    position = position.toUpperCase();
+
+    if (position === 'I') {
+        index = 1;
+    } else if (position === 'O') {
+        index = 2;
+    } else if (position === '4') {
+        index = 3;
+    } else if (position === 'H' && stage >= 5) {
+        index = stage - 1;
+    } else if (position === 'W' && stage >= 6) {
+        index = stage - 2;
+    } else if (position === 'M' && stage >= 7) {
+        index = stage - 3;
+    } else if (position === '5' && stage >= 8) {
+        index = 4;
+    } else if (position === '6' && stage >= 9) {
+        index = 4;
+    } else if (position === '7' && stage >= 10) {
+        index = 4;
+    } else if (position === '8' && stage >= 11) {
+        index = 4;
+    } else if (position === '9' && stage >= 12) {
+        index = 4;
+    }
+
+    if (index === 0) {
+        throw new Error(`calling position ${position} is not valid on ${stage.toString()} bells.`);
+    }
+
+    return index;
+}
+
 export const getStageQueens = (stage: number) => {
     let queens: string = '';
 

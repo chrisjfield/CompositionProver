@@ -1,5 +1,5 @@
 import { IResult, IComposition, IMethod, ICall, ITruth, IMusicalChanges, IResultHelper, ILeadResults } from "../interfaces/interfaces";
-import { getStageQueens, getStageTittums, getStageRollupsForward, getStageRollupsBackward, getInitialChange, getStageCharacter, getStageNumber } from "./stageHelper";
+import { getStageQueens, getStageTittums, getStageRollupsForward, getStageRollupsBackward, getInitialChange, getStageCharacter, getStageNumber, getTenorIndexFromCallPosition } from "./stageHelper";
 import { plainCall } from "./callHelper";
 
 export const emptyResult: IResult = {
@@ -144,9 +144,6 @@ const calculateFullElement = (currentResultHelper: IResultHelper, compositionEle
 }
 
 const calculateNumericalElement = (currentResultHelper: IResultHelper, compositionElement: string, methods: IMethod[], calls: ICall[], lastElement: boolean, lastElementOfPart: boolean) => {
-    // in the composition type, each element is a lead or half lead
-    let resultHelper = currentResultHelper;
-
     const method: IMethod | undefined = methods.find(method => method.abbreviation === currentResultHelper.baseMethod)
     let call: ICall | undefined;
     let position: number | undefined;
@@ -231,18 +228,111 @@ const calculateNumericalElement = (currentResultHelper: IResultHelper, compositi
         do {
             currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
         }
-        while (currentResultHelper.result.courseEnds.length === currentCourseCount && loopStartChange !== currentResultHelper.currentChange)
-
+        while (currentResultHelper.currentChange !== currentResultHelper.initialChange && loopStartChange !== currentResultHelper.currentChange)
         // no need to throw errors here, can just display the composition with a plain course to finish and no rounds.
     }
 
-    return resultHelper;
+    return currentResultHelper;
 }
 
-const calculatePositionalElement = (currentResultHelper: IResultHelper, compositionElement: string, methods: IMethod[], calls: ICall[], lastElement: boolean) => {
-    let resultHelper = currentResultHelper;
+const calculatePositionalElement = (currentResultHelper: IResultHelper, compositionElement: string, methods: IMethod[], calls: ICall[], lastElement: boolean, lastElementOfPart: boolean) => {
+    const method: IMethod | undefined = methods.find(method => method.abbreviation === currentResultHelper.baseMethod)
 
-    return resultHelper;
+    if (!method) {
+        throw new Error(`Method "${currentResultHelper.baseMethod}" is not a valid method.`);
+    }
+
+    // get where we expect the tenor to end up at the next call
+    const callingPosition: string = compositionElement.substr(compositionElement.length - 1);
+    const expectedTenorIndex: number = getTenorIndexFromCallPosition(callingPosition, method.stage);
+
+    let call: ICall | undefined;
+    let numberOfCalls: number = 1;
+
+    if (compositionElement.length >= 2) {
+        let callAbbreviation = compositionElement.substr(compositionElement.length - 2, compositionElement.length - 1);
+        if (!Number(callAbbreviation)) {
+            if (callAbbreviation === 'b' && method.defaultBob) {
+                call = calls.find(call => call.abbreviation === method.defaultBob);
+            } else if (callAbbreviation === 's' && method.defaultSingle) {
+                call = calls.find(call => call.abbreviation === method.defaultSingle);
+            } else {
+                call = calls.find(call => call.abbreviation === callAbbreviation);
+            }
+
+            if (!call) {
+                throw new Error(`Composition element "${compositionElement}" contains an invalid call abbreviation.`);
+            }
+
+            numberOfCalls = Number(compositionElement.substr(0, compositionElement.length - 2)) || 1;
+        } else {
+            numberOfCalls = Number(compositionElement.substr(0, compositionElement.length - 1)) || 1;
+        }
+    }
+
+    if (!call) {
+        const callAbbreviation: string = method.defaultBob ? method.defaultBob : 'b';
+        call = calls.find(call => call.abbreviation === callAbbreviation);
+    }
+
+    if (!call) {
+        throw new Error(`Composition element "${compositionElement}" can't find default call`);
+    }
+
+    // set the method stage as there is no changing method, and ensure half leads are off
+    currentResultHelper.highestMethodStage = method.stage;
+    currentResultHelper.halfLeadsOn = false;
+
+    // run the generation for the number of times the position is called.
+    for (let i = 0; i < numberOfCalls; i += 1) {
+        const loopStartChange: string = currentResultHelper.currentChange;
+        let callFound: boolean = false;
+
+        do {
+            // clone the array and try generating a lead with the call
+            let withCall: IResultHelper = JSON.parse(JSON.stringify(currentResultHelper));
+            withCall = generateLead(withCall, call, method, false);
+
+            // if the generated lead gives the right tenor position then great, else add a plain lead and loop
+            if (withCall.currentChange.indexOf(method.stage.toString()) === expectedTenorIndex) {
+                currentResultHelper = withCall;
+                callFound = true;
+            } else {
+                currentResultHelper = generateLead(currentResultHelper, plainCall, method, false);
+            }
+        }
+        while (!callFound && loopStartChange !== currentResultHelper.currentChange)
+
+        if (loopStartChange === currentResultHelper.currentChange) {
+            throw new Error(`Composition has a call which can't be made, cannot apply call ${compositionElement}.`);
+        }
+    }
+
+    // if it is the last call in a part keep going until the tenor is in home
+    // if it is the last call, keep going to rounds
+    const loopStartChange = currentResultHelper.currentChange;
+    const currentCourseCount = currentResultHelper.result.courseEnds.length;
+    const lastCourseEnd: string = currentResultHelper.result.courseEnds[currentResultHelper.result.courseEnds.length - 1];
+
+    if (lastElementOfPart && !lastElement && currentResultHelper.currentChange !== lastCourseEnd) {
+        do {
+            currentResultHelper = generateLead(currentResultHelper, plainCall, method, false);
+        }
+        while (currentResultHelper.result.courseEnds.length === currentCourseCount && loopStartChange !== currentResultHelper.currentChange)
+
+        if (loopStartChange === currentResultHelper.currentChange) {
+            throw new Error(`Composition has a part which never completes.`);
+        }
+        // if it is the last call of the last part continue until rounds, or repeated leadend.
+    } else if (lastElement && currentResultHelper.currentChange !== lastCourseEnd) {
+        do {
+            currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
+        }
+        while (currentResultHelper.currentChange !== currentResultHelper.initialChange && loopStartChange !== currentResultHelper.currentChange)
+        // no need to throw errors here, can just display the composition with a plain course to finish and no rounds.
+    }
+
+    return currentResultHelper;
 }
 
 const generatePart = (currentResultHelper: IResultHelper, composition: IComposition, methods: IMethod[], calls: ICall[], lastPart: boolean) => {
@@ -262,7 +352,7 @@ const generatePart = (currentResultHelper: IResultHelper, composition: IComposit
                 resultHelper = calculateNumericalElement(resultHelper, compositionElement, methods, calls, lastElement, lastElementOfPart);
                 break;
             case 'Positional':
-                resultHelper = calculatePositionalElement(resultHelper, compositionElement, methods, calls, lastElement);
+                resultHelper = calculatePositionalElement(resultHelper, compositionElement, methods, calls, lastElement, lastElementOfPart);
                 break;
         }
     }
