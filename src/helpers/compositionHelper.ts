@@ -42,7 +42,7 @@ export const isValidComposition = (calls: ICall[], methods: IMethod[], compositi
                 break
         }
 
-        let partRegex: String = '';
+        let partRegex: string = '';
 
         const compositionParts = composition.composition.replace(/[\n\r\s]+/g, '').split(';');
         const setInvalid = () => { valid = false };

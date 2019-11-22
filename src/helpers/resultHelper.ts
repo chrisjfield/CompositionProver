@@ -33,6 +33,7 @@ const emptyResultHelper: IResultHelper = {
     currentMethod: '',
     halfLeadsOn: false,
     halfLeadNext: false,
+    courseLeadCounter: 1,
 }
 
 export const calculateResult = (composition: IComposition, methods: IMethod[], calls: ICall[], onComplete: (result: IResult) => void) => {
@@ -51,7 +52,7 @@ export const calculateResult = (composition: IComposition, methods: IMethod[], c
     for (let part = 1; part <= composition.parts; part += 1) {
         const lastPart: boolean = part === composition.parts;
 
-        resultHelper = calculatePart(resultHelper, composition, methods, calls, lastPart);
+        resultHelper = generatePart(resultHelper, composition, methods, calls, lastPart);
     }
 
     // calculate the key stats - length, musicality and truth.
@@ -92,8 +93,9 @@ const getExpandedComposition = (composition: string) => {
         // loop through all previously defined sections and replace with the abbreviation with the actual notation
         for (const key in compositionSectionDictionary) {
             const compositionSection = compositionSectionDictionary[key];
+            var globalReplaceRegex = new RegExp(key, 'gi');
 
-            sectionNotation = sectionNotation.replace(key, compositionSection);
+            sectionNotation = sectionNotation.replace(globalReplaceRegex, compositionSection);
         }
 
         // if it is a definition store it, else return the composition
@@ -107,12 +109,149 @@ const getExpandedComposition = (composition: string) => {
     return expandedComposition;
 }
 
-const calculatePart = (currentResultHelper: IResultHelper, composition: IComposition, methods: IMethod[], calls: ICall[], lastPart: boolean) => {
+const calculateFullElement = (currentResultHelper: IResultHelper, compositionElement: string, methods: IMethod[], calls: ICall[], lastElement: boolean) => {
+    // in the composition type, each element is a lead or half lead
+    const callAbbreviation: string = compositionElement.substr(compositionElement.length - 1);
+    const methodAbbreviation: string = compositionElement.substr(0, compositionElement.length - 1);
+
+    const method: IMethod | undefined = methods.find(method => method.abbreviation === methodAbbreviation);
+
+    if (!method) {
+        throw new Error(`Composition element "${compositionElement}" does not start with a valid method.`);
+    }
+
+    let call: ICall | undefined;
+
+    if (callAbbreviation === 'b' && method.defaultBob) {
+        call = calls.find(call => call.abbreviation === method.defaultBob);
+    } else if (callAbbreviation === 's' && method.defaultSingle) {
+        call = calls.find(call => call.abbreviation === method.defaultSingle);
+    } else {
+        call = calls.find(call => call.abbreviation === callAbbreviation);
+    }
+
+    if (!call && callAbbreviation === 'p') {
+        call = plainCall;
+    }
+
+    if (!call) {
+        throw new Error(`Composition element "${compositionElement}" does not end with a valid call.`);
+    }
+
+    currentResultHelper = generateLead(currentResultHelper, call, method, lastElement);
+
+    return currentResultHelper;
+}
+
+const calculateNumericalElement = (currentResultHelper: IResultHelper, compositionElement: string, methods: IMethod[], calls: ICall[], lastElement: boolean, lastElementOfPart: boolean) => {
+    // in the composition type, each element is a lead or half lead
+    let resultHelper = currentResultHelper;
+
+    const method: IMethod | undefined = methods.find(method => method.abbreviation === currentResultHelper.baseMethod)
+    let call: ICall | undefined;
+    let position: number | undefined;
+
+    if (!method) {
+        throw new Error(`Method "${currentResultHelper.baseMethod}" is not a valid method.`);
+    }
+
+    if (!Number(compositionElement)) {
+        const callAbbreviation: string = compositionElement.substr(0, 1);
+
+        // set the call to the method default if b/s, else the call type
+        if (callAbbreviation === 'b' && method.defaultBob) {
+            call = calls.find(call => call.abbreviation === method.defaultBob);
+        } else if (callAbbreviation === 's' && method.defaultSingle) {
+            call = calls.find(call => call.abbreviation === method.defaultSingle);
+        } else {
+            call = calls.find(call => call.abbreviation === callAbbreviation);
+        }
+
+        position = Number(compositionElement.substr(1, compositionElement.length));
+    } else {
+        call = calls.find(call => call.abbreviation === method.defaultBob);
+        position = Number(compositionElement);
+    }
+
+    if (!call) {
+        throw new Error(`Composition element "${compositionElement}" does not start with a valid call.`);
+    }
+
+    if (!position) {
+        throw new Error(`Composition element "${compositionElement}" does not end with a valid numerical position.`);
+    }
+
+    // set the method stage as there is no changing method
+    currentResultHelper.highestMethodStage = method.stage;
+
+    // if we need to finish a course before carrying on cycle through leads until a course end, 
+    // or we get back to the same lead end - catch for funky methods where you can get stuck in a loop but the tenor is never at home
+    let loopStartChange: string = currentResultHelper.currentChange;
+    let currentCourseCount: number = currentResultHelper.result.courseEnds.length;
+
+    if (position < currentResultHelper.courseLeadCounter) {
+        do {
+            currentResultHelper = generateLead(currentResultHelper, plainCall, method, false);
+        }
+        while (currentResultHelper.result.courseEnds.length === currentCourseCount && loopStartChange !== currentResultHelper.currentChange)
+
+        if (loopStartChange === currentResultHelper.currentChange) {
+            throw new Error(`Composition has a course which never completes, cannot apply call ${compositionElement}.`);
+        }
+    }
+
+    // cycle through leads untill we reach the one with the call
+    // do while to avoid infinite loop with call at the last lead of course
+    do {
+        if (currentResultHelper.courseLeadCounter === position) {
+            currentResultHelper = generateLead(currentResultHelper, call, method, false);
+        } else {
+            currentResultHelper = generateLead(currentResultHelper, plainCall, method, false);
+        }
+    }
+    while (currentResultHelper.courseLeadCounter > 1 && currentResultHelper.courseLeadCounter <= position)
+
+    // if it is the last call of the part continue untill the next course end, or repeated leadend. 
+    // Numerical parts must end at course ends for the notation to make sense
+    loopStartChange = currentResultHelper.currentChange;
+    currentCourseCount = currentResultHelper.result.courseEnds.length;
+    const lastCourseEnd: string = currentResultHelper.result.courseEnds[currentResultHelper.result.courseEnds.length - 1];
+
+    if (lastElementOfPart && !lastElement && currentResultHelper.currentChange !== lastCourseEnd) {
+        do {
+            currentResultHelper = generateLead(currentResultHelper, plainCall, method, false);
+        }
+        while (currentResultHelper.result.courseEnds.length === currentCourseCount && loopStartChange !== currentResultHelper.currentChange)
+
+        if (loopStartChange === currentResultHelper.currentChange) {
+            throw new Error(`Composition has a part which never completes.`);
+        }
+        // if it is the last call of the last part continue until rounds, or repeated leadend.
+    } else if (lastElement && currentResultHelper.currentChange !== lastCourseEnd) {
+        do {
+            currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
+        }
+        while (currentResultHelper.result.courseEnds.length === currentCourseCount && loopStartChange !== currentResultHelper.currentChange)
+
+        // no need to throw errors here, can just display the composition with a plain course to finish and no rounds.
+    }
+
+    return resultHelper;
+}
+
+const calculatePositionalElement = (currentResultHelper: IResultHelper, compositionElement: string, methods: IMethod[], calls: ICall[], lastElement: boolean) => {
+    let resultHelper = currentResultHelper;
+
+    return resultHelper;
+}
+
+const generatePart = (currentResultHelper: IResultHelper, composition: IComposition, methods: IMethod[], calls: ICall[], lastPart: boolean) => {
     let resultHelper = currentResultHelper;
     const compositionArray: string[] = resultHelper.expandedComposition.split('.').filter(x => x);
 
     for (let element = 0; element < compositionArray.length; element += 1) {
         const lastElement: boolean = (lastPart && element === compositionArray.length - 1);
+        const lastElementOfPart: boolean = (!lastPart && element === compositionArray.length - 1);
         const compositionElement: string = compositionArray[element];
 
         switch (composition.type) {
@@ -120,7 +259,7 @@ const calculatePart = (currentResultHelper: IResultHelper, composition: IComposi
                 resultHelper = calculateFullElement(resultHelper, compositionElement, methods, calls, lastElement);
                 break;
             case 'Numerical':
-                resultHelper = calculateNumericalElement(resultHelper, compositionElement, methods, calls, lastElement);
+                resultHelper = calculateNumericalElement(resultHelper, compositionElement, methods, calls, lastElement, lastElementOfPart);
                 break;
             case 'Positional':
                 resultHelper = calculatePositionalElement(resultHelper, compositionElement, methods, calls, lastElement);
@@ -134,30 +273,10 @@ const calculatePart = (currentResultHelper: IResultHelper, composition: IComposi
     return resultHelper;
 }
 
-const calculateFullElement = (currentResultHelper: IResultHelper, compositionElement: String, methods: IMethod[], calls: ICall[], lastElement: boolean) => {
-    // in the composition type, each element is a lead or half lead
-    let resultHelper = currentResultHelper;
-    const callAbbreviation: string = compositionElement.substr(compositionElement.length - 1);
-    const methodAbbreviation: string = compositionElement.substr(0, compositionElement.length - 1);
-
-    let call = calls.find(call => call.abbreviation === callAbbreviation);
-    const method = methods.find(method => method.abbreviation === methodAbbreviation)
-
-    if (!call && callAbbreviation === 'p') {
-        call = plainCall;
-    }
-
-    if (!call) {
-        throw new Error(`Composition element "${compositionElement}" does not end with a valid call.`);
-    }
-
-    if (!method) {
-        throw new Error(`Composition element "${compositionElement}" does not start with a valid method.`);
-    }
-
+const generateLead = (currentResultHelper: IResultHelper, call: ICall, method: IMethod, possibleLastLead: boolean) => {
     let leadResults: ILeadResults = {
-        call: callAbbreviation,
-        method: methodAbbreviation,
+        call: call.abbreviation,
+        method: method.abbreviation,
         leadEnd: '',
         rows: [],
     };
@@ -167,12 +286,10 @@ const calculateFullElement = (currentResultHelper: IResultHelper, compositionEle
 
     for (let i = 0; i < placeNotation.length; i += 1) {
         const row: string = generateRow(currentResultHelper, placeNotation[i], method.stage);
-        currentResultHelper.currentChange = row;
-        currentResultHelper.result.grid.push(row);
         leadResults.rows.push(row);
 
         // if it comes round in the last lead before the end stop calculating - it's a snap finish
-        if (lastElement && i !== placeNotation.length - 1 && row === currentResultHelper.initialChange) {
+        if (possibleLastLead && i !== placeNotation.length - 1 && row === currentResultHelper.initialChange) {
             // need to check if the last lead was a change of method and the stage before returning
             if (currentResultHelper.currentMethod && currentResultHelper.currentMethod !== method.abbreviation) {
                 currentResultHelper.result.changesOfMethod += 1;
@@ -181,7 +298,7 @@ const calculateFullElement = (currentResultHelper: IResultHelper, compositionEle
                 currentResultHelper.highestMethodStage = method.stage
             }
 
-            return resultHelper;
+            return currentResultHelper;
         }
     }
 
@@ -196,14 +313,17 @@ const calculateFullElement = (currentResultHelper: IResultHelper, compositionEle
         currentResultHelper.highestMethodStage = method.stage
     }
     currentResultHelper.currentMethod = method.abbreviation;
+    currentResultHelper.courseLeadCounter += 1;
 
-    // part ends can only occur at a true lead end
+    // course ends can only occur at a true lead end
     if (!currentResultHelper.halfLeadsOn || currentResultHelper.halfLeadNext) {
         const lastBell: string = currentResultHelper.currentChange[method.stage - 1];
 
         // Add the course end if the change ends with the tenor
+        // Set the lead counter back to 1 as it is a new course
         if (lastBell === getStageCharacter(method.stage)) {
             currentResultHelper.result.courseEnds.push(currentResultHelper.currentChange);
+            currentResultHelper.courseLeadCounter = 1;
         }
     }
 
@@ -212,59 +332,7 @@ const calculateFullElement = (currentResultHelper: IResultHelper, compositionEle
         currentResultHelper.halfLeadNext = !currentResultHelper.halfLeadNext;
     }
 
-    return resultHelper;
-}
-
-const calculateNumericalElement = (currentResultHelper: IResultHelper, compositionElement: String, methods: IMethod[], calls: ICall[], lastElement: boolean) => {
-    let resultHelper = currentResultHelper;
-
-    return resultHelper;
-}
-
-const calculatePositionalElement = (currentResultHelper: IResultHelper, compositionElement: String, methods: IMethod[], calls: ICall[], lastElement: boolean) => {
-    let resultHelper = currentResultHelper;
-
-    return resultHelper;
-}
-
-const getPlaceNotation = (currentResultHelper: IResultHelper, method: IMethod, call: ICall) => {
-    // if it has a comma then shortened notation is being used
-    // in that case need to filp, remove half lead and add in the lead end notations
-    const shortNotation: string[] = method.placeNotation.split(',');
-    let placeNotationArray: string[] = shortNotation[0].split(/(-)|\./g).filter(x => x);
-
-    if (shortNotation.length > 1) {
-        const reverseNotation: string[] = [...placeNotationArray].reverse().slice(1);
-        reverseNotation.push(shortNotation[1]);
-        placeNotationArray = placeNotationArray.concat(reverseNotation);
-    }
-
-    //if we are using half leads take the relevant half of the array
-    const arrayHalfIndex = Math.floor(placeNotationArray.length / 2);
-
-    if (currentResultHelper.halfLeadsOn && currentResultHelper.halfLeadNext) {
-        //half lead next, so take second half
-        placeNotationArray = placeNotationArray.slice(arrayHalfIndex, placeNotationArray.length);
-    } else if (currentResultHelper.halfLeadsOn && !currentResultHelper.halfLeadNext) {
-        //half lead not next, take first half
-        placeNotationArray = placeNotationArray.slice(0, arrayHalfIndex);
-    }
-
-    //if we have a non-plain call, edit the notation to adapt for it.
-    const callNotation = (currentResultHelper.halfLeadsOn && currentResultHelper.halfLeadNext) ? call.halfLeadPlaceNotation : call.leadEndPlaceNotation;
-    if (callNotation) {
-        const callNotationArray: string[] = callNotation.split('.');
-
-        // adjust for the call
-        for (let i = 0; i < callNotationArray.length; i += 1) {
-            placeNotationArray.pop();
-        }
-        for (let i = 0; i < callNotationArray.length; i += 1) {
-            placeNotationArray.push(callNotationArray[i]);
-        }
-    }
-
-    return placeNotationArray;
+    return currentResultHelper;
 }
 
 const generateRow = (currentResultHelper: IResultHelper, placeNotationElement: string, methodStage: number) => {
@@ -301,7 +369,52 @@ const generateRow = (currentResultHelper: IResultHelper, placeNotationElement: s
         }
     }
 
-    return nextChange.join('');
+    const row: string = nextChange.join('');
+    currentResultHelper.currentChange = row;
+    currentResultHelper.result.grid.push(row);
+
+    return row;
+}
+
+const getPlaceNotation = (currentResultHelper: IResultHelper, method: IMethod, call: ICall) => {
+    // if it has a comma then shortened notation is being used
+    // in that case need to filp, remove half lead and add in the lead end notations
+    const shortNotation: string[] = method.placeNotation.split(',');
+    let placeNotationArray: string[] = shortNotation[0].split(/(-)|\./g).filter(x => x);
+
+    if (shortNotation.length > 1) {
+        const reverseNotation: string[] = [...placeNotationArray].reverse().slice(1);
+        reverseNotation.push(shortNotation[1]);
+        placeNotationArray = placeNotationArray.concat(reverseNotation);
+    }
+
+    //if we are using half leads take the relevant half of the array
+    const arrayHalfIndex = Math.floor(placeNotationArray.length / 2);
+
+    if (currentResultHelper.halfLeadsOn && currentResultHelper.halfLeadNext) {
+        //half lead next, so take second half
+        placeNotationArray = placeNotationArray.slice(arrayHalfIndex, placeNotationArray.length);
+    } else if (currentResultHelper.halfLeadsOn && !currentResultHelper.halfLeadNext) {
+        //half lead not next, take first half
+        placeNotationArray = placeNotationArray.slice(0, arrayHalfIndex);
+    }
+
+    //if we have a non-plain call, edit the notation to adapt for it.
+    //if half lead is not next this means we are in the firts half so half lead calls apply
+    const callNotation = (currentResultHelper.halfLeadsOn && !currentResultHelper.halfLeadNext) ? call.halfLeadPlaceNotation : call.leadEndPlaceNotation;
+    if (callNotation) {
+        const callNotationArray: string[] = callNotation.split('.');
+
+        // adjust for the call
+        for (let i = 0; i < callNotationArray.length; i += 1) {
+            placeNotationArray.pop();
+        }
+        for (let i = 0; i < callNotationArray.length; i += 1) {
+            placeNotationArray.push(callNotationArray[i]);
+        }
+    }
+
+    return placeNotationArray;
 }
 
 const getTruth = (stage: number, rows: string[]) => {

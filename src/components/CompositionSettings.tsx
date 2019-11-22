@@ -32,7 +32,12 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
     }
 
     const handleChange = (property: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        props.editComposition({ ...props.composition, [property]: event.target.value });
+        let value: string | number = event.target.value
+        if (event.target.type === 'number') {
+            value = parseInt(value) ? parseInt(value) : 1;
+        }
+
+        props.editComposition({ ...props.composition, [property]: value });
     };
 
     const handleHalfLeadChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +45,7 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
     };
 
     const compositionValidation = (composition: IComposition) => {
-        let validation: String = '';
+        let validation: string = '';
 
         !isValidComposition(props.calls, props.methods, composition) && (validation = 'Invalid Full Type Composition');
 

@@ -74,6 +74,7 @@ const Results = (props: IResultsState) => {
                     <Grid container>
                         <Grid item xs={6}>
                             {result.truth.true.toString()}
+                            {result.numberOfChanges.toString()}
                         </Grid>
                     </Grid>
                 </Container>

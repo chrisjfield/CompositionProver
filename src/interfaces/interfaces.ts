@@ -173,6 +173,7 @@ export interface IResultHelper {
     halfLeadNext: boolean;
     baseMethod: string;
     currentMethod: string;
+    courseLeadCounter: number;
 }
 
 export interface ILeadResults {

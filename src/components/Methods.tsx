@@ -51,7 +51,7 @@ const Methods = (props: IMethodState) => {
 	};
 
 	const fieldValidation = (method: IMethod, property: IMethodProperty) => {
-		let validation: String = '';
+		let validation: string = '';
 
 		if (!method[property]) {
 			validation = 'Enter a value';
@@ -61,7 +61,7 @@ const Methods = (props: IMethodState) => {
 					const dupe = props.allMethods.filter(methodToCheck => {
 						return (
 							methodToCheck.abbreviation ===
-								method.abbreviation &&
+							method.abbreviation &&
 							(methodToCheck.stage !== method.stage || methodToCheck.id < method.id)
 						);
 					}).length;
@@ -69,9 +69,9 @@ const Methods = (props: IMethodState) => {
 					dupe > 0 && (validation = 'Use unique abbreviations');
 					break;
 				case 'placeNotation':
-                    const validNotation = isValidMethodNotation(method.stage, method.placeNotation)
+					const validNotation = isValidMethodNotation(method.stage, method.placeNotation)
 
-                    !validNotation && (validation = 'Invalid place notation')
+					!validNotation && (validation = 'Invalid place notation')
 					break;
 			}
 		}
@@ -82,7 +82,7 @@ const Methods = (props: IMethodState) => {
 	const getMethodField = (
 		method: IMethod,
 		property: IMethodProperty,
-		label: String,
+		label: string,
 	) => {
 		const validation = fieldValidation(method, property);
 		const error = validation ? true : false;
@@ -193,7 +193,7 @@ const Methods = (props: IMethodState) => {
 };
 
 const mapStateToProps = (state: IAppState) => {
-    const allMethods = getAllMethods(state);
+	const allMethods = getAllMethods(state);
 	const methods = getMethods(state);
 	const calls = getCalls(state);
 	const stage = getSettingsStage(state);
