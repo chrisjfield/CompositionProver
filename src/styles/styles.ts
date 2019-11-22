@@ -68,10 +68,6 @@ const useStyles = makeStyles({
     compositionMethodField: {
         maxWidth: '250px',
     },
-    resultsContainer: {
-        marginTop: '10px',
-        marginBottom: '20px',
-    },
     loadingText: {
         marginTop: '25px',
         marginLeft: '-50px',
@@ -79,6 +75,22 @@ const useStyles = makeStyles({
     errorText: {
         color: 'red',
         fontWeight: 'bold',
+    },
+    resultsContainer: {
+        padding: '20px',
+    },
+    resultsTruthTrue: {
+        color: 'green',
+    },
+    resultsTruthFalse: {
+        color: 'red',
+    },
+    resultsField: {
+        marginTop: '15px',
+        marginBottom: '10px',
+    },
+    resultsText: {
+        marginTop: '15px',
     },
 });
 

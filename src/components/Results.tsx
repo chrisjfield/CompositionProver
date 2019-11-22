@@ -7,7 +7,7 @@ import { IAppState } from '../redux/reducers/rootReducer';
 import { getCalls } from '../redux/selectors/callSelectors';
 import { getCompositionMethods } from '../redux/selectors/methodSelectors';
 import { getCurrentComposition } from '../redux/selectors/compositionSelectors';
-import { Grid, Container, CircularProgress, Typography } from '@material-ui/core';
+import { Grid, Container, CircularProgress, Typography, TextField } from '@material-ui/core';
 import { calculateResult, emptyResult } from '../helpers/resultHelper';
 
 const Results = (props: IResultsState) => {
@@ -42,42 +42,85 @@ const Results = (props: IResultsState) => {
         }
     }
 
+    const getReadOnlyField = (label: string, value: string) => {
+        const id: string = `results-${label.replace(/[\n\r\s]+/g, '')}`
+        return (
+            <Grid item xs={12} md={4}>
+                <TextField
+                    id={id}
+                    label={label}
+                    variant="outlined"
+                    value={value}
+                    className={styles.resultsField}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+            </Grid>
+        )
+    }
+
+    const getTextField = (label: string) => {
+        return (
+            <Grid item xs={12}>
+                <Typography variant='subtitle1' className={styles.resultsText}>
+                    <u>{label}</u>
+                </Typography>
+            </Grid>
+        )
+    }
+
     const getResultsContent = () => {
         if (error) {
             return (
-                <Container className={styles.compositionContainer}>
-                    <Grid container>
-                        <Grid item className={styles.loading}>
-                            <Typography className={styles.errorText}>
-                                {error}
-                            </Typography>
-                        </Grid>
+                <Grid container className={styles.callContainer}>
+                    <Grid item className={styles.loading}>
+                        <Typography className={styles.errorText}>
+                            {error}
+                        </Typography>
                     </Grid>
-                </Container>
+                </Grid>
             )
         } else if (loading) {
             return (
-                <Container className={styles.compositionContainer}>
-                    <Grid container>
-                        <Grid item className={styles.loading}>
-                            <CircularProgress />
-                            <Typography className={styles.loadingText}>
-                                Calculating Results...
-                            </Typography>
-                        </Grid>
+                <Grid container className={styles.callContainer}>
+                    <Grid item className={styles.loading}>
+                        <CircularProgress />
+                        <Typography className={styles.loadingText}>
+                            Calculating Results...
+                    </Typography>
                     </Grid>
-                </Container>
+                </Grid>
             )
         } else {
             return (
-                <Container className={styles.compositionContainer}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            {result.truth.true.toString()}
-                            {result.numberOfChanges.toString()}
-                        </Grid>
+                <Grid container className={styles.callContainer}>
+                    {getTextField('Statistics')}
+                    <Grid item xs={12} md={4}>
+                        <TextField
+                            id='results-truth'
+                            label='Truth'
+                            variant="outlined"
+                            value={result.truth.true ? 'True' : 'False'}
+                            helperText={result.truth.comesRound ? null : 'Does not come round'}
+                            className={styles.resultsField}
+                            InputProps={{
+                                readOnly: true,
+                                className: result.truth.true ? styles.resultsTruthTrue : styles.resultsTruthFalse
+                            }}
+                        />
                     </Grid>
-                </Container>
+                    {getReadOnlyField('Number of Changes', result.numberOfChanges.toString())}
+                    {getReadOnlyField('Changes of Method', result.changesOfMethod.toString())}
+                    {getTextField('Music')}
+                    {getReadOnlyField('Queens', result.musicalChanges.queens.toString())}
+                    {getReadOnlyField('Tittums', result.musicalChanges.tittums.toString())}
+                    {getReadOnlyField('Rollups (Front)', result.musicalChanges.rollupsFront.toString())}
+                    {getReadOnlyField('Rollups (Back)', result.musicalChanges.rollupsBack.toString())}
+                    {getReadOnlyField('Little Bells (Front)', result.musicalChanges.littleBellsFront.toString())}
+                    {getReadOnlyField('Little Bells (Back)', result.musicalChanges.littleBellsBack.toString())}
+                    {getTextField('Section Ends')}
+                </Grid>
             )
         }
     }
@@ -85,7 +128,11 @@ const Results = (props: IResultsState) => {
     // run the actual composition, pass in set state handlers to feedback results or errors
     runComposition();
 
-    return getResultsContent();
+    return (
+        <Container>
+            {getResultsContent()}
+        </Container>
+    )
 }
 
 const mapStateToProps = (state: IAppState) => {

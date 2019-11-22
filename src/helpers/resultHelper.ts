@@ -20,6 +20,7 @@ export const emptyResult: IResult = {
     truth: {
         firstFalseRow: '',
         true: true,
+        comesRound: false,
     }
 };
 
@@ -57,7 +58,7 @@ export const calculateResult = (composition: IComposition, methods: IMethod[], c
 
     // calculate the key stats - length, musicality and truth.
     resultHelper.result.numberOfChanges = resultHelper.result.grid.length;
-    resultHelper.result.truth = getTruth(resultHelper.highestMethodStage, resultHelper.result.grid);
+    resultHelper.result.truth = getTruth(resultHelper.highestMethodStage, resultHelper.result.grid, resultHelper.initialChange);
     resultHelper.result.musicalChanges = getMusicalChanges(resultHelper.highestMethodStage, resultHelper.result.grid);
 
     onComplete(resultHelper.result);
@@ -250,7 +251,7 @@ const calculatePositionalElement = (currentResultHelper: IResultHelper, composit
     let numberOfCalls: number = 1;
 
     if (compositionElement.length >= 2) {
-        let callAbbreviation = compositionElement.substr(compositionElement.length - 2, compositionElement.length - 1);
+        let callAbbreviation = compositionElement.substr(compositionElement.length - 2, 1);
         if (!Number(callAbbreviation)) {
             if (callAbbreviation === 'b' && method.defaultBob) {
                 call = calls.find(call => call.abbreviation === method.defaultBob);
@@ -507,12 +508,18 @@ const getPlaceNotation = (currentResultHelper: IResultHelper, method: IMethod, c
     return placeNotationArray;
 }
 
-const getTruth = (stage: number, rows: string[]) => {
+const getTruth = (stage: number, rows: string[], initialChange: string) => {
     let rowsToCheck: string[] = rows;
     const truth: ITruth = {
         true: true,
+        comesRound: false,
         firstFalseRow: '',
     };
+
+    if (rows[rows.length - 1] === initialChange) {
+        truth.comesRound = true;
+    }
+
     const numberOfRows: number = rows.length;
     const extent: number = getFactorial(stage);
     // plus one to account for exact multiples of an extent - these will have 0 allowed of the next repeat number)

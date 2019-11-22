@@ -194,5 +194,6 @@ export interface IMusicalChanges {
 
 export interface ITruth {
     true: boolean;
+    comesRound: boolean;
     firstFalseRow: string;
 }
