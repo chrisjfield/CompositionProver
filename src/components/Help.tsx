@@ -166,6 +166,32 @@ const Help = () => {
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
+            <ExpansionPanel expanded={expanded === 'results'} onChange={handleChange('results')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    id="help-calls-results"
+                >
+                    <Typography variant="h6">Results</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography>
+                        The results tab is where you can view the details of your composition.<br />
+                        <br />
+                        The statistic section will show you if it is true (with a note if it does not come round), along with the number of changes and number of changes of method.<br />
+                        <br />
+                        The Music section gives an idea of the musical qualities of a composition, this is often opinion based so it just shows a few common measures.<br />
+                        <br />
+                        The section sends section will show couse ends, part ends and lead ends.<br />
+                        Lead ends will show the methods and calls along side them.<br />
+                        This section may time a few seconds to render for large compositions.<br />
+                        <br />
+                        The Grid section will show the full grid.<br />
+                        Here you can highlight the treble and any other bell if you wish.<br />
+                        It will also highlight the first false row (and it's repeats) in false compositions.<br />
+                        This section can take multiple seconds to render, usually around 5-10s for a peal length composition on a decent PC.
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
         </Container>
     );
 }

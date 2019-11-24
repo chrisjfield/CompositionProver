@@ -102,7 +102,26 @@ const useStyles = makeStyles({
     resultSettingField: {
         width: '200px',
         marginTop: '15px',
-    }
+    },
+    gridLead: {
+        paddingTop: '40px',
+    },
+    gridInitialLead: {
+        paddingTop: '15px',
+    },
+    gridHighlightTreble: {
+        color: 'red',
+    },
+    gridHighlightBell: {
+        color: 'blue',
+        fontWeight: 'bold',
+    },
+    HelperText: {
+        fontWeight: 'lighter',
+    },
+    falseRow: {
+        backgroundColor: '#ff000057',
+    },
 });
 
 export default useStyles;
