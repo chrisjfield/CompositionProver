@@ -192,7 +192,7 @@ const calculateNumericalElement = (currentResultHelper: IResultHelper, compositi
             throw new Error(`Composition has a part which never completes.`);
         }
         // if it is the last call of the last part continue until rounds, or repeated leadend.
-    } else if (lastElement && currentResultHelper.currentChange !== lastCourseEnd) {
+    } else if (lastElement && currentResultHelper.currentChange !== currentResultHelper.result.initialChange) {
         do {
             currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
         }
@@ -292,7 +292,7 @@ const calculatePositionalElement = (currentResultHelper: IResultHelper, composit
             throw new Error(`Composition has a part which never completes.`);
         }
         // if it is the last call of the last part continue until rounds, or repeated leadend.
-    } else if (lastElement && currentResultHelper.currentChange !== lastCourseEnd) {
+    } else if (lastElement && currentResultHelper.currentChange !== currentResultHelper.result.initialChange) {
         do {
             currentResultHelper = generateLead(currentResultHelper, plainCall, method, true);
         }

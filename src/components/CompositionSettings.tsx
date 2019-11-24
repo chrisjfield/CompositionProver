@@ -8,7 +8,7 @@ import { getCalls } from '../redux/selectors/callSelectors';
 import { getCompositionMethods } from '../redux/selectors/methodSelectors';
 import { getCurrentComposition } from '../redux/selectors/compositionSelectors';
 import { editCurrentComposition } from '../redux/actions/actions';
-import { TextField, MenuItem, FormControlLabel, Checkbox, Grid, Container } from '@material-ui/core';
+import { TextField, MenuItem, FormControlLabel, Checkbox, Grid, Container, Typography } from '@material-ui/core';
 import { isValidComposition } from '../helpers/compositionHelper'
 import { sortMethods } from '../helpers/methodHelper';
 
@@ -50,6 +50,40 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
         !isValidComposition(props.calls, props.methods, composition) && (validation = 'Invalid Full Type Composition');
 
         return validation;
+    }
+
+    const getCompositionHelperText = () => {
+        switch (props.composition.type) {
+            case 'Full':
+                return (
+                    <Typography className={styles.HelperText}>
+                        <br />
+                        In this composition mode enter every lead seperated by '.'s. <br />
+                        Each element must start with the method abbreviation and finish with the call abbreviation (use p for plain leads). <br />
+                        For example: <b>pb6p.pb6p.pb6p.pb6p.pb6b</b> as a 3 part would be a 180 of Bob Minor.
+                    </Typography>
+                );
+            case 'Numerical':
+                return (
+                    <Typography className={styles.HelperText}>
+                        <br />
+                        In this composition mode enter every call position numerically seperated by '.'s. <br />
+                        Each element may start with the call abbreviation (a bob will be assumed) and must end with the lead number in the course. <br />
+                        For example: <b>1.s5</b> as a 2 part would be a 131 of Bob Minor coming round a lead after the second part.
+                    </Typography>
+                );
+            case 'Positional':
+                return (
+                    <Typography className={styles.HelperText}>
+                        <br />
+                        In this composition mode enter every call position by notation seperated by '.'s. <br />
+                        Each element may start with a number if the call is repeated, it may then contain the call abbreviation (a bob will be assumed) and must end with the calling position. <br />
+                        For example: <b>2H.2W.2H.sW</b> as a 1 part would be the standard 1250 of Yorkshire Major.
+                    </Typography>
+                );;
+            default:
+                return '';
+        }
     }
 
     const methodNotSet = props.composition.type !== 'Full' && !props.composition.startingMethod;
@@ -148,6 +182,21 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
                         margin="normal"
                         variant="outlined"
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography className={styles.HelperText}>
+                        {getCompositionHelperText()}
+                        <br />
+                        Repeated sections can be pre-defined for ease in all modes by a line in the form: <b>Part=...;</b> where ... is valid composition notation.<br />
+                        You may use previous definitions in future ones.<br />
+                        For example the following would be a valid (but verbose!) re-writing of the Yorkshire composition in Positional notation:<br />
+                        <b>part1=2H;</b><br />
+                        <b>part2=2W;</b><br />
+                        <b>part3=part1.sW;</b><br />
+                        <b>part1.part2.part3</b>
+                        <br /><br />
+                        See the help tab for more information.
+                    </Typography>
                 </Grid>
             </Grid>
         </Container>
