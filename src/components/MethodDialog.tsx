@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react';
 import { connect } from "react-redux";
-import { FixedSizeList, ListChildComponentProps  } from 'react-window';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { Dialog, DialogTitle, ListItem, ListItemText, CircularProgress, TextField } from "@material-ui/core";
 import { addMethod } from '../redux/actions/actions';
 import { getMethodListForStage } from '../helpers/methodHelper';
@@ -10,7 +10,7 @@ import useStyles from '../styles/styles';
 
 const MethodDialog = (props: IMethodDialogState) => {
     const styles = useStyles();
-    
+
     const [loading, setLoading] = React.useState(true);
     const [methods, setMethods] = React.useState<INewMethod[]>([]);
     const [filteredMethods, setFilteredMethods] = React.useState<INewMethod[]>([]);
@@ -36,7 +36,7 @@ const MethodDialog = (props: IMethodDialogState) => {
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
         props.addMethod(method);
-        props.onClose();
+        closeDialog();
     }
 
     const Row = (rowProps: ListChildComponentProps) => {
@@ -48,11 +48,11 @@ const MethodDialog = (props: IMethodDialogState) => {
             </ListItem>
         );
     }
-    
+
     const getDiaglogContents = () => {
         if (loading) {
             return (
-                <CircularProgress className={styles.loading}/>
+                <CircularProgress className={styles.loading} />
             )
         } else {
             return (
@@ -70,6 +70,11 @@ const MethodDialog = (props: IMethodDialogState) => {
         }
     }
 
+    const closeDialog = () => {
+        props.onClose();
+        setFilteredMethods(methods);
+    }
+
     // if we change stage we need to set back to loading
     (prevStage !== props.stage && !loading) && setLoading(true);
 
@@ -77,11 +82,11 @@ const MethodDialog = (props: IMethodDialogState) => {
     (loading && props.open) && getMethodListForStage(props.stage, setMethodProps);
 
     return (
-        <Dialog 
-            onClose={props.onClose} 
-            open={props.open} 
-            fullWidth={true} 
-            maxWidth='xs' 
+        <Dialog
+            onClose={closeDialog}
+            open={props.open}
+            fullWidth={true}
+            maxWidth='xs'
             classes={{
                 paper: styles.methodDialogPaper,
             }}

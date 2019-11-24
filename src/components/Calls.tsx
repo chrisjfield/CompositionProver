@@ -17,7 +17,7 @@ const Calls = (props: ICallState) => {
         return props.calls.map((call) => {
             const callKey = call.abbreviation + String(call.stage);
             const callText = `${call.name} (${call.abbreviation})`;
-            
+
             return (
                 <Grid container item key={callKey} className={styles.callContainer} spacing={1} xs={12} lg={6} xl={4}>
                     <Grid item sm={4} xs={12}>
@@ -26,7 +26,7 @@ const Calls = (props: ICallState) => {
                         </Box>
                     </Grid>
                     <Grid item sm={4} xs={12}>
-                        {getCallEditableField(call,'leadEndPlaceNotation', 'Lead End Notation')}
+                        {getCallEditableField(call, 'leadEndPlaceNotation', 'Lead End Notation')}
                     </Grid>
                     <Grid item sm={4} xs={12}>
                         {getCallEditableField(call, 'halfLeadPlaceNotation', 'Half Lead Notation')}
@@ -42,18 +42,18 @@ const Calls = (props: ICallState) => {
     const getCallEditableField = (call: ICall, property: ICallProperty, label: string) => {
         const validNotation = isValidCallNotation(call.stage, call[property]);
 
-        return (call.editable || call[property]) 
-            ?  (<TextField
-                    disabled={!call.editable}
-                    error={!validNotation}
-                    id={`call-field-${property.toString()}`}
-                    className={styles.callField}
-                    margin='normal'
-                    label={label}
-                    value={call[property]}
-                    onChange={handleChange(property, call)}
-                    helperText={!validNotation && 'Invalid place notation'}
-                />) 
+        return (call.editable || call[property])
+            ? (<TextField
+                disabled={!call.editable}
+                error={!validNotation}
+                id={`call-field-${property.toString()}`}
+                className={styles.callField}
+                margin='normal'
+                label={label}
+                value={call[property]}
+                onChange={handleChange(property, call)}
+                helperText={!validNotation && 'Invalid place notation'}
+            />)
             : null;
     }
 

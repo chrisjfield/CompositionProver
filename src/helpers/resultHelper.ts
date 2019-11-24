@@ -15,6 +15,7 @@ export const calculateResult = (composition: IComposition, methods: IMethod[], c
     resultHelper.expandedComposition = getExpandedComposition(composition.composition);
     resultHelper.halfLeadsOn = composition.halfLead;
     resultHelper.baseMethod = composition.startingMethod ? composition.startingMethod : '';
+    resultHelper.currentChange = resultHelper.result.initialChange;
 
     for (let part = 1; part <= composition.parts; part += 1) {
         const lastPart: boolean = part === composition.parts;
@@ -261,7 +262,7 @@ const calculatePositionalElement = (currentResultHelper: IResultHelper, composit
             withCall = generateLead(withCall, call, method, false);
 
             // if the generated lead gives the right tenor position then great, else add a plain lead and loop
-            if (withCall.currentChange.indexOf(method.stage.toString()) === expectedTenorIndex) {
+            if (withCall.currentChange.indexOf(getStageCharacter(method.stage)) === expectedTenorIndex) {
                 currentResultHelper = withCall;
                 callFound = true;
             } else {

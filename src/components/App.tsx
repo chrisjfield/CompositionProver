@@ -9,6 +9,7 @@ import Calls from './Calls';
 import Methods from './Methods';
 import CompositionSettings from './CompositionSettings';
 import Results from './Results';
+import { StylesProvider } from '@material-ui/styles';
 
 const App: React.FC = () => {
   const [value, setValue] = React.useState(0);
@@ -18,7 +19,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div>
+    <StylesProvider>
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="on">
           <Tab label="Compositions" />
@@ -33,7 +34,7 @@ const App: React.FC = () => {
       {value === 2 && (<div><StageSelector /> <Calls /></div>)}
       {value === 3 && <Results />}
       {value === 4 && <Help />}
-    </div>
+    </StylesProvider>
   );
 }
 
