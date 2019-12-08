@@ -2,125 +2,125 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
     stageDropdown: {
-        display: 'flex',
-        width: '175px',
-        margin: '20px auto',
+        display: 'flex!important',
+        width: '175px!important',
+        margin: '20px auto!important',
     },
     callField: {
-        width: '175px',
-        margin: '0 10px',
+        width: '175px!important',
+        margin: '0 10px!important',
     },
     callText: {
-        lineHeight: '60px',
-        width: '175px',
-        verticalAlign: 'middle',
-        padding: '0 10px',
+        lineHeight: '60px!important',
+        width: '175px!important',
+        verticalAlign: 'middle!important',
+        padding: '0 10px!important',
     },
     callContainer: {
-        padding: '4px 20px',
+        padding: '4px 20px!important',
     },
     methodDialogPaper: {
-        height: '600px',
+        height: '600px!important',
     },
     methodDialogSearch: {
-        margin: '0 15px 15px 15px',
+        margin: '0 15px 15px 15px!important',
     },
     methodDialogTitle: {
-        textAlign: 'center',
+        textAlign: 'center!important' as 'center',
     },
     loading: {
-        margin: '50px auto',
+        margin: '50px auto!important',
     },
     buttonLeft: {
-        margin: '10px 10px 10px 0',
-        width: '180px',
+        margin: '10px 10px 10px 0!important',
+        width: '180px!important',
     },
     buttonRight: {
-        margin: '10px 0 10px 0',
-        width: '180px',
+        margin: '10px 0 10px 0!important',
+        width: '180px!important',
     },
     methodCallDropdown: {
-        width: '200px',
+        width: '200px!important',
     },
     methodList: {
-        margin: '0 15px'
+        margin: '0 15px!important'
     },
     methodDelete: {
-        marginTop: '18px',
+        marginTop: '18px!important',
     },
     helpContainer: {
-        marginTop: '20px',
-        marginBottom: '20px',
+        marginTop: '20px!important',
+        marginBottom: '20px!important',
     },
     compositionSettingField: {
-        width: '150px',
+        width: '150px!important',
     },
     compositionCheckbox: {
-        marginTop: '24px',
+        marginTop: '24px!important',
     },
     compositionContainer: {
-        marginTop: '10px',
-        marginBottom: '20px',
+        marginTop: '10px!important',
+        marginBottom: '20px!important',
     },
     compositionCompositionField: {
-        maxWidth: '600px',
+        maxWidth: '600px!important',
     },
     compositionMethodField: {
-        maxWidth: '250px',
+        maxWidth: '250px!important',
     },
     loadingText: {
-        marginTop: '25px',
-        marginLeft: '-50px',
+        marginTop: '25px!important',
+        marginLeft: '-50px!important',
     },
     errorText: {
-        color: 'red',
-        fontWeight: 'bold',
+        color: 'red!important',
+        fontWeight: 'bold!important' as 'bold',
     },
     resultsContainer: {
-        padding: '20px',
+        padding: '20px!important',
     },
     resultsTruthTrue: {
-        color: 'green',
+        color: 'green!important',
     },
     resultsTruthFalse: {
-        color: 'red',
+        color: 'red!important',
     },
     resultsField: {
-        marginTop: '15px',
-        marginBottom: '10px',
+        marginTop: '15px!important',
+        marginBottom: '10px!important',
     },
     resultsText: {
-        marginTop: '15px',
+        marginTop: '15px!important',
     },
     sectionRow: {
-        letterSpacing: '4px',
+        letterSpacing: '4px!important',
     },
     resultDivider: {
-        maxWidth: '170px',
-        margin: 'auto',
+        maxWidth: '170px!important',
+        margin: 'auto!important',
     },
     resultSettingField: {
-        width: '200px',
-        marginTop: '15px',
+        width: '200px!important',
+        marginTop: '15px!important',
     },
     gridLead: {
-        paddingTop: '40px',
+        paddingTop: '40px!important',
     },
     gridInitialLead: {
-        paddingTop: '15px',
+        paddingTop: '15px!important',
     },
     gridHighlightTreble: {
-        color: 'red',
+        color: 'red!important',
     },
     gridHighlightBell: {
-        color: 'blue',
-        fontWeight: 'bold',
+        color: 'blue!important',
+        fontWeight: 'bold!important' as 'bold',
     },
     HelperText: {
-        fontWeight: 'lighter',
+        fontWeight: 'lighter!important' as 'lighter',
     },
     falseRow: {
-        backgroundColor: '#ff000057',
+        backgroundColor: '#ff000057!important',
     },
 });
 
