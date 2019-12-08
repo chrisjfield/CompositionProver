@@ -22,10 +22,10 @@ const Help = () => {
                     expandIcon={<ExpandMoreIcon />}
                     id="help-about-header"
                 >
-                    <Typography variant="h6">About</Typography>
+                    <Typography component={'span'} variant="h6">About</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography component={'span'}>
                         This site is to help prove, analyse and store bell ringing compositions. <br />
                         It can deal with splicing (lead end and half lead), multiple call types, and multple composition styles. <br />
                         The site is also offline capable, once initially loaded it can run fully without internet connection. <br />
@@ -48,10 +48,10 @@ const Help = () => {
                     expandIcon={<ExpandMoreIcon />}
                     id="help-compositions-header"
                 >
-                    <Typography variant="h6">Compositions</Typography>
+                    <Typography component={'span'} variant="h6">Compositions</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography component={'span'}>
                         The compositions tab is where you add the composition you wish to run.<br />
                         Firstly you will need to set the following:<br />
                         <ul>
@@ -68,7 +68,7 @@ const Help = () => {
                             <li><b>Enter the composition!</b> You can now enter your composition and look at the results.</li>
                         </ul>
                         <br />
-                        <Typography variant="subtitle2"><u>Full Compositions</u></Typography>
+                        <Typography component={'span'} variant="subtitle2"><u>Full Compositions</u></Typography>
                         <br />
                         Full compositions should be entered lead (or half lead) at a time, with each element seperated by a ".".
                         <br />
@@ -78,7 +78,7 @@ const Help = () => {
                         For example <i>pb8p.pb8b</i> would be a plain lead of bob major followed by a bobbed lead.
                         <br />
                         <br />
-                        <Typography variant="subtitle2"><u>Numerical Compositions</u></Typography>
+                        <Typography component={'span'} variant="subtitle2"><u>Numerical Compositions</u></Typography>
                         <br />
                         Numerical compositions should be entered call by call with each element seperated by a ".".
                         <br />
@@ -88,7 +88,7 @@ const Help = () => {
                         For example, if you set the method to Grandsire Triples and wrote <i>1.3.s4</i> this would give a bob at leads 1 & 3 and a single at lead 4.
                         <br />
                         <br />
-                        <Typography variant="subtitle2"><u>Positional Compositions</u></Typography>
+                        <Typography component={'span'} variant="subtitle2"><u>Positional Compositions</u></Typography>
                         <br />
                         Positional compositions should be entered call by call with each element seperated by a ".".
                         <br />
@@ -114,10 +114,10 @@ const Help = () => {
                     expandIcon={<ExpandMoreIcon />}
                     id="help-methods-header"
                 >
-                    <Typography variant="h6">Methods</Typography>
+                    <Typography component={'span'} variant="h6">Methods</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography component={'span'}>
                         The methods tab is where you add the methods you wish to use in your composition.<br />
                         Use the stage dropdown to change which set of methods you are looking at.<br />
                         <br />
@@ -143,10 +143,10 @@ const Help = () => {
                     expandIcon={<ExpandMoreIcon />}
                     id="help-calls-header"
                 >
-                    <Typography variant="h6">Calls</Typography>
+                    <Typography component={'span'} variant="h6">Calls</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography component={'span'}>
                         The calls tab is where you can view and add the calls you wish to use in your composition.<br />
                         Use the stage dropdown to change which set of calls you are looking at.<br />
                         <br />
@@ -171,10 +171,10 @@ const Help = () => {
                     expandIcon={<ExpandMoreIcon />}
                     id="help-calls-results"
                 >
-                    <Typography variant="h6">Results</Typography>
+                    <Typography component={'span'} variant="h6">Results</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography component={'span'}>
                         The results tab is where you can view the details of your composition.<br />
                         <br />
                         The statistic section will show you if it is true (with a note if it does not come round), along with the number of changes and number of changes of method.<br />

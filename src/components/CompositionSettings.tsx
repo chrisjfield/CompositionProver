@@ -56,7 +56,7 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
         switch (props.composition.type) {
             case 'Full':
                 return (
-                    <Typography className={styles.HelperText}>
+                    <Typography component={'span'} className={styles.HelperText}>
                         <br />
                         In this composition mode enter every lead seperated by '.'s. <br />
                         Each element must start with the method abbreviation and finish with the call abbreviation (use p for plain leads). <br />
@@ -65,7 +65,7 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
                 );
             case 'Numerical':
                 return (
-                    <Typography className={styles.HelperText}>
+                    <Typography component={'span'} className={styles.HelperText}>
                         <br />
                         In this composition mode enter every call position numerically seperated by '.'s. <br />
                         Each element may start with the call abbreviation (a bob will be assumed) and must end with the lead number in the course. <br />
@@ -74,7 +74,7 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
                 );
             case 'Positional':
                 return (
-                    <Typography className={styles.HelperText}>
+                    <Typography component={'span'} className={styles.HelperText}>
                         <br />
                         In this composition mode enter every call position by notation seperated by '.'s. <br />
                         Each element may start with a number if the call is repeated, it may then contain the call abbreviation (a bob will be assumed) and must end with the calling position. <br />
@@ -184,9 +184,9 @@ const CompositionSettings = (props: ICompositionSettingsState) => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography className={styles.HelperText}>
+                    <Typography component={'span'} className={styles.HelperText}>
                         {getCompositionHelperText()}
-                        <br />
+                        <br /><br />
                         Repeated sections can be pre-defined for ease in all modes by a line in the form: <b>Part=...;</b> where ... is valid composition notation.<br />
                         You may use previous definitions in future ones.<br />
                         For example the following would be a valid (but verbose!) re-writing of the Yorkshire composition in Positional notation:<br />
