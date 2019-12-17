@@ -91,13 +91,13 @@ export const getTenorIndexFromCallPosition = (position: string, stage: number) =
     } else if (position === '5' && stage >= 8) {
         index = 4;
     } else if (position === '6' && stage >= 9) {
-        index = 4;
+        index = 5;
     } else if (position === '7' && stage >= 10) {
-        index = 4;
+        index = 6;
     } else if (position === '8' && stage >= 11) {
-        index = 4;
+        index = 7;
     } else if (position === '9' && stage >= 12) {
-        index = 4;
+        index = 8;
     }
 
     if (index === 0) {
