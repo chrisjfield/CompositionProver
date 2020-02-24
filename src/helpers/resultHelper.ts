@@ -441,9 +441,17 @@ const getPlaceNotation = (currentResultHelper: IResultHelper, method: IMethod, c
     let placeNotationArray: string[] = shortNotation[0].split(/(-)|\./g).filter(x => x);
 
     if (shortNotation.length > 1) {
-        const reverseNotation: string[] = [...placeNotationArray].reverse().slice(1);
-        reverseNotation.push(shortNotation[1]);
-        placeNotationArray = placeNotationArray.concat(reverseNotation);
+        // if the comma is near the end it denotes a repeating section first
+        if (placeNotationArray.length > 1) {
+            const reverseNotation: string[] = [...placeNotationArray].reverse().slice(1);
+            reverseNotation.push(shortNotation[1]);
+            placeNotationArray = placeNotationArray.concat(reverseNotation);
+        } // if a comma is early it denotes a repeating section at the end
+        else {
+            const repeatingNotation = shortNotation[1].split(/(-)|\./g).filter(x => x);
+            const reverseNotation: string[] = [...repeatingNotation].reverse().slice(1);
+            placeNotationArray = placeNotationArray.concat(repeatingNotation).concat(reverseNotation);
+        }
     }
 
     //if we are using half leads take the relevant half of the array

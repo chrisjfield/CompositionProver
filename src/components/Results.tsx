@@ -13,6 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { emptyResult, defaultResultSettings } from '../defaults/results';
 import Divider from '@material-ui/core/Divider';
+import { getStageCharacter } from '../helpers/stageHelper';
 
 const Results = (props: IResultsState) => {
     const styles = useStyles();
@@ -261,15 +262,15 @@ const Results = (props: IResultsState) => {
 
         return (
             <Grid container key={`row-${index.toString()}`}>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Typography align='right'>
                         <b>{method + '  '}</b>
                     </Typography>
                 </Grid>
-                <Grid item xs={4} className={sytle}>
+                <Grid item xs={6} className={sytle}>
                     {getGridBells(row, index)}
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Typography align='left'>
                         <b>{call !== 'p' && '  ' + call}</b>
                     </Typography>
@@ -284,7 +285,7 @@ const Results = (props: IResultsState) => {
                 {
                     Array.from(row).map((char: string, index: number) => {
                         const trebleClassName: string = (settings.showTreble && char === '1') ? styles.gridHighlightTreble : '';
-                        const workingBellName: string = (char === workingBell) ? styles.gridHighlightBell : '';
+                        const workingBellName: string = (char === getStageCharacter(Number(workingBell))) ? styles.gridHighlightBell : '';
                         const style: string = `${trebleClassName} ${workingBellName}`;
 
                         return (
