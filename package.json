@@ -1,36 +1,48 @@
 {
-  "name": "composition-helper",
-  "version": "0.1.0",
+  "name": "composition-prover",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "4.1.3",
-    "@material-ui/icons": "4.2.1",
-    "@material-ui/styles": "4.2.0",
-    "@types/jest": "24.0.15",
-    "@types/node": "12.0.12",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4",
-    "@types/react-redux": "7.1.1",
-    "@types/react-window": "1.8.0",
-    "@types/redux-logger": "3.0.7",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-redux": "7.1.0",
-    "react-scripts": "3.0.1",
-    "react-window": "1.8.5",
-    "redux-logger": "3.0.6",
-    "redux-persist": "5.10.0",
-    "typescript": "4.4.3"
+    "@types/node": "12.0.0",
+    "@types/react": "17.0.0",
+    "@types/react-dom": "17.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-scripts": "4.0.3",
+    "typescript": "4.1.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "4.29.3",
+    "@typescript-eslint/parser": "4.29.3",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-plugin-react-hooks": "4.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && cd ./build && rename index.html 200.html && surge -p ./ -d compositionprover.surge.sh"
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "airbnb",
+      "airbnb-typescript"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "rules": {
+      "linebreak-style": [
+        "error",
+        "windows"
+      ],
+      "react/react-in-jsx-scope": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -43,8 +55,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "surge": "0.21.3"
   }
 }

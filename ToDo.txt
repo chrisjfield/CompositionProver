@@ -1,0 +1,5 @@
+New UI
+Redux => Context - use Reudcer
+Save multiple compositions
+Deal with erin
+better defaults

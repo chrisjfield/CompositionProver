@@ -1,12 +1,12 @@
-import { IComposition } from '../interfaces/interfaces';
+import Composition from '../types/compositions';
 
-const defaultComposition: IComposition = {
-    type: 'Full',
-    numberOfBells: 8,
-    parts: 3,
-    halfLead: false,
-    composition: 'pb8p.pb8p.pb8p.pb8p.pb8p.pb8p.pb8b',
-    startingMethod: 'pb8',
-}
+const defaultComposition: Composition = {
+  type: 'Full',
+  numberOfBells: 8,
+  parts: 3,
+  halfLead: false,
+  composition: 'pb8p.pb8p.pb8p.pb8p.pb8p.pb8p.pb8b',
+  startingMethod: 'pb8',
+};
 
 export default defaultComposition;

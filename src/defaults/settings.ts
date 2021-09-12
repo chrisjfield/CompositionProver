@@ -1,7 +1,7 @@
-import { ISettings } from '../interfaces/interfaces';
+import Settings from '../types/settings';
 
-const defaultSettings: ISettings = {
-    methodStage: 8,
-}
+const defaultSettings: Settings = {
+  methodStage: 8,
+};
 
 export default defaultSettings;
