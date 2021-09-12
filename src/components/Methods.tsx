@@ -1,142 +1,215 @@
-import * as React from 'react';
+import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import { IconButton, Fab, MenuItem, Divider } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { IAppState } from '../redux/reducers/rootReducer';
+import {
+	editMethod,
+	addMethod,
+	deleteMethod,
+	newMethod,
+} from '../redux/actions/actions';
+import {
+	IMethodState,
+	IMethodActionTypes,
+	IMethod,
+	IMethodProperty,
+	INewMethod,
+} from '../interfaces/interfaces';
+import { getMethods, getAllMethods } from '../redux/selectors/methodSelectors';
+import { getCalls } from '../redux/selectors/callSelectors';
+import getSettingsStage from '../redux/selectors/settingSelectors';
+import useStyles from '../styles/styles';
+import { isValidMethodNotation } from '../helpers/methodHelper';
+import MethodDialog from './MethodDialog';
 
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
+const Methods = (props: IMethodState) => {
+	const styles = useStyles();
+	const [open, setOpen] = React.useState(false);
 
-import validationHelper from '../helpers/validationHelper';
-import { IStore, IMethodProps, IMethodState, IMethod } from '../interfaces/Interfaces';
-import { addMethod, updateMethods, deleteMethod } from '../actions/methodActions';
-import styles from '../styles';
+	const getCallDropdownValues = (searchString: string) => {
+		const filteredCalls = props.calls.filter(
+			call =>
+				call.name.includes(searchString) || call.name.includes('User'),
+		);
 
-class Methods extends React.Component<IMethodProps, IMethodState> {
+		return filteredCalls.map(call => (
+			<MenuItem key={call.abbreviation} value={call.abbreviation}>
+				{call.name}
+			</MenuItem>
+		));
+	};
 
-    constructor(props: IMethodProps) {
-        super(props);
-        this.state = {
-            methods: props.methods.filter((method: IMethod) => method.stage === props.stage),
-        };
-    }
+	const handleChange = (property: IMethodProperty, method: IMethod) => (
+		event: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		method[property] = String(event.target.value);
+		props.editMethod(method);
+	};
 
-    componentWillReceiveProps(nextProps: IMethodProps) {
-        this.setState({
-            methods: nextProps.methods.filter((method: IMethod) => method.stage === nextProps.stage),
-        });
-    }
+	const fieldValidation = (method: IMethod, property: IMethodProperty) => {
+		let validation: string = '';
 
-    generateMethodHTML = (method: IMethod, index: number) => {
-        return (
-            <div key={method.methodId}>
-                <div className={'row text-field-method-wrapper'}>
-                    <div className="col-lg-4 col-md-3 col-sm-8 text-field-method">
-                        <TextField 
-                            style={styles.methodNameTextField}
-                            hintText="Name" 
-                            value={method.methodName ? method.methodName : ''}
-                            errorText={validationHelper.validateMethodName(method.methodName)} 
-                            onChange={(event, newValue) => this.updateMethodName(method, newValue)}
-                        />
-                    </div>
-                    <div className="col-lg-1 col-md-1 col-sm-3 text-field-method">
-                        <TextField 
-                            style={styles.methodSymbolTextField}
-                            hintText="Code" 
-                            value={method.methodSymbol ? method.methodSymbol : ''} 
-                            errorText={validationHelper.validateMethodSymbol(method.methodSymbol, this.state.methods)} 
-                            onChange={(event, newValue) => this.updateMethodSymbol(method, newValue)}
-                        />
-                    </div>
-                    <div className="col-lg-6 col-md-7 col-sm-11 text-field-method">
-                        <TextField 
-                            style={styles.methodPlaceNotationTextField}
-                            hintText="Place Notation" 
-                            value={method.methodPlaceNotation ? method.methodPlaceNotation : ''}
-                            errorText={validationHelper.validatePlaceNotation(method.methodPlaceNotation)}
-                            onChange={(event, newValue) => this.updateMethodPlaceNotation(method, newValue)}
-                        />
-                        {method.coreMethod ? null : this.getDeleteButton(method)}
-                    </div>
-                </div>
-                <hr className="row method-break"/>
-            </div>
-        );
-    }
+		if (!method[property]) {
+			validation = 'Enter a value';
+		} else {
+			switch (property) {
+				case 'abbreviation':
+					const dupe = props.allMethods.filter(methodToCheck => {
+						return (
+							methodToCheck.abbreviation ===
+							method.abbreviation &&
+							(methodToCheck.stage !== method.stage || methodToCheck.id < method.id)
+						);
+					}).length;
 
-    updateMethodName = (method: IMethod, newValue: string) => {
-        const updatedMethod: IMethod = { ...method, methodName: newValue };
-        this.updateMethod(updatedMethod);
-    }
+					dupe > 0 && (validation = 'Use unique abbreviations');
+					break;
+				case 'placeNotation':
+					const validNotation = isValidMethodNotation(method.stage, method.placeNotation)
 
-    updateMethodSymbol = (method: IMethod, newValue: string) => {
-        const updatedMethod: IMethod = { ...method, methodSymbol: newValue.toLowerCase() };
-        this.updateMethod(updatedMethod);
-    }
+					!validNotation && (validation = 'Invalid place notation')
+					break;
+			}
+		}
 
-    updateMethodPlaceNotation = (method: IMethod, newValue: string) => {
-        const updatedMethod: IMethod = { ...method, methodPlaceNotation: newValue };
-        this.updateMethod(updatedMethod);
-    }
+		return validation;
+	};
 
-    updateMethod = (updatedMethod: IMethod) => {
-        const updatedMethods = this.props.methods.map((method: IMethod) => {
-            return method.methodId === updatedMethod.methodId ? updatedMethod : method;
-        });
+	const getMethodField = (
+		method: IMethod,
+		property: IMethodProperty,
+		label: string,
+	) => {
+		const validation = fieldValidation(method, property);
+		const error = validation ? true : false;
 
-        this.props.dispatch(updateMethods(updatedMethods));
-    }
+		return (
+			<TextField
+				id={`outlined-method-${property.toString()}`}
+				error={error}
+				helperText={validation}
+				label={label}
+				value={method[property]}
+				margin="normal"
+				onChange={handleChange(property, method)}
+				fullWidth
+			/>
+		);
+	};
 
-    getDeleteButton = (method: IMethod) => {
-        return (
-            <div className="text-field-method-delete" onClick={() => this.deleteMethod(method)}>
-                x
-            </div>
-        );
-    }
+	const getMethodRows = () => {
+		return props.methods.map(method => {
+			return (
+				<Grid key={method.id} container spacing={2}>
+					<Grid item xs={12} sm={8} lg={2}>
+						{getMethodField(method, 'name', 'Name')}
+					</Grid>
+					<Grid item xs={12} sm={4} lg={1}>
+						{getMethodField(method, 'abbreviation', 'Abbreviation')}
+					</Grid>
+					<Grid item xs={12} sm={12} lg={4}>
+						{getMethodField(
+							method,
+							'placeNotation',
+							'Place Notation',
+						)}
+					</Grid>
+					<Grid item xs={12} sm={5} lg={2}>
+						<TextField
+							select
+							id="method-defaultbob-dropdown"
+							className={styles.methodCallDropdown}
+							label="Default Bob"
+							value={method.defaultBob}
+							onChange={handleChange('defaultBob', method)}
+							margin="normal"
+							variant="outlined"
+						>
+							{getCallDropdownValues('Bob')}
+						</TextField>
+					</Grid>
+					<Grid item xs={8} sm={5} lg={2}>
+						<TextField
+							select
+							id="method-defaultsingle-dropdown"
+							className={styles.methodCallDropdown}
+							label="Default Single"
+							value={method.defaultSingle}
+							onChange={handleChange('defaultSingle', method)}
+							margin="normal"
+							variant="outlined"
+						>
+							{getCallDropdownValues('Single')}
+						</TextField>
+					</Grid>
+					<Grid item xs={4} sm={2} lg={1}>
+						<IconButton
+							onClick={() => props.deleteMethod(method.id)}
+							className={styles.methodDelete}
+						>
+							<DeleteIcon />
+						</IconButton>
+					</Grid>
+					<Grid item xs={12}>
+						<Divider variant="middle" />
+					</Grid>
+				</Grid>
+			);
+		});
+	};
 
-    deleteMethod = (method: IMethod) => {
-        this.props.dispatch(deleteMethod(method));
-    }
-
-    addMethod = () => {
-        const maxMethodId: IMethod = this.props.methods.reduce((prev, current) => {
-            return (prev.methodId > current.methodId) ? prev : current;
-        });
-        const newMethod: IMethod = {
-            methodId: maxMethodId.methodId + 1,
-            stage: this.props.stage,
-        };
-
-        this.props.dispatch(addMethod(newMethod));
-    }
-    
-    render() {
-        return (
-            <div>
-                <div className="row">
-                    {this.state && this.state.methods && this.state.methods.map(
-                        (method: IMethod, index: number) => this.generateMethodHTML(method, index))}
-                </div>
-                <div className="row method-button">
-                    <RaisedButton
-                        label="Add Method"
-                        labelPosition="after"
-                        primary={true}
-                        icon={<AddIcon />}
-                        onClick={this.addMethod}
-                    />
-                </div>
-            </div>
-        );
-    }
-}
-
-const mapStateToProps = (store: IStore) => {
-    return {
-        methods: store.methodReducer.methods,
-        stage: store.compositionReducer.stage,
-    };
+	return (
+		<div className={styles.methodList}>
+			{getMethodRows()}
+			<Fab
+				variant="extended"
+				color="primary"
+				onClick={() => setOpen(true)}
+				className={styles.buttonLeft}
+			>
+				<AddIcon />
+				Lookup Method
+			</Fab>
+			<Fab
+				variant="extended"
+				color="primary"
+				onClick={() => props.newMethod(props.stage)}
+				className={styles.buttonRight}
+			>
+				<AddIcon />
+				Create Method
+			</Fab>
+			<MethodDialog
+				open={open}
+				stage={props.stage}
+				onClose={() => setOpen(false)}
+			/>
+		</div>
+	);
 };
-  
-const ConnectedMethods = connect(mapStateToProps)(Methods);
-export default ConnectedMethods;
+
+const mapStateToProps = (state: IAppState) => {
+	const allMethods = getAllMethods(state);
+	const methods = getMethods(state);
+	const calls = getCalls(state);
+	const stage = getSettingsStage(state);
+	return { allMethods, methods, calls, stage };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<IMethodActionTypes>) => {
+	return {
+		newMethod: (stage: number) => dispatch(newMethod(stage)),
+		addMethod: (method: INewMethod) => dispatch(addMethod(method)),
+		editMethod: (method: IMethod) => dispatch(editMethod(method)),
+		deleteMethod: (id: number) => dispatch(deleteMethod(id)),
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(Methods);

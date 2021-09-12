@@ -1,462 +1,376 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-import TextField from 'material-ui/TextField';
-import Toggle from 'material-ui/Toggle';
-import MenuItem from 'material-ui/MenuItem';
-import SelectField from 'material-ui/SelectField';
+import { IResultsState, IResult, IResultsSettingsType, ILeadResults } from '../interfaces/interfaces';
+import useStyles from '../styles/styles';
+import { IAppState } from '../redux/reducers/rootReducer';
+import { getCalls } from '../redux/selectors/callSelectors';
+import { getCompositionMethods } from '../redux/selectors/methodSelectors';
+import { getCurrentComposition } from '../redux/selectors/compositionSelectors';
+import { Grid, Container, CircularProgress, Typography, TextField, MenuItem } from '@material-ui/core';
+import { calculateResult } from '../helpers/resultHelper';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { emptyResult, defaultResultSettings } from '../defaults/results';
+import Divider from '@material-ui/core/Divider';
+import { getStageCharacter } from '../helpers/stageHelper';
 
-import { IStore, IResultProps, ILeadResults } from '../interfaces/Interfaces';
-import styles from '../styles';
-import { getNotationCharacterFromPosition } from '../helpers/placeNotationHelper';
+const Results = (props: IResultsState) => {
+    const styles = useStyles();
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState('');
+    const [result, setResult] = React.useState(emptyResult);
+    const [settings, setSettings] = React.useState(defaultResultSettings);
+    const [workingBell, setworkingBell] = React.useState('None');
 
-interface IResultState {
-    showTreble: boolean;
-    showGrid: boolean;
-    showSectionEnds: boolean;
-    showWorkingBell: string;
-}
+    const handleWorkingBellChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setworkingBell(event.target.value);
+    };
 
-class Results extends React.Component<IResultProps, IResultState> {
-    constructor(props: IResultProps) {
-        super(props);
+    const handleSettingChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSettings({ ...settings, [name]: event.target.checked });
+    };
 
-        this.state = {
-            showTreble: true,
-            showGrid: false,
-            showSectionEnds: false,
-            showWorkingBell: '2',
-        };
+    const onComplete = (result: IResult) => {
+        setLoading(false);
+        setResult(result);
     }
 
-    componentWillReceiveProps(nextProps: IResultProps) {
-        this.setState({
-            showGrid: nextProps.numberOfChanges > 500 ? false : true,
-            showSectionEnds: nextProps.leads.length > 40 ? false : true,
+    const runComposition = () => {
+        if (loading && !error) {
+            // do this on a set timeout to allow the main thread long enough to render the loading page.
+            setTimeout(function () { tryCalculation(); }, 100);
+        }
+    }
+
+    const tryCalculation = () => {
+        try {
+            calculateResult(props.composition, props.methods, props.calls, (result: IResult) => onComplete(result));
+        }
+        catch (error) {
+            if ((error as Error).message) {
+                setError((error as Error).message);
+            }
+            else {
+                setError('An Unknown Error Occurred :(');
+            }
+        }
+    }
+
+    const getReadOnlyField = (label: string, value: string) => {
+        const id: string = `results-${label.replace(/[\n\r\s]+/g, '')}`
+        return (
+            <Grid item xs={12} md={4}>
+                <TextField
+                    id={id}
+                    label={label}
+                    variant="outlined"
+                    value={value}
+                    className={styles.resultsField}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+            </Grid>
+        )
+    }
+
+    const getHeader = (label: string) => {
+        return (
+            <Grid item xs={12}>
+                <Typography variant='subtitle1' className={styles.resultsText}>
+                    <u>{label}</u>
+                </Typography>
+            </Grid>
+        )
+    }
+
+    const getCheckbox = (label: string, property: IResultsSettingsType) => {
+        return (
+            <Grid item xs={12}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={settings[property]}
+                            onChange={handleSettingChange(property.toString())}
+                            value={property.toString()}
+                            color='primary'
+                        />
+                    }
+                    label={label}
+                />
+            </Grid>
+        )
+    }
+
+    const getLeadEndSection = () => {
+        return (
+            <Grid item xs={12} md={4}>
+                <Typography variant='subtitle2' align='center'>
+                    <u>Lead Ends</u>
+                </Typography>
+                <Typography align='center' className={styles.sectionRow}>
+                    <b>{result.initialChange}</b>
+                </Typography>
+                <Divider variant='middle' className={styles.resultDivider} />
+                {getLeadEnds()}
+            </Grid>
+        )
+    }
+
+    const getLeadEnds = () => {
+        let previousMethod: string = '';
+
+        return result.leads.map((lead: ILeadResults, index: number) => {
+            const methodChanged: boolean = previousMethod !== lead.method;
+            previousMethod = lead.method;
+
+            return (
+                <Grid container>
+                    <Grid item xs={4}>
+                        <Typography align='right'>
+                            <b>{methodChanged && (lead.method + '  ')}</b>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                        {getChanges([lead.rows[lead.rows.length - 1]])}
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Typography align='left'>
+                            <b>{lead.call !== 'p' && '  ' + lead.call}</b>
+                        </Typography>
+                    </Grid>
+                </Grid>
+            );
         });
     }
 
-    getCompositionStats = () => {
+    const getSection = (label: string, rowArray: string[]) => {
         return (
-            <div className="row">
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Truth
-                    </span>
-                    <TextField 
-                        name="truth"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.truth.true ? 'True' : 'False'} 
-                        inputStyle={this.props.truth.true ? styles.truthFieldTrue : styles.truthFieldFalse}
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Number of Changes
-                    </span>
-                    <TextField 
-                        name="numberOfChanges"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.numberOfChanges} 
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Changes of Method
-                    </span>
-                    <TextField 
-                        name="changesOfMethod"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.changesOfMethod} 
-                    />
-                </div>
-            </div>
-        );
+            <Grid item xs={12} md={4}>
+                <Typography variant='subtitle2' align='center'>
+                    <u>{label}</u>
+                </Typography>
+                <Typography align='center' className={styles.sectionRow}>
+                    <b>{result.initialChange}</b>
+                </Typography>
+                <Divider variant='middle' className={styles.resultDivider} />
+                {getChanges(rowArray)}
+            </Grid>
+        )
     }
 
-    getImportantChangesOptions = () => {
-        return (
-            <div>
-                <div className="row grid-options-first">
-                    <div className="col-sm-6">
-                        <span className="text-field-results-grid-options-treble">
-                            Show Section Ends
-                        </span>
-                        <div className="grid-toggle">
-                            <Toggle 
-                                toggled={this.state.showSectionEnds} 
-                                onToggle={(event, isInputChecked) => this.toggleShowSectionEnds(isInputChecked)}/>
-                        </div>
-                    </div>  
-                </div>
-            </div>
-        );
-    }
-
-    getImportantChanges = () => {
-        return (
-            <div className="row">
-                <div className="col-sm-4">
-                    <div className="row text-field-changes-label">
-                        <h4>Part Ends</h4>
-                    </div>
-                    <div key="initial" className="row important-changes-row-header">
-                        {this.props.initialChangeString}
-                    </div>
-                    <hr className="results-hr"/>
-                    {this.getChanges(this.props.partEnds)}
-                </div>
-                <div className="col-sm-4">
-                    <div className="row text-field-changes-label">
-                        <h4>Course Ends</h4>
-                    </div>
-                    <div key="initial" className="row important-changes-row-header">
-                        {this.props.initialChangeString}
-                    </div>
-                    <hr className="results-hr"/>
-                    {this.getChanges(this.props.courseEnds)}
-                </div>
-                <div className="col-sm-4">
-                    <div className="row text-field-changes-label">
-                        <h4>Lead Ends</h4>
-                    </div>
-                    <div key="initial" className="row important-changes-row-header">
-                        {this.props.initialChangeString}
-                    </div>
-                    <hr className="results-hr"/>
-                    {this.getLeadEndChanges(this.props.leads)}
-                </div>
-            </div>
-        );
-    }
-
-    getMusicalChanges = () => {
-        return (
-            <div className="row">
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Queens
-                    </span>
-                    <TextField 
-                        name="queens"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.musicalChanges.queens} 
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Tittums
-                    </span>
-                    <TextField 
-                        name="tittums"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.musicalChanges.tittums} 
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Rollups (Front)
-                    </span>
-                    <TextField 
-                        name="rollupsf"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.musicalChanges.rollupsFront} 
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Rollups (Back)
-                    </span>
-                    <TextField 
-                        name="rollupsb"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.musicalChanges.rollupsBack} 
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Little Bells (Front)
-                    </span>
-                    <TextField 
-                        name="littlebellsf"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.musicalChanges.littleBellsFront} 
-                    />
-                </div>
-                <div className="col-sm-4">
-                    <span className="text-field-results-label">
-                        Little Bells (Back)
-                    </span>
-                    <TextField 
-                        name="littlebellsb"
-                        style={styles.resultTruthTextField}
-                        disabled={true}
-                        value={this.props.musicalChanges.littleBellsBack} 
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    getChanges = (rowArray: string[]) => {
+    const getChanges = (rowArray: string[]) => {
         return rowArray.map((row: string, index: number) => (
-            <div key={index} className="row important-changes-row">
+            <Typography align='center' className={styles.sectionRow} key={`change-${index.toString()}`}>
                 {row}
-            </div>
+            </Typography>
         ));
     }
 
-    getLeadEndChanges = (lead: ILeadResults[]) => {
-        let previousMethod: string = '';
-
-        return lead.map((leadResults: ILeadResults, index: number) => {
-            const methodChanged: boolean = previousMethod !== leadResults.method;
-            previousMethod = leadResults.method;
-            return (
-                <div key={index} className="row important-changes-row">
-                    <div className="important-changes-leadend-row-method">
-                        <b>{methodChanged && (leadResults.method + '  ')}</b>
-                    </div>
-                    <div className="important-changes-leadend-row-changes">
-                        {leadResults.leadEnd}
-                    </div>
-                    <div className="important-changes-leadend-row-call">
-                        <b>{leadResults.call !== 'p' && '  ' + leadResults.call}</b>
-                    </div>
-                </div>
-            );
-        });
-    }
-
-    getGrid = () => {
-        let previousMethod: string = null;
-        return (
-            <div>
-                <div key="initial" className="row">
-                    <div className="col-lg-2 col-md-3 col-sm-4 grid-header">
-                        {this.props.initialChangeString}
-                        <hr className="results-hr"/>
-                    </div>
-                </div>
-                <div key="columns" className="row">
-                    {this.props.leads.map((lead: ILeadResults, index: number) => {
-                        const methodChanged: boolean = previousMethod !== lead.method;
-                        previousMethod = lead.method;
-                        
-                        return this.getGridColumns(lead, index, methodChanged);
-                    })}
-                </div>
-            </div>
-        );
-    }
-
-    getGridColumns = (lead: ILeadResults, index: number, methodChanged: boolean) => {
-        return (
-            <div key={index} className="col-lg-2 col-md-3 col-sm-4 grid-column">
-                {this.getGridRow(lead, methodChanged)}
-            </div>
-        );
-    }
-
-    getGridRow = (lead: ILeadResults, methodChanged: boolean) => {
-        return lead.rows.map((row: string[], index: number) => {
-            const falseRow: string = this.props.truth.firstFalseRow === row.join(' ')
-                ? ' false-row'
-                : '';
-
-            return (
-                <div key={index} className="row grid-row">
-                    <div className="important-changes-leadend-row-method">
-                        <b>{index === 0 && methodChanged && (lead.method + '  ')}</b>
-                    </div>
-                    <div className={'important-changes-leadend-row-changes' + falseRow}>
-                        {row.map((bell: string) => this.getGridBell(bell, index))}
-                    </div>
-                    <div className="important-changes-leadend-row-call">
-                        <b>{index === lead.rows.length - 1 && lead.call !== 'p' && '  ' + lead.call}</b>
-                    </div>
-                </div>
-            );
-        });
-    }
-
-    getGridBell = (bell: string, rowIndex: number) => {
-        const showTreblePath: string = (bell === '1' && this.state.showTreble && this.state.showWorkingBell !== bell) 
-            ? ' grid-highlighted-treble' 
-            : '';
-        const highlightPath: string = (bell === this.state.showWorkingBell) ? ' grid-highlighted-bell' : '';
-
-        return (
-            <span key={String(rowIndex) + bell} 
-                className={'grid-row-bell grid-row-' + rowIndex + '-' + bell + highlightPath + showTreblePath}>
-                {bell}
-            </span>
-        );
-    }
-
-    getGridOptions = () => {
-        return (
-            <div>
-                <div className="row grid-options-first">
-                    <div className="col-sm-6">
-                        <span className="text-field-results-grid-options-treble">
-                            Show Grid
-                        </span>
-                        <div className="grid-toggle">
-                            <Toggle 
-                                toggled={this.state.showGrid} 
-                                onToggle={(event, isInputChecked) => this.toggleShowGrid(isInputChecked)}/>
-                        </div>
-                    </div>  
-                </div>
-                <div className="row grid-options-first">
-                    <div className="col-sm-6">
-                        <span className="text-field-results-grid-options-treble">
-                            Hightlight Treble Path
-                        </span>
-                        <div className="grid-toggle">
-                            <Toggle 
-                                toggled={this.state.showTreble} 
-                                onToggle={(event, isInputChecked) => this.toggleShowTreble(isInputChecked)}/>
-                        </div>
-                    </div>  
-                </div>
-                <div className="row grid-options">
-                    <div className="col-sm-6">
-                        <div className="text-field-results-grid-options-inside">
-                            Hightlight Working Bell
-                        </div>
-                        <div className="grid-selected-bell">
-                            <SelectField 
-                                value={this.state.showWorkingBell} 
-                                onChange={(event, index, newValue) => this.showBell(newValue)} 
-                                style={styles.resultWorkingBellField}
-                            >
-                                <MenuItem key={null} value={null} primaryText={'none'} />
-                                {this.getWorkingBells()}
-                            </SelectField>
-                        </div>
-                    </div>  
-                </div>
-            </div>
-        );
-    }
-
-    getWorkingBells = () => {
-        const bellsArray: string[] = [];
-        const numberOfBells: number = this.props.leads[0] && this.props.leads[0].rows[0] ? this.props.leads[0].rows[0].length : 0;
-
-        for (let i = 1; i <= numberOfBells; i += 1) {
-            bellsArray.push(getNotationCharacterFromPosition(i));
+    const getDropdownOptions = () => {
+        const dropDownArray: string[] = [];
+        for (let i = 1; i <= props.composition.numberOfBells; i += 1) {
+            dropDownArray.push(i === 1 ? 'None' : i.toString());
         }
 
-        return bellsArray.map((bell: string, index: number) => {
+        return dropDownArray.map((item) => (
+            <MenuItem key={item.toString()} value={item}>
+                {item.toString()}
+            </MenuItem>
+        ));
+    }
+
+    const getWorkingBellDropdown = () => {
+        return (
+            <Grid item xs={12}>
+                <TextField
+                    select
+                    id='results-HighlightWorkingBell'
+                    className={styles.resultSettingField}
+                    label='Highlight Working Bell'
+                    value={workingBell}
+                    onChange={handleWorkingBellChange}
+                    variant='outlined'
+                >
+                    {getDropdownOptions()}
+                </TextField>
+            </Grid>
+        )
+    }
+
+    const getTruthField = () => {
+        return (
+            <Grid item xs={12} md={4}>
+                <TextField
+                    id='results-truth'
+                    label='Truth'
+                    variant="outlined"
+                    value={result.truth.true ? 'True' : 'False'}
+                    helperText={result.truth.comesRound ? null : 'Does not come round'}
+                    className={styles.resultsField}
+                    InputProps={{
+                        readOnly: true,
+                        className: result.truth.true ? styles.resultsTruthTrue : styles.resultsTruthFalse,
+                    }}
+                    FormHelperTextProps={{
+                        className: styles.resultsTruthFalse,
+                    }}
+                />
+            </Grid>
+        )
+    }
+
+    const getGrid = () => {
+        let previousMethod: string = '';
+
+        return result.leads.map((lead: ILeadResults, index: number) => {
+            const methodChanged: boolean = previousMethod !== lead.method;
+            previousMethod = lead.method;
+
+            return getGridLead(lead, methodChanged, index);
+        })
+    }
+
+    const getGridLead = (lead: ILeadResults, methodChanged: boolean, index: number) => {
+        const sytle: string = index === 0 ? styles.gridInitialLead : styles.gridLead;
+
+        return (
+            <Grid item xs={12} md={6} lg={4} key={`lead-${index.toString()}`} className={sytle}>
+                {index === 0 && getInitialChange()}
+                {lead.rows.map((row: string, index: number) => {
+                    const method = (index === 0 && methodChanged) ? lead.method : '';
+                    const call = (index === lead.rows.length - 1) ? lead.call : '';
+
+                    return getGridRow(row, call, method, index);
+                })}
+            </Grid>
+        )
+    }
+
+    const getInitialChange = () => {
+        return ([
+            <Typography align='center' className={styles.sectionRow} key={'initialChange'}>
+                <b>{result.initialChange}</b>
+            </Typography>,
+            <Divider variant='middle' className={styles.resultDivider} key={'initialChangeDivider'} />
+        ])
+    }
+
+    const getGridRow = (row: string, call: string, method: string, index: number) => {
+        const sytle: string = row === result.truth.firstFalseRow ? styles.falseRow : '';
+
+        return (
+            <Grid container key={`row-${index.toString()}`}>
+                <Grid item xs={3}>
+                    <Typography align='right'>
+                        <b>{method + '  '}</b>
+                    </Typography>
+                </Grid>
+                <Grid item xs={6} className={sytle}>
+                    {getGridBells(row, index)}
+                </Grid>
+                <Grid item xs={3}>
+                    <Typography align='left'>
+                        <b>{call !== 'p' && '  ' + call}</b>
+                    </Typography>
+                </Grid>
+            </Grid>
+        )
+    }
+
+    const getGridBells = (row: string, index: number) => {
+        return (
+            <Typography align='center' className={styles.sectionRow} key={`change-${index.toString()}`}>
+                {
+                    Array.from(row).map((char: string, index: number) => {
+                        const trebleClassName: string = (settings.showTreble && char === '1') ? styles.gridHighlightTreble : '';
+                        const workingBellName: string = (char === getStageCharacter(Number(workingBell))) ? styles.gridHighlightBell : '';
+                        const style: string = `${trebleClassName} ${workingBellName}`;
+
+                        return (
+                            <span className={style} key={`bell-${index.toString()}`}>
+                                {char}
+                            </span>
+                        )
+                    })
+                }
+            </Typography>
+        )
+    }
+
+    const getResultsContent = () => {
+        if (error) {
             return (
-                <MenuItem key={bell} value={bell} primaryText={bell} />
-            );
-        });
+                <Grid container className={styles.callContainer}>
+                    <Grid item className={styles.loading}>
+                        <Typography className={styles.errorText}>
+                            {error}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            )
+        } else if (loading) {
+            return (
+                <Grid container className={styles.callContainer}>
+                    <Grid item className={styles.loading}>
+                        <CircularProgress />
+                        <Typography className={styles.loadingText}>
+                            Calculating Results...
+                    </Typography>
+                    </Grid>
+                </Grid>
+            )
+        } else {
+            return (
+                <Grid container className={styles.callContainer}>
+                    {getHeader('Statistics')}
+                    {getTruthField()}
+                    {getReadOnlyField('Number of Changes', result.numberOfChanges.toString())}
+                    {getReadOnlyField('Changes of Method', result.changesOfMethod.toString())}
+                    {getHeader('Music')}
+                    {getReadOnlyField('Queens', result.musicalChanges.queens.toString())}
+                    {getReadOnlyField('Tittums', result.musicalChanges.tittums.toString())}
+                    {getReadOnlyField('Rollups (Front)', result.musicalChanges.rollupsFront.toString())}
+                    {getReadOnlyField('Rollups (Back)', result.musicalChanges.rollupsBack.toString())}
+                    {getReadOnlyField('Little Bells (Front)', result.musicalChanges.littleBellsFront.toString())}
+                    {getReadOnlyField('Little Bells (Back)', result.musicalChanges.littleBellsBack.toString())}
+                    {getHeader('Section Ends')}
+                    <Typography className={styles.HelperText}>
+                        Please allow a bit of time when clicking "Show Section Ends" for the section ends to render.
+                    </Typography>
+                    {getCheckbox('Show Section Ends', 'showSections')}
+                    {settings.showSections && getSection('Part Ends', result.partEnds)}
+                    {settings.showSections && getSection('Course Ends', result.courseEnds)}
+                    {settings.showSections && getLeadEndSection()}
+                    {getHeader('Grid')}
+                    <Typography className={styles.HelperText}>
+                        Please allow a bit of time when changing an option below to allow for the grid to render.
+                    </Typography>
+                    {getCheckbox('Show Grid', 'showGrid')}
+                    {getCheckbox('Highlight Treble Path', 'showTreble')}
+                    {getWorkingBellDropdown()}
+                    {settings.showGrid && getGrid()}
+                </Grid>
+            )
+        }
     }
 
-    toggleShowTreble = (isInputChecked: boolean) => {
-        this.setState({
-            showTreble: isInputChecked,
-        });
-    }
+    // run the actual composition, pass in set state handlers to feedback results or errors
+    runComposition();
 
-    toggleShowGrid = (isInputChecked: boolean) => {
-        this.setState({
-            showGrid: isInputChecked,
-        });
-    }
-
-    toggleShowSectionEnds = (isInputChecked: boolean) => {
-        this.setState({
-            showSectionEnds: isInputChecked,
-        });
-    }
-
-    showBell = (bell: string) => {
-        this.setState({
-            showWorkingBell: bell,
-        });
-    }
-
-    getResults = () => {
-        return (
-            <div className="results-wrapper">
-                <div className="row group-heading">
-                    <h4>Statistics</h4>
-                </div>
-                {this.getCompositionStats()}
-                <div className="row group-heading">
-                    <h4>Music</h4>
-                </div>
-                {this.getMusicalChanges()}
-                <div className="row group-heading">
-                    <h4>Section Ends</h4>
-                </div>
-                {this.getImportantChangesOptions()}
-                {this.state.showSectionEnds && this.getImportantChanges()}
-                <div className="row group-heading">
-                    <h4>Grid</h4>
-                </div>
-                {this.getGridOptions()}
-                {this.state.showGrid && this.getGrid()}
-            </div>
-        );
-    }
-
-    showError = () => {
-        return (
-            <div className="results-wrapper">
-                <div className="row results-error">
-                    {this.props.calculationError}
-                </div>
-                <div className="row group-heading">
-                    <h4>Statistics</h4>
-                </div>
-                <div className="row group-heading">
-                    <h4>Music</h4>
-                </div>
-                <div className="row group-heading">
-                    <h4>Section Ends</h4>
-                </div>
-                <div className="row group-heading">
-                    <h4>Grid</h4>
-                </div>
-            </div>
-        );
-    }
-
-    render() {
-        return (
-            this.props.calculationError ? this.showError() : this.getResults()
-        );
-    }
+    return (
+        <Container>
+            {getResultsContent()}
+        </Container>
+    )
 }
 
-const mapStateToProps = (store: IStore) => {
-    return {
-        leads: store.resultReducer.leads,
-        grid: store.resultReducer.grid,
-        courseEnds: store.resultReducer.courseEnds,
-        partEnds: store.resultReducer.partEnds,
-        numberOfChanges: store.resultReducer.numberOfChanges,
-        changesOfMethod: store.resultReducer.changesOfMethod,
-        truth: store.resultReducer.truth,
-        initialChangeString: store.resultReducer.initialChangeString,
-        musicalChanges: store.resultReducer.musicalChanges,
-        calculationError: store.resultReducer.calculationError,
-    };
+const mapStateToProps = (state: IAppState) => {
+    const composition = getCurrentComposition(state);
+    const methods = getCompositionMethods(state);;
+    const calls = getCalls(state);
+    return { composition, methods, calls };
 };
-  
-const ConnectedResults = connect(mapStateToProps)(Results);
-export default ConnectedResults;
+
+export default connect(mapStateToProps)(Results);
