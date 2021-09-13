@@ -1,25 +1,19 @@
-function App() {
+import { useContext } from 'react';
+import CallContext from './context/callContext';
+
+const App = () => {
+  const { calls, dispatch } = useContext(CallContext);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit
-          {' '}
-          <code>src/App.tsx</code>
-          {' '}
-          and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>
+        {JSON.stringify(calls[0])}
+      </p>
+      <button type="button" onClick={() => { dispatch({ type: 'update', payload: { ...calls[0], name: calls[0].name += '1' } }); }}>
+        Hello
+      </button>
     </div>
   );
-}
+};
 
 export default App;

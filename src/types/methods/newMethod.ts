@@ -1,4 +1,4 @@
-interface INewMethod {
+interface NewMethod {
   name: string;
   abbreviation: string;
   placeNotation: string;
@@ -7,4 +7,4 @@ interface INewMethod {
   defaultSingle: string;
 }
 
-export default INewMethod;
+export default NewMethod;

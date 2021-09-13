@@ -3,7 +3,7 @@ import { getCallAbbreviationRegex } from './callHelper';
 import { getStageCallingPositionRegex } from './stageHelper';
 import Call from '../types/calls';
 import { Method } from '../types/methods';
-import Composition from '../types/compositions/composition';
+import { Composition } from '../types/compositions';
 
 const isValidComposition = (calls: Call[], methods: Method[], composition: Composition) => {
   let valid = true;

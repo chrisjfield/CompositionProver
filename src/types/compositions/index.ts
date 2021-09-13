@@ -1,3 +1,4 @@
 import Composition from './composition';
+import NewComposition from './newComposition';
 
-export default Composition;
+export type { Composition, NewComposition };

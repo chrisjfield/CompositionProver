@@ -1,12 +1,10 @@
-import CompositionType from './compositionType';
+import NewComposition from './newComposition';
 
-interface Composition {
-  numberOfBells: number;
-  type: CompositionType;
-  parts: number;
-  halfLead: boolean;
+interface Composition extends NewComposition {
+  id: number;
   startingMethod?: string;
   composition?: string;
+  changes?: number;
 }
 
 export default Composition;

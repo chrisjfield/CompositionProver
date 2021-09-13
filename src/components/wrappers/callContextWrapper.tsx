@@ -1,9 +1,9 @@
 import { useReducer } from 'react';
-import { ContextWrapperProps, CallAction } from '../types/context';
-import { CallProvider } from './callContext';
-import defaultCalls from '../defaults/calls';
-import Call from '../types/calls';
-import assertUnreachable from '../helpers/contextHelper';
+import { ContextWrapperProps, CallAction } from '../../types/context';
+import { CallProvider } from '../../context/callContext';
+import defaultCalls from '../../defaults/calls';
+import Call from '../../types/calls';
+import assertUnreachable from '../../helpers/contextHelper';
 
 const callReducer = (calls: Call[], action: CallAction) => {
   switch (action.type) {

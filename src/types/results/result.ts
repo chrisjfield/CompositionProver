@@ -1,4 +1,4 @@
-import LeadResult from './LeadResult';
+import LeadResult from './leadResult';
 import Truth from './truth';
 import MusicalChanges from './musicalChanges';
 

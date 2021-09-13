@@ -1,6 +1,6 @@
 import { emptyResultHelper } from '../defaults/results';
 import { plainCall } from './callHelper';
-import Composition from '../types/compositions/composition';
+import { Composition } from '../types/compositions';
 import { Method } from '../types/methods';
 import Call from '../types/calls';
 import {

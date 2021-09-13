@@ -1,7 +1,7 @@
-import INewMethod from './newMethod';
+import NewMethod from './newMethod';
 
-interface IMethod extends INewMethod {
+interface Method extends NewMethod {
   id: number;
 }
 
-export default IMethod;
+export default Method;

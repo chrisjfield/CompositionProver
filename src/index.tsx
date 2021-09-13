@@ -1,8 +1,8 @@
-import React, { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import AppContextWrapper from './context/appContextWrapper';
+import AppContextWrapper from './components/wrappers/appContextWrapper';
 
 ReactDOM.render(
   <StrictMode>
