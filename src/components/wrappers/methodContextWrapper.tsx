@@ -1,9 +1,18 @@
-import { useReducer } from 'react';
-import { ContextWrapperProps, MethodAction } from '../../types/context';
+import { useEffect, useReducer } from 'react';
+import {
+  AddMethodAction, ContextWrapperProps, DeleteMethodAction,
+  ImportMethodAction, MethodAction, ResetMethodAction,
+  UpdateMethodAction,
+} from '../../types/context';
 import { MethodProvider } from '../../context/methodContext';
 import defaultMethods from '../../defaults/methods';
-import { Method } from '../../types/methods';
+import { Method, NewMethod } from '../../types/methods';
 import assertUnreachable from '../../helpers/contextHelper';
+
+const methodContextInitializer = (initialValue: Method[]) => {
+  const persistedState = localStorage.getItem('methodState');
+  return persistedState ? JSON.parse(persistedState) : initialValue;
+};
 
 const methodReducer = (methods: Method[], action: MethodAction) => {
   switch (action.type) {
@@ -24,8 +33,12 @@ const methodReducer = (methods: Method[], action: MethodAction) => {
   }
 };
 
-const MethodContextWrapper = ({ children }: ContextWrapperProps) => {
-  const [methods, dispatch] = useReducer(methodReducer, defaultMethods);
+export const MethodContextWrapper = ({ children }: ContextWrapperProps) => {
+  const [methods, dispatch] = useReducer(methodReducer, defaultMethods, methodContextInitializer);
+
+  useEffect(() => {
+    localStorage.setItem('methodState', JSON.stringify(methods));
+  }, [methods]);
 
   return (
     <MethodProvider value={{ methods, dispatch }}>
@@ -34,4 +47,18 @@ const MethodContextWrapper = ({ children }: ContextWrapperProps) => {
   );
 };
 
-export default MethodContextWrapper;
+export const resetMethods = (): ResetMethodAction => ({ type: 'reset' });
+
+export const importMethods = (methods: Method[]): ImportMethodAction => (
+  { type: 'import', payload: methods }
+);
+
+export const updateMethod = (method: Method): UpdateMethodAction => (
+  { type: 'update', payload: method }
+);
+
+export const addMethod = (newMethod: NewMethod): AddMethodAction => (
+  { type: 'add', payload: newMethod }
+);
+
+export const deleteMethod = (id: number): DeleteMethodAction => ({ type: 'delete', payload: id });

@@ -1,8 +1,8 @@
 import { ContextWrapperProps } from '../../types/context';
-import CallContextWrapper from './callContextWrapper';
-import CompositionContextWrapper from './compositionContextWrapper';
-import MethodContextWrapper from './methodContextWrapper';
-import SettingsContextWrapper from './settingsContextWrapper';
+import { CallContextWrapper } from './callContextWrapper';
+import { CompositionContextWrapper } from './compositionContextWrapper';
+import { MethodContextWrapper } from './methodContextWrapper';
+import { SettingsContextWrapper } from './settingsContextWrapper';
 
 const AppContextWrapper = ({ children }: ContextWrapperProps) => (
   <SettingsContextWrapper>

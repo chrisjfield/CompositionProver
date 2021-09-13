@@ -1,9 +1,17 @@
-import { useReducer } from 'react';
-import { ContextWrapperProps, SettingsAction } from '../../types/context';
+import { useEffect, useReducer } from 'react';
+import {
+  ContextWrapperProps, ResetSettingsAction, SettingsAction,
+  UpdateSettingsAction,
+} from '../../types/context';
 import { SettingsProvider } from '../../context/settingsContext';
 import defaultSettings from '../../defaults/settings';
 import Settings from '../../types/settings';
 import asertUnreachable from '../../helpers/contextHelper';
+
+const settingsContextInitializer = (initialValue: Settings) => {
+  const persistedState = localStorage.getItem('settingsState');
+  return persistedState ? JSON.parse(persistedState) : initialValue;
+};
 
 const settingsReducer = (settings: Settings, action: SettingsAction) => {
   switch (action.type) {
@@ -16,8 +24,14 @@ const settingsReducer = (settings: Settings, action: SettingsAction) => {
   }
 };
 
-const SettingsContextWrapper = ({ children }: ContextWrapperProps) => {
-  const [settings, dispatch] = useReducer(settingsReducer, defaultSettings);
+export const SettingsContextWrapper = ({ children }: ContextWrapperProps) => {
+  const [settings, dispatch] = useReducer(
+    settingsReducer, defaultSettings, settingsContextInitializer,
+  );
+
+  useEffect(() => {
+    localStorage.setItem('settingsState', JSON.stringify(settings));
+  }, [settings]);
 
   return (
     <SettingsProvider value={{ settings, dispatch }}>
@@ -26,4 +40,6 @@ const SettingsContextWrapper = ({ children }: ContextWrapperProps) => {
   );
 };
 
-export default SettingsContextWrapper;
+export const resetSettings = (): ResetSettingsAction => ({ type: 'reset' });
+
+export const updateSettings = (settings: Settings): UpdateSettingsAction => ({ type: 'update', payload: settings });
