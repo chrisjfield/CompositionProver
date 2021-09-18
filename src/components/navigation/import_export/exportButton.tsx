@@ -3,7 +3,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ExportIcon from '@mui/icons-material/ArrowDownward';
-import { AppState } from '../../../types/context/AppState';
+import { AppState } from '../../../types/context';
 import CallContext from '../../../context/callContext';
 import MethodContext from '../../../context/methodContext';
 import CompositionContext from '../../../context/compositionContext';

@@ -1,4 +1,3 @@
-Error handling with snackbar?
 New UI
 Save multiple compositions
 Deal with erin

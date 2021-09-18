@@ -15,6 +15,8 @@ import {
   AddCompositionAction, DeleteCompositionAction,
   ImportCompositionAction, ResetCompositionAction, UpdateCompositionAction,
 } from './CompositionState';
+import AppState from './AppState';
+import AlertState from './AlertState';
 
 export type {
   ContextWrapperProps,
@@ -24,4 +26,5 @@ export type {
   SettingsState, SettingsAction, ResetSettingsAction, UpdateSettingsAction,
   CompositionState, CompositionAction, AddCompositionAction, DeleteCompositionAction,
   ImportCompositionAction, ResetCompositionAction, UpdateCompositionAction,
+  AppState, AlertState,
 };
