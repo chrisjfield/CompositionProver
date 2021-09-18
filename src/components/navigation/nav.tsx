@@ -6,11 +6,11 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
-import { ContextWrapperProps } from '../../types/context';
 import Drawer from './drawer';
 import Menu from './menu';
+import Routes from './routes';
 
-const Nav = ({ children }: ContextWrapperProps) => {
+const Nav = () => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
 
@@ -38,7 +38,7 @@ const Nav = ({ children }: ContextWrapperProps) => {
       </Drawer>
       <Box sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {children}
+        <Routes />
       </Box>
     </Box>
   );
