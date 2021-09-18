@@ -1,25 +1,26 @@
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 const Routes = () => (
   <Switch>
-    <Route path="/composition">
+    <Route exact path="/composition">
       <div>composition</div>
     </Route>
-    <Route path="/methods">
+    <Route exact path="/methods">
       <div>methods</div>
     </Route>
-    <Route path="/calls">
+    <Route exact path="/calls">
       <div>calls</div>
     </Route>
-    <Route path="/results">
+    <Route exact path="/results">
       <div>results</div>
     </Route>
-    <Route path="/help">
+    <Route exact path="/help">
       <div>help</div>
     </Route>
-    <Route path="/">
+    <Route exact path="/">
       <div>home</div>
     </Route>
+    <Redirect to="/" />
   </Switch>
 );
 
