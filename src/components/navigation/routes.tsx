@@ -1,4 +1,5 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
+import CallsTab from '../calls/callsTab';
 
 const Routes = () => (
   <Switch>
@@ -9,7 +10,7 @@ const Routes = () => (
       <div>methods</div>
     </Route>
     <Route exact path="/calls">
-      <div>calls</div>
+      <CallsTab />
     </Route>
     <Route exact path="/results">
       <div>results</div>

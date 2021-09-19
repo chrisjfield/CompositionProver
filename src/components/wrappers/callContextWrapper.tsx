@@ -4,7 +4,7 @@ import {
 } from '../../types/context';
 import { CallProvider } from '../../context/callContext';
 import defaultCalls from '../../defaults/calls';
-import Call from '../../types/calls';
+import { Call } from '../../types/calls';
 import assertUnreachable from '../../helpers/contextHelper';
 
 const callContextInitializer = (initialValue: Call[]) => {

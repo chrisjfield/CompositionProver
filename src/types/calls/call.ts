@@ -6,4 +6,7 @@ interface Call {
   halfLeadPlaceNotation?: string;
   editable: boolean;
 }
+
+export type CallProperty = 'leadEndPlaceNotation' | 'halfLeadPlaceNotation';
+
 export default Call;

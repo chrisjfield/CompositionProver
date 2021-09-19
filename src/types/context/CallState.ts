@@ -1,4 +1,4 @@
-import Call from '../calls';
+import { Call } from '../calls';
 import ContextState from './ContextState';
 
 export type ResetCallAction = { type: 'reset' };

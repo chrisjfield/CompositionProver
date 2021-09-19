@@ -1,4 +1,4 @@
-import Call from '../calls';
+import { Call } from '../calls';
 import Method from '../methods/method';
 import Composition from '../compositions/composition';
 import Settings from '../settings/index';

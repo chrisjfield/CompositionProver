@@ -1,7 +1,7 @@
 import { getMethodAbbreviationRegex } from './methodHelper';
 import { getCallAbbreviationRegex } from './callHelper';
 import { getStageCallingPositionRegex } from './stageHelper';
-import Call from '../types/calls';
+import { Call } from '../types/calls';
 import { Method } from '../types/methods';
 import { Composition } from '../types/compositions';
 

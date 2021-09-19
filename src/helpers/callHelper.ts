@@ -1,4 +1,4 @@
-import Call from '../types/calls';
+import { Call } from '../types/calls';
 import { getStageNotationRegex } from './stateHelper';
 
 export const plainCall: Call = {
