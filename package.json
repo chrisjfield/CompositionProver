@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^6.3.0",
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
     "@mui/icons-material": "5.0.0",
@@ -11,10 +12,13 @@
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
     "@types/react-router-dom": "5.1.9",
+    "autoprefixer": "^9",
+    "postcss": "^7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "5.3.0",
     "react-scripts": "4.0.3",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "4.1.2"
   },
   "devDependencies": {
@@ -28,11 +32,12 @@
     "eslint-plugin-react-hooks": "4.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
-    "lint": "npx eslint . --ext .ts,.tsx"
+    "lint": "npx eslint . --ext .ts,.tsx",
+    "export-eslint-config": "npx eslint --print-config src/App.tsx >> eslint-config.json"
   },
   "eslintConfig": {
     "extends": [
@@ -48,7 +53,8 @@
         "windows"
       ],
       "react/react-in-jsx-scope": "off"
-    }
+    },
+    "ignorePatterns": "*.config.js"
   },
   "browserslist": {
     "production": [
