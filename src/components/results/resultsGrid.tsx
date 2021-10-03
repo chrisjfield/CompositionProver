@@ -21,14 +21,14 @@ const resultsGrid = ({
   const [workingBell, setWorkingBell] = useState('None');
 
   const sectionHeader = () => [
-    <Typography align="center">
+    <Typography key="gridheader_label" align="center">
       <b>{initialChange}</b>
     </Typography>,
-    <Divider variant="middle" />,
+    <Divider key="gridheader_divider" variant="middle" />,
   ];
 
-  const getGridBells = (row: string, index: number) => (
-    <Typography align="center" key={`change-${index.toString()}`}>
+  const getGridBells = (row: string, index: string) => (
+    <Typography align="center" key={`change-${index}`}>
       {
         Array.from(row).map((char: string) => {
           let color = '';
@@ -36,7 +36,7 @@ const resultsGrid = ({
           if (char === getStageCharacter(Number(workingBell))) { color = 'blue'; }
 
           return (
-            <span key={`bell-${index.toString()}`} style={{ color }}>
+            <span key={`${index}-bell-${char}`} style={{ color }}>
               {char}
             </span>
           );
@@ -45,11 +45,11 @@ const resultsGrid = ({
     </Typography>
   );
 
-  const getGridRow = (row: string, call: string, method: string, index: number) => {
+  const getGridRow = (row: string, call: string, method: string, index: string) => {
     const backgroundColor: string = row === truth.firstFalseRow ? '#ff000057' : '';
 
     return (
-      <Grid container key={`row-${index.toString()}`}>
+      <Grid container key={index}>
         <Grid item xs={3}>
           <Typography align="right">
             <b>{`${method}  `}</b>
@@ -70,11 +70,11 @@ const resultsGrid = ({
   const getGridLead = (lead: LeadResult, methodChanged: boolean, index: number) => (
     <Grid item xs={12} md={6} lg={4} key={`lead-${index.toString()}`}>
       {index === 0 && sectionHeader()}
-      {lead.rows.map((row: string) => {
-        const method = (index === 0 && methodChanged) ? lead.method : '';
-        const call = (index === lead.rows.length - 1) ? lead.call : '';
+      {lead.rows.map((row: string, rowIndex: number) => {
+        const method = (rowIndex === 0 && methodChanged) ? lead.method : '';
+        const call = (rowIndex === lead.rows.length - 1) ? lead.call : '';
 
-        return getGridRow(row, call, method, index);
+        return getGridRow(row, call, method, `lead${index}-row${rowIndex}`);
       })}
     </Grid>
   );

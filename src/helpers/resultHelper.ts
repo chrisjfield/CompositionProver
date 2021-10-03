@@ -191,6 +191,9 @@ const generateLead = (
         newResultHelper.highestMethodStage = method.stage;
       }
 
+      leadResults.leadEnd = `(${newResultHelper.currentChange})`;
+      newResultHelper.result.leads.push(leadResults);
+
       return newResultHelper;
     }
   }

@@ -26,7 +26,6 @@ const ResultsTab = () => {
   const [result, setResult] = useState(emptyResult);
 
   const onComplete = (res: Result) => {
-    console.log(res);
     setResult(res);
     setLoading(false);
   };

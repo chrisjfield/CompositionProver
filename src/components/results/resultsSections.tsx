@@ -19,13 +19,13 @@ const resultsSections = ({
   ));
 
   const sectionHeader = (label: string) => [
-    <Typography variant="subtitle2" align="center">
+    <Typography key="sectionheader_label" variant="subtitle2" align="center">
       <u>{label}</u>
     </Typography>,
-    <Typography align="center">
+    <Typography key="sectionheader_initialChange" align="center">
       <b>{initialChange}</b>
     </Typography>,
-    <Divider variant="middle" />,
+    <Divider key="sectionheader_divider" variant="middle" />,
   ];
 
   const getSection = (label: string, rowArray: string[]) => (
@@ -38,19 +38,19 @@ const resultsSections = ({
   const getLeadEnds = () => {
     let previousMethod: string = '';
 
-    return leads.map((lead: LeadResult) => {
+    return leads.map((lead: LeadResult, index: number) => {
       const methodChanged: boolean = previousMethod !== lead.method;
       previousMethod = lead.method;
 
       return (
-        <Grid container>
+        <Grid container key={`leadEndGrid-${index.toString()}`}>
           <Grid item xs={4}>
             <Typography align="right">
               <b>{methodChanged && (`${lead.method}  `)}</b>
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            {getChanges([lead.rows[lead.rows.length - 1]])}
+            {getChanges([lead.leadEnd])}
           </Grid>
           <Grid item xs={4}>
             <Typography align="left">
