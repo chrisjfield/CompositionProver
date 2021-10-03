@@ -1,6 +1,7 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
 import HomeTab from '../home/homeTab';
 import CompositionTab from '../composition/compositionTab';
+import MethodsTab from '../methods/methodsTab';
 import CallsTab from '../calls/callsTab';
 import HelpTab from '../help/helpTab';
 
@@ -10,7 +11,7 @@ const Routes = () => (
       <CompositionTab />
     </Route>
     <Route exact path="/methods">
-      <div>methods</div>
+      <MethodsTab />
     </Route>
     <Route exact path="/calls">
       <CallsTab />

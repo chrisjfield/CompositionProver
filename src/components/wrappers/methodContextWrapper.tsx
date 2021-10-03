@@ -57,7 +57,22 @@ export const updateMethod = (method: Method): UpdateMethodAction => (
   { type: 'update', payload: method }
 );
 
-export const addMethod = (newMethod: NewMethod): AddMethodAction => (
+export const addMethod = (stage: number): AddMethodAction => {
+  const newMethod: NewMethod = {
+    name: 'New Custom Method',
+    abbreviation: `ncm${stage}`,
+    stage,
+    placeNotation: '',
+    defaultBob: 'b',
+    defaultSingle: 's',
+  };
+
+  return (
+    { type: 'add', payload: newMethod }
+  );
+};
+
+export const lookupMethod = (newMethod: NewMethod): AddMethodAction => (
   { type: 'add', payload: newMethod }
 );
 
