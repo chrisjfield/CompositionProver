@@ -7,7 +7,9 @@ const defaultCompositions: Composition[] = [{
   numberOfBells: 8,
   parts: 3,
   halfLead: false,
-  composition: 'pb8p.pb8p.pb8p.pb8p.pb8p.pb8p.pb8b',
+  fullComposition: 'pb8p.pb8p.pb8p.pb8p.pb8p.pb8p.pb8b',
+  numericalComposition: '7',
+  positionalComposition: 'H',
   startingMethod: 'pb8',
   changes: 336,
 }];

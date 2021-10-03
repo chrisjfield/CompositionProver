@@ -7,6 +7,7 @@ import {
   LeadResult, Result, ResultHelper, Truth,
 } from '../types/results';
 import MusicalChanges from '../types/results/musicalChanges';
+import { getCompositionDetail } from './compositionHelper';
 import {
   getInitialChange,
   getStageCharacter,
@@ -647,14 +648,15 @@ const calculateResult = (
   composition: Composition, methods: Method[], calls: Call[], onComplete: (result: Result) => void,
 ) => {
   let resultHelper: ResultHelper = JSON.parse(JSON.stringify(emptyResultHelper));
+  const compositionDetail = getCompositionDetail(composition);
 
-  if (!composition.composition) {
+  if (!compositionDetail) {
     throw new Error('No composition found');
   }
 
   // set the initial values
   resultHelper.result.initialChange = getInitialChange(composition.numberOfBells);
-  resultHelper.expandedComposition = getExpandedComposition(composition.composition);
+  resultHelper.expandedComposition = getExpandedComposition(compositionDetail);
   resultHelper.halfLeadsOn = composition.halfLead;
   resultHelper.baseMethod = composition.startingMethod ? composition.startingMethod : '';
   resultHelper.currentChange = resultHelper.result.initialChange;

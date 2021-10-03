@@ -9,7 +9,7 @@ import { updateComposition } from '../wrappers/compositionContextWrapper';
 import Composition from '../../types/compositions/composition';
 import MethodContext from '../../context/methodContext';
 import { sortMethods, methodValidForStage } from '../../helpers/methodHelper';
-import isValidComposition from '../../helpers/compositionHelper';
+import { getCompositionDetail, getCompositionDetailProperty, isValidComposition } from '../../helpers/compositionHelper';
 import CallContext from '../../context/callContext';
 import CompositionHelpText from './compositionHelpText';
 import getTypedValue from '../../helpers/eventsHelper';
@@ -111,8 +111,8 @@ const CompositionTab = () => {
       <Grid item xs={12}>
         <TextField
           label="Composition"
-          value={composition.composition}
-          onChange={handleChange('composition')}
+          value={getCompositionDetail(composition)}
+          onChange={handleChange(getCompositionDetailProperty(composition))}
           error={!!validation}
           helperText={validation}
           multiline
