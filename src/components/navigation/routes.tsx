@@ -4,6 +4,7 @@ import CompositionTab from '../composition/compositionTab';
 import MethodsTab from '../methods/methodsTab';
 import CallsTab from '../calls/callsTab';
 import HelpTab from '../help/helpTab';
+import ResultsTab from '../results/resultsTab';
 
 const Routes = () => (
   <Switch>
@@ -17,7 +18,7 @@ const Routes = () => (
       <CallsTab />
     </Route>
     <Route exact path="/results">
-      <div>results</div>
+      <ResultsTab />
     </Route>
     <Route exact path="/help">
       <HelpTab />

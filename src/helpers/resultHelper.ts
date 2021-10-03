@@ -184,7 +184,7 @@ const generateLead = (
       && row === newResultHelper.result.initialChange
     ) {
       // need to check if the last lead was a change of method and the stage before returning
-      if (newResultHelper?.currentMethod !== method.abbreviation) {
+      if (newResultHelper.currentMethod && newResultHelper.currentMethod !== method.abbreviation) {
         newResultHelper.result.changesOfMethod += 1;
       }
       if (newResultHelper.highestMethodStage < method.stage) {
@@ -199,7 +199,7 @@ const generateLead = (
   leadResults.leadEnd = newResultHelper.currentChange;
   newResultHelper.result.leads.push(leadResults);
 
-  if (newResultHelper?.currentMethod !== method.abbreviation) {
+  if (newResultHelper.currentMethod && newResultHelper.currentMethod !== method.abbreviation) {
     newResultHelper.result.changesOfMethod += 1;
   }
   if (newResultHelper.highestMethodStage < method.stage) {
@@ -358,7 +358,7 @@ const calculateNumericalElement = (
       newResultHelper = generateLead(newResultHelper, plainCall, method, false);
     }
     while (newResultHelper.result.courseEnds.length === currentCourseCount
-       && loopStartChange !== newResultHelper.currentChange);
+      && loopStartChange !== newResultHelper.currentChange);
 
     if (loopStartChange === newResultHelper.currentChange) {
       throw new Error('Composition has a part which never completes.');

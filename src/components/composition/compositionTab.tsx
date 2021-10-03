@@ -118,6 +118,7 @@ const CompositionTab = () => {
           multiline
           fullWidth
           rows="8"
+          sx={{ height: 'unset' }}
         />
       </Grid>
       <CompositionHelpText compositionType={composition.type} />

@@ -23,7 +23,6 @@ const EditableCallField = ({ call, property, label }: EditableCallFieldProps) =>
       value={call[property] || ''}
       onChange={handleChange}
       helperText={!validNotation && 'Invalid place notation'}
-      sx={{ height: '71px', mt: 0 }}
     />
   );
 };

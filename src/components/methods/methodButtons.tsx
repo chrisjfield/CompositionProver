@@ -15,7 +15,7 @@ const MethodButtons = () => {
   return (
     <Stack
       direction={{ xs: 'column', md: 'row' }}
-      spacing={{ xs: 1, md: 3 }}
+      spacing={{ xs: 0, md: 3 }}
       justifyContent="space-evenly"
       alignItems="center"
     >
