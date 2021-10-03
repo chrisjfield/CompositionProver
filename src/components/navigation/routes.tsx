@@ -1,6 +1,8 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
+import HomeTab from '../home/homeTab';
 import CompositionTab from '../composition/compositionTab';
 import CallsTab from '../calls/callsTab';
+import HelpTab from '../help/helpTab';
 
 const Routes = () => (
   <Switch>
@@ -17,10 +19,10 @@ const Routes = () => (
       <div>results</div>
     </Route>
     <Route exact path="/help">
-      <div>help</div>
+      <HelpTab />
     </Route>
     <Route exact path="/">
-      <div>home</div>
+      <HomeTab />
     </Route>
     <Redirect to="/" />
   </Switch>
