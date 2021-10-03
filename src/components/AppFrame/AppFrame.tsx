@@ -17,7 +17,7 @@ const AppFrame = (
     setNavOpen(false);
   };
 
-  const sidebarClasses = `flex flex-col justify-between absolute md:relative top-0 left-0 w-full md:w-auto md:max-w-xs min-h-screen px-4 bg-blue-700 text-center md:text-left transform transition-all md:translate-x-0 md:visible ${navOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'}`;
+  const sidebarClasses = `flex flex-col justify-between absolute md:relative top-0 left-0 w-full md:w-auto md:max-w-xs min-h-screen px-4 bg-primary text-center md:text-left transform transition-all md:translate-x-0 md:visible ${navOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'}`;
 
   return (
     <main className="flex w-full min-h-screen">
