@@ -1,3 +1,4 @@
+import { Composition } from '../types/compositions';
 import { NewMethod, Method } from '../types/methods';
 import { getStageNotationRegex } from './stateHelper';
 
@@ -82,4 +83,9 @@ export const sortMethods = (methodA: Method, methodB: Method) => {
     return 1;
   }
   return -1;
+};
+
+export const methodValidForStage = (methods: Method[], composition: Composition) => {
+  const method = methods.find((m) => m.abbreviation === composition.startingMethod);
+  return !(!method || method.stage > composition.numberOfBells);
 };

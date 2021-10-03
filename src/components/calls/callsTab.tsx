@@ -13,8 +13,8 @@ const CallsTab = () => {
       {calls
         .filter((c) => c.stage === methodStage)
         .map((c) => (
-          <Grid item xs={12} xl={6}>
-            <EditableCall key={`call_${c.abbreviation}_${c.stage}`} call={c} />
+          <Grid item xs={12} xl={6} key={`call_${c.abbreviation}_${c.stage}`}>
+            <EditableCall call={c} />
             <Divider sx={{ maxWidth: '700px', m: 'auto' }} />
           </Grid>
         ))}

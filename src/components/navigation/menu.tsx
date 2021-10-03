@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -13,7 +13,7 @@ import MethodIcon from '@mui/icons-material/LibraryMusic';
 import ImportExportButton from './import_export/importExportButton';
 
 const Menu = () => {
-  const menuItems: [string, ReactNode][] = [
+  const menuItems: [string, ReactElement][] = [
     ['Home', <HomeIcon />],
     ['Composition', <CompositionIcon />],
     ['Methods', <MethodIcon />],

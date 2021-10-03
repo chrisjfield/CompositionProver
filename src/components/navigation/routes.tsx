@@ -1,10 +1,11 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
+import CompositionTab from '../composition/compositionTab';
 import CallsTab from '../calls/callsTab';
 
 const Routes = () => (
   <Switch>
     <Route exact path="/composition">
-      <div>composition</div>
+      <CompositionTab />
     </Route>
     <Route exact path="/methods">
       <div>methods</div>

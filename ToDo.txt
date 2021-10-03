@@ -2,3 +2,4 @@ New UI
 Save multiple compositions
 Deal with erin
 better defaults
+3 types of composition so you can switch
