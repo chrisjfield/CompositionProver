@@ -1,4 +1,3 @@
 Save multiple compositions
 New UI
-Align calls with actual position on the grid
 unit tests on results generation

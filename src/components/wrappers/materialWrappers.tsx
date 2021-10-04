@@ -8,7 +8,7 @@ const TextField = ({ children, ...muiProps }: TextFieldProps) => (
     margin="dense"
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...muiProps}
-    sx={{ height: '71px', mt: 0, ...muiProps.sx }}
+    helperText={muiProps.helperText || ' '}
   >
     {children}
   </MuiTextField>

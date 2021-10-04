@@ -10,9 +10,10 @@ import Method from '../../types/methods/method';
 import TextField from '../wrappers/materialWrappers';
 import CallContext from '../../context/callContext';
 import SettingsContext from '../../context/settingsContext';
+import { isValidMethodNotation } from '../../helpers/methodHelper';
 
 const EditableMethod = ({ method }: EditableMethodProps) => {
-  const { dispatch } = useContext(MethodContext);
+  const { dispatch, methods } = useContext(MethodContext);
   const { calls } = useContext(CallContext);
   const { settings: { methodStage } } = useContext(SettingsContext);
   // const validNotation = isValidCallNotation(call.stage, call[property]);
@@ -33,6 +34,35 @@ const EditableMethod = ({ method }: EditableMethodProps) => {
       </MenuItem>
     ));
 
+  const fieldValidation = (property: keyof Method) => {
+    let validation: string = '';
+
+    if (!method[property]) {
+      validation = 'Enter a value';
+    } else {
+      switch (property) {
+        case 'abbreviation': {
+          const dupe = methods.filter((m) => (
+            m.abbreviation === method.abbreviation
+            && (m.stage !== method.stage || m.id < method.id)
+          )).length;
+
+          if (dupe > 0) { validation = 'Use unique abbreviations'; }
+          break;
+        }
+        case 'placeNotation': {
+          const validNotation = isValidMethodNotation(method.stage, method.placeNotation);
+
+          if (!validNotation) { validation = 'Invalid place notation'; }
+          break;
+        }
+        default:
+      }
+    }
+
+    return validation;
+  };
+
   return (
     <Stack
       direction={{ xs: 'column', md: 'row' }}
@@ -44,16 +74,23 @@ const EditableMethod = ({ method }: EditableMethodProps) => {
         label="Name"
         value={method.name}
         onChange={handleChange('name')}
+        helperText={fieldValidation('name')}
+        error={!!fieldValidation('name')}
       />
       <TextField
         label="Abbreviation"
         value={method.abbreviation}
         onChange={handleChange('abbreviation')}
+        helperText={fieldValidation('abbreviation')}
+        error={!!fieldValidation('abbreviation')}
+        inputProps={{ maxLength: 5 }}
       />
       <TextField
         label="Place Notation"
         value={method.placeNotation}
         onChange={handleChange('placeNotation')}
+        helperText={fieldValidation('placeNotation')}
+        error={!!fieldValidation('placeNotation')}
       />
       <TextField
         select
