@@ -25,8 +25,10 @@ const compositionReducer = (compositions: Composition[], action: CompositionActi
       return [...compositions.map(
         (c) => (c.id === action.payload.id ? action.payload : c),
       )];
-    case 'add':
-      return [...compositions, { ...action.payload, id: compositions.length }];
+    case 'add': {
+      const nextId = Math.max(...compositions.map((c) => c.id), 0);
+      return [...compositions, { ...action.payload, id: nextId }];
+    }
     case 'delete':
       return [...compositions.filter((c) => c.id !== action.payload)];
     default:
