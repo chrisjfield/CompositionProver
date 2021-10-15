@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { NavItem } from '../../types/navigation';
 import BarChartIcon from '../icons/BarChartIcon';
 import BellIcon from '../icons/BellIcon';
@@ -86,12 +87,12 @@ const SidenavItems = () => {
     <>
       {/* Navigation Items */}
       {navItems.map((navItem) => (
-        <a href={navItem.url} key={navItem.url} className="flex items-center rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 my-1 p-3 pr-6">
+        <Link to={navItem.url} key={navItem.url} className="flex items-center rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 my-1 p-3 pr-6">
           {navItem.icon}
           <p className="ml-3 text-base">
             {navItem.name}
           </p>
-        </a>
+        </Link>
       ))}
       <hr className="border-gray-200 opacity-50 my-4" />
       {/* Import/Export */}
