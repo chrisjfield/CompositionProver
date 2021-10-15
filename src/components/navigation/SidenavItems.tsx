@@ -5,13 +5,13 @@ import BarChartIcon from '../icons/BarChartIcon';
 import BellIcon from '../icons/BellIcon';
 import CaretIcon from '../icons/CaretIcon';
 import ChatBubbleIcon from '../icons/ChatBubbleIcon';
-import ExportIcon from '../icons/ExportIcon';
 import HelpIcon from '../icons/HelpIcon';
 import HomeIcon from '../icons/HomeIcon';
 import ImportExportIcon from '../icons/ImportExportIcon';
-import ImportIcon from '../icons/ImportIcon';
 import MusicalNoteIcon from '../icons/MusicalNoteIcon';
-import ResetIcon from '../icons/ResetIcon';
+import ExportButton from './ExportButton';
+import ImportButton from './ImportButton';
+import ResetButton from './ResetButton';
 
 interface SidenavItemsProps {
   closeNav: () => void;
@@ -22,18 +22,6 @@ const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
 
   const toggleImportMenu = () => {
     setImportMenuOpen(!importMenuOpen);
-  };
-
-  const importComposition = () => {
-    console.log('import');
-  };
-
-  const exportComposition = () => {
-    console.log('export');
-  };
-
-  const resetComposition = () => {
-    console.log('reset');
   };
 
   const navItems: NavItem[] = [
@@ -69,24 +57,6 @@ const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
     },
   ];
 
-  const importDropdownOptions = [
-    {
-      name: 'Import',
-      icon: <ImportIcon className="w-6 h-6 fill-current" />,
-      action: () => importComposition(),
-    },
-    {
-      name: 'Export',
-      icon: <ExportIcon className="w-6 h-6 fill-current" />,
-      action: () => exportComposition(),
-    },
-    {
-      name: 'Reset',
-      icon: <ResetIcon className="w-6 h-6 fill-current" />,
-      action: () => resetComposition(),
-    },
-  ];
-
   return (
     <>
       {/* Navigation Items */}
@@ -108,14 +78,9 @@ const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
         <CaretIcon className={`absolute right-0 mr-3 w-4 h-4 fill-current transform transition-transform ${importMenuOpen && 'rotate-90'}`} />
       </button>
       <div className={importMenuOpen ? 'flex flex-col' : 'hidden'}>
-        {importDropdownOptions.map((option) => (
-          <button onClick={option.action} type="button" key={option.name} className="flex items-center relative rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 mt-1 ml-6 px-3 py-2 pr-6">
-            {option.icon}
-            <p className="ml-3 text-base">
-              {option.name}
-            </p>
-          </button>
-        ))}
+        <ImportButton />
+        <ExportButton />
+        <ResetButton />
       </div>
     </>
   );

@@ -1,2 +1,4 @@
 Save multiple compositions
 New UI
+
+BUG: Cannot import the same file multiple times (<input> related, would need a workaround);
