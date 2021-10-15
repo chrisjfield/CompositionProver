@@ -15,7 +15,7 @@ export const isValidCallNotation = (stage: number, notation?: string) => {
 
   if (notation) {
     const stageRegex = getStageNotationRegex(stage);
-    const validCallRegex = RegExp(`^${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
+    const validCallRegex = RegExp(`^[\\-]?${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
     valid = validCallRegex.test(notation);
   }
 

@@ -4,11 +4,39 @@ import { getStageCallingPositionRegex } from './stageHelper';
 import { Call } from '../types/calls';
 import { Method } from '../types/methods';
 import { Composition } from '../types/compositions';
+import assertUnreachable from './contextHelper';
 
-const isValidComposition = (calls: Call[], methods: Method[], composition: Composition) => {
+export const getCompositionDetailProperty = ({ type }: Composition) => {
+  switch (type) {
+    case 'Full':
+      return 'fullComposition';
+    case 'Numerical':
+      return 'numericalComposition';
+    case 'Positional':
+      return 'positionalComposition';
+    default:
+      return assertUnreachable(type);
+  }
+};
+
+export const getCompositionDetail = (composition: Composition) => {
+  switch (composition.type) {
+    case 'Full':
+      return composition.fullComposition;
+    case 'Numerical':
+      return composition.numericalComposition;
+    case 'Positional':
+      return composition.positionalComposition;
+    default:
+      return assertUnreachable(composition.type);
+  }
+};
+
+export const isValidComposition = (calls: Call[], methods: Method[], composition: Composition) => {
   let valid = true;
+  const compositionDetail = getCompositionDetail(composition);
 
-  if (composition.composition) {
+  if (compositionDetail) {
     // compositions can have definitions at the start in the form: part=x.x;
     // compositions are all in the form x.x, or part.part, or a combination i.e. part.x
 
@@ -47,7 +75,7 @@ const isValidComposition = (calls: Call[], methods: Method[], composition: Compo
 
     let partRegex: string = '';
 
-    const compositionParts = composition.composition.replace(/[\n\r\s]+/g, '').split(';');
+    const compositionParts = compositionDetail.replace(/[\n\r\s]+/g, '').split(';');
     const setInvalid = () => { valid = false; };
 
     for (let i = 0; i < compositionParts.length; i += 1) {
@@ -91,5 +119,3 @@ const isValidComposition = (calls: Call[], methods: Method[], composition: Compo
 
   return valid;
 };
-
-export default isValidComposition;

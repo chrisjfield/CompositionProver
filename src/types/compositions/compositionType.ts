@@ -1,3 +1,3 @@
-type ICompositionType = 'Full' | 'Numerical' | 'Positional';
+type CompositionType = 'Full' | 'Numerical' | 'Positional';
 
-export default ICompositionType;
+export default CompositionType;

@@ -1,9 +1,9 @@
-import { TextField } from '@mui/material';
 import { useContext } from 'react';
 import CallContext from '../../context/callContext';
 import { updateCall } from '../wrappers/callContextWrapper';
 import { EditableCallFieldProps } from '../../types/calls';
 import { isValidCallNotation } from '../../helpers/callHelper';
+import TextField from '../wrappers/materialWrappers';
 
 const EditableCallField = ({ call, property, label }: EditableCallFieldProps) => {
   const { dispatch } = useContext(CallContext);
@@ -17,16 +17,12 @@ const EditableCallField = ({ call, property, label }: EditableCallFieldProps) =>
   return (
     <TextField
       id={call.abbreviation}
-      variant="filled"
-      size="small"
-      margin="dense"
       disabled={!call.editable}
       error={!validNotation}
       label={label}
       value={call[property] || ''}
       onChange={handleChange}
       helperText={!validNotation && 'Invalid place notation'}
-      sx={{ height: '71px', mt: 0 }}
     />
   );
 };

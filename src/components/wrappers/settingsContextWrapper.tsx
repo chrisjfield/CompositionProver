@@ -6,7 +6,7 @@ import {
 import { SettingsProvider } from '../../context/settingsContext';
 import defaultSettings from '../../defaults/settings';
 import Settings from '../../types/settings';
-import asertUnreachable from '../../helpers/contextHelper';
+import assertUnreachable from '../../helpers/contextHelper';
 
 const settingsContextInitializer = (initialValue: Settings) => {
   const persistedState = localStorage.getItem('settingsState');
@@ -20,7 +20,7 @@ const settingsReducer = (settings: Settings, action: SettingsAction) => {
     case 'update':
       return { ...action.payload };
     default:
-      return asertUnreachable(action);
+      return assertUnreachable(action);
   }
 };
 

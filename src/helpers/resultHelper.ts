@@ -7,6 +7,7 @@ import {
   LeadResult, Result, ResultHelper, Truth,
 } from '../types/results';
 import MusicalChanges from '../types/results/musicalChanges';
+import { getCompositionDetail } from './compositionHelper';
 import {
   getInitialChange,
   getStageCharacter,
@@ -64,7 +65,9 @@ const getExpandedComposition = (composition: string) => {
   return expandedComposition;
 };
 
-const getPlaceNotation = (currentResultHelper: ResultHelper, method: Method, call: Call) => {
+const getPlaceNotation = (
+  currentResultHelper: ResultHelper, method: Method, call: Call,
+): [string[], number] => {
   // if it has a comma then shortened notation is being used
   // in that case need to filp, remove half lead and add in the lead end notations
   const shortNotation: string[] = method.placeNotation.split(',');
@@ -100,8 +103,9 @@ const getPlaceNotation = (currentResultHelper: ResultHelper, method: Method, cal
     ? call.halfLeadPlaceNotation
     : call.leadEndPlaceNotation;
 
+  let callNotationArray: string[] = [];
   if (callNotation) {
-    const callNotationArray: string[] = callNotation.split('.');
+    callNotationArray = callNotation.split(/(-)|\./g).filter((x) => x);
 
     // adjust for the call
     for (let i = 0; i < callNotationArray.length; i += 1) {
@@ -112,7 +116,7 @@ const getPlaceNotation = (currentResultHelper: ResultHelper, method: Method, cal
     }
   }
 
-  return placeNotationArray;
+  return [placeNotationArray, callNotationArray.length];
 };
 
 const generateRow = (
@@ -159,19 +163,24 @@ const generateRow = (
 };
 
 const generateLead = (
-  currentResultHelper: ResultHelper, call: Call, method: Method, possibleLastLead: boolean,
+  currentResultHelper: ResultHelper,
+  call: Call,
+  callAbbreviation: string,
+  method: Method,
+  possibleLastLead: boolean,
 ) => {
   const newResultHelper: ResultHelper = currentResultHelper;
 
+  // get the place notation for the next lead (or half lead)
+  const [placeNotation, callLength] = getPlaceNotation(newResultHelper, method, call);
+
   const leadResults: LeadResult = {
-    call: call.abbreviation,
+    call: callAbbreviation,
+    callLength,
     method: method.abbreviation,
     leadEnd: '',
     rows: [],
   };
-
-  // get the place notation for the next lead (or half lead)
-  const placeNotation: string[] = getPlaceNotation(newResultHelper, method, call);
 
   for (let i = 0; i < placeNotation.length; i += 1) {
     const row: string = generateRow(newResultHelper, placeNotation[i], method.stage);
@@ -184,12 +193,15 @@ const generateLead = (
       && row === newResultHelper.result.initialChange
     ) {
       // need to check if the last lead was a change of method and the stage before returning
-      if (newResultHelper?.currentMethod !== method.abbreviation) {
+      if (newResultHelper.currentMethod && newResultHelper.currentMethod !== method.abbreviation) {
         newResultHelper.result.changesOfMethod += 1;
       }
       if (newResultHelper.highestMethodStage < method.stage) {
         newResultHelper.highestMethodStage = method.stage;
       }
+
+      leadResults.leadEnd = `(${newResultHelper.currentChange})`;
+      newResultHelper.result.leads.push(leadResults);
 
       return newResultHelper;
     }
@@ -199,7 +211,7 @@ const generateLead = (
   leadResults.leadEnd = newResultHelper.currentChange;
   newResultHelper.result.leads.push(leadResults);
 
-  if (newResultHelper?.currentMethod !== method.abbreviation) {
+  if (newResultHelper.currentMethod && newResultHelper.currentMethod !== method.abbreviation) {
     newResultHelper.result.changesOfMethod += 1;
   }
   if (newResultHelper.highestMethodStage < method.stage) {
@@ -265,7 +277,7 @@ const calculateFullElement = (
     throw new Error(`Composition element "${compositionElement}" does not end with a valid call.`);
   }
 
-  return generateLead(currentResultHelper, call, method, lastElement);
+  return generateLead(currentResultHelper, call, callAbbreviation, method, lastElement);
 };
 
 const calculateNumericalElement = (
@@ -288,8 +300,9 @@ const calculateNumericalElement = (
     throw new Error(`Method "${newResultHelper.baseMethod}" is not a valid method.`);
   }
 
+  let callAbbreviation: string = 'b';
   if (!Number(compositionElement)) {
-    const callAbbreviation: string = compositionElement.substr(0, 1);
+    callAbbreviation = compositionElement.substr(0, 1);
 
     // set the call to the method default if b/s, else the call type
     if (callAbbreviation === 'b' && method.defaultBob) {
@@ -325,7 +338,7 @@ const calculateNumericalElement = (
 
   if (position < newResultHelper.courseLeadCounter) {
     do {
-      newResultHelper = generateLead(newResultHelper, plainCall, method, false);
+      newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, false);
     }
     while (newResultHelper.result.courseEnds.length === currentCourseCount
       && loopStartChange !== newResultHelper.currentChange);
@@ -339,9 +352,9 @@ const calculateNumericalElement = (
   // do while to avoid infinite loop with call at the last lead of course
   do {
     if (newResultHelper.courseLeadCounter === position) {
-      newResultHelper = generateLead(newResultHelper, call, method, false);
+      newResultHelper = generateLead(newResultHelper, call, callAbbreviation, method, false);
     } else {
-      newResultHelper = generateLead(newResultHelper, plainCall, method, false);
+      newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, false);
     }
   }
   while (newResultHelper.courseLeadCounter > 1
@@ -355,10 +368,10 @@ const calculateNumericalElement = (
 
   if (lastElementOfPart && !lastElement && newResultHelper.currentChange !== lastCourseEnd) {
     do {
-      newResultHelper = generateLead(newResultHelper, plainCall, method, false);
+      newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, false);
     }
     while (newResultHelper.result.courseEnds.length === currentCourseCount
-       && loopStartChange !== newResultHelper.currentChange);
+      && loopStartChange !== newResultHelper.currentChange);
 
     if (loopStartChange === newResultHelper.currentChange) {
       throw new Error('Composition has a part which never completes.');
@@ -368,7 +381,7 @@ const calculateNumericalElement = (
     lastElement && newResultHelper.currentChange !== newResultHelper.result.initialChange
   ) {
     do {
-      newResultHelper = generateLead(newResultHelper, plainCall, method, true);
+      newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, true);
     }
     while (newResultHelper.currentChange !== newResultHelper.result.initialChange
       && loopStartChange !== newResultHelper.currentChange);
@@ -403,8 +416,9 @@ const calculatePositionalElement = (
   let call: Call | undefined;
   let numberOfCalls: number = 1;
 
+  let callAbbreviation: string = 'b';
   if (compositionElement.length >= 2) {
-    const callAbbreviation = compositionElement.substr(compositionElement.length - 2, 1);
+    callAbbreviation = compositionElement.substr(compositionElement.length - 2, 1);
     if (!Number(callAbbreviation)) {
       if (callAbbreviation === 'b' && method.defaultBob) {
         call = calls.find((c) => c.abbreviation === method.defaultBob);
@@ -425,8 +439,7 @@ const calculatePositionalElement = (
   }
 
   if (!call) {
-    const callAbbreviation: string = method.defaultBob ? method.defaultBob : 'b';
-    call = calls.find((c) => c.abbreviation === callAbbreviation);
+    call = calls.find((c) => c.abbreviation === method.defaultBob);
   }
 
   if (!call) {
@@ -445,7 +458,7 @@ const calculatePositionalElement = (
     do {
       // clone the array and try generating a lead with the call
       let withCall: ResultHelper = JSON.parse(JSON.stringify(newResultHelper));
-      withCall = generateLead(withCall, call, method, false);
+      withCall = generateLead(withCall, call, callAbbreviation, method, false);
 
       // if the generated lead gives the right tenor position then great
       // else add a plain lead and loop
@@ -453,7 +466,7 @@ const calculatePositionalElement = (
         newResultHelper = withCall;
         callFound = true;
       } else {
-        newResultHelper = generateLead(newResultHelper, plainCall, method, false);
+        newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, false);
       }
     }
     while (!callFound && loopStartChange !== newResultHelper.currentChange);
@@ -471,7 +484,7 @@ const calculatePositionalElement = (
 
   if (lastElementOfPart && !lastElement && newResultHelper.currentChange !== lastCourseEnd) {
     do {
-      newResultHelper = generateLead(newResultHelper, plainCall, method, false);
+      newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, false);
     }
     while (newResultHelper.result.courseEnds.length === currentCourseCount
       && loopStartChange !== newResultHelper.currentChange);
@@ -484,7 +497,7 @@ const calculatePositionalElement = (
     lastElement && newResultHelper.currentChange !== newResultHelper.result.initialChange
   ) {
     do {
-      newResultHelper = generateLead(newResultHelper, plainCall, method, true);
+      newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, true);
     }
     while (newResultHelper.currentChange !== newResultHelper.result.initialChange
       && loopStartChange !== newResultHelper.currentChange);
@@ -644,14 +657,15 @@ const calculateResult = (
   composition: Composition, methods: Method[], calls: Call[], onComplete: (result: Result) => void,
 ) => {
   let resultHelper: ResultHelper = JSON.parse(JSON.stringify(emptyResultHelper));
+  const compositionDetail = getCompositionDetail(composition);
 
-  if (!composition.composition) {
+  if (!compositionDetail) {
     throw new Error('No composition found');
   }
 
   // set the initial values
   resultHelper.result.initialChange = getInitialChange(composition.numberOfBells);
-  resultHelper.expandedComposition = getExpandedComposition(composition.composition);
+  resultHelper.expandedComposition = getExpandedComposition(compositionDetail);
   resultHelper.halfLeadsOn = composition.halfLead;
   resultHelper.baseMethod = composition.startingMethod ? composition.startingMethod : '';
   resultHelper.currentChange = resultHelper.result.initialChange;

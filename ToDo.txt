@@ -1,4 +1,2 @@
-New UI
 Save multiple compositions
-Deal with erin
-better defaults
+New UI

@@ -3,6 +3,7 @@ interface LeadResult {
   leadEnd: string;
   method: string;
   call: string;
+  callLength: number;
 }
 
 export default LeadResult;

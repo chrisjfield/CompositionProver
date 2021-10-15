@@ -15,7 +15,7 @@ const AlertContextWrapper = ({ children }: ContextWrapperProps) => {
   const showSuccess = (text: string) => setSuccess({ visible: true, text });
 
   const showAppError = (
-    <Snackbar open={error.visible} autoHideDuration={5000} onClose={() => setError(offState)}>
+    <Snackbar open={error.visible} autoHideDuration={2000} onClose={() => setError(offState)}>
       <MuiAlert severity="error" variant="filled" onClose={() => setError(offState)}>
         {error.text}
       </MuiAlert>
@@ -23,7 +23,7 @@ const AlertContextWrapper = ({ children }: ContextWrapperProps) => {
   );
 
   const showAppSuccess = (
-    <Snackbar open={success.visible} autoHideDuration={5000} onClose={() => setSuccess(offState)}>
+    <Snackbar open={success.visible} autoHideDuration={2000} onClose={() => setSuccess(offState)}>
       <MuiAlert severity="success" variant="filled" onClose={() => setSuccess(offState)}>
         {success.text}
       </MuiAlert>

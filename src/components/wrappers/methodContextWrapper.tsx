@@ -24,8 +24,10 @@ const methodReducer = (methods: Method[], action: MethodAction) => {
       return [...methods.map(
         (m) => (m.id === action.payload.id ? action.payload : m),
       )];
-    case 'add':
-      return [...methods, { ...action.payload, id: methods.length }];
+    case 'add': {
+      const nextId = Math.max(...methods.map((m) => m.id), 0);
+      return [...methods, { ...action.payload, id: nextId }];
+    }
     case 'delete':
       return [...methods.filter((m) => m.id !== action.payload)];
     default:
@@ -57,7 +59,22 @@ export const updateMethod = (method: Method): UpdateMethodAction => (
   { type: 'update', payload: method }
 );
 
-export const addMethod = (newMethod: NewMethod): AddMethodAction => (
+export const addMethod = (stage: number): AddMethodAction => {
+  const newMethod: NewMethod = {
+    name: 'New Custom Method',
+    abbreviation: `ncm${stage}`,
+    stage,
+    placeNotation: '',
+    defaultBob: 'b',
+    defaultSingle: 's',
+  };
+
+  return (
+    { type: 'add', payload: newMethod }
+  );
+};
+
+export const lookupMethod = (newMethod: NewMethod): AddMethodAction => (
   { type: 'add', payload: newMethod }
 );
 
