@@ -1,11 +1,14 @@
 import { BrowserRouter } from 'react-router-dom';
 import AppContextWrapper from './wrappers/appContextWrapper';
-import Nav from './navigation/nav';
+import AppFrame from './AppFrame/AppFrame';
+import Routes from './navigation/routes';
 
 const App = () => (
   <AppContextWrapper>
     <BrowserRouter>
-      <Nav />
+      <AppFrame>
+        <Routes />
+      </AppFrame>
     </BrowserRouter>
   </AppContextWrapper>
 );
