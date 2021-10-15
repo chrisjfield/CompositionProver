@@ -13,7 +13,11 @@ import ImportIcon from '../icons/ImportIcon';
 import MusicalNoteIcon from '../icons/MusicalNoteIcon';
 import ResetIcon from '../icons/ResetIcon';
 
-const SidenavItems = () => {
+interface SidenavItemsProps {
+  closeNav: () => void;
+}
+
+const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
   const [importMenuOpen, setImportMenuOpen] = useState(false);
 
   const toggleImportMenu = () => {
@@ -87,7 +91,7 @@ const SidenavItems = () => {
     <>
       {/* Navigation Items */}
       {navItems.map((navItem) => (
-        <Link to={navItem.url} key={navItem.url} className="flex items-center rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 my-1 p-3 pr-6">
+        <Link to={navItem.url} key={navItem.url} onClick={closeNav} className="flex items-center rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 my-1 p-3 pr-6">
           {navItem.icon}
           <p className="ml-3 text-base">
             {navItem.name}
