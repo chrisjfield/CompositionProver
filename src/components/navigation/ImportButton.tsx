@@ -1,18 +1,15 @@
 import { useContext, useRef } from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ImportIcon from '@mui/icons-material/ArrowUpward';
-import { AppState } from '../../../types/context';
-import CallContext from '../../../context/callContext';
-import MethodContext from '../../../context/methodContext';
-import CompositionContext from '../../../context/compositionContext';
-import SettingsContext from '../../../context/settingsContext';
-import { importCalls } from '../../wrappers/callContextWrapper';
-import { importMethods } from '../../wrappers/methodContextWrapper';
-import { importCompositions } from '../../wrappers/compositionContextWrapper';
-import { updateSettings } from '../../wrappers/settingsContextWrapper';
-import AlertContext from '../../../context/alertContext';
+import { AppState } from '../../types/context';
+import CallContext from '../../context/callContext';
+import MethodContext from '../../context/methodContext';
+import CompositionContext from '../../context/compositionContext';
+import SettingsContext from '../../context/settingsContext';
+import { importCalls } from '../wrappers/callContextWrapper';
+import { importMethods } from '../wrappers/methodContextWrapper';
+import { importCompositions } from '../wrappers/compositionContextWrapper';
+import { updateSettings } from '../wrappers/settingsContextWrapper';
+import AlertContext from '../../context/alertContext';
+import ImportIcon from '../icons/ImportIcon';
 
 const ImportButton = () => {
   const { dispatch: dispatchCall } = useContext(CallContext);
@@ -67,12 +64,12 @@ const ImportButton = () => {
         type="file"
         onChange={importState}
       />
-      <ListItem button onClick={importStateClick} sx={{ pl: 4 }}>
-        <ListItemIcon>
-          <ImportIcon />
-        </ListItemIcon>
-        <ListItemText primary="Import" />
-      </ListItem>
+      <button onClick={importStateClick} type="button" className="flex items-center relative rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 mt-1 ml-6 px-3 py-2 pr-6">
+        <ImportIcon className="w-6 h-6 fill-current" />
+        <p className="ml-3 text-base">
+          Import
+        </p>
+      </button>
     </>
   );
 };

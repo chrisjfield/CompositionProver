@@ -1,13 +1,10 @@
 import { useContext } from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ExportIcon from '@mui/icons-material/ArrowDownward';
-import { AppState } from '../../../types/context';
-import CallContext from '../../../context/callContext';
-import MethodContext from '../../../context/methodContext';
-import CompositionContext from '../../../context/compositionContext';
-import SettingsContext from '../../../context/settingsContext';
+import { AppState } from '../../types/context';
+import CallContext from '../../context/callContext';
+import MethodContext from '../../context/methodContext';
+import CompositionContext from '../../context/compositionContext';
+import SettingsContext from '../../context/settingsContext';
+import ExportIcon from '../icons/ExportIcon';
 
 const ExportButton = () => {
   const { calls } = useContext(CallContext);
@@ -29,12 +26,12 @@ const ExportButton = () => {
   };
 
   return (
-    <ListItem button onClick={exportState} sx={{ pl: 4 }}>
-      <ListItemIcon>
-        <ExportIcon />
-      </ListItemIcon>
-      <ListItemText primary="Export" />
-    </ListItem>
+    <button onClick={exportState} type="button" className="flex items-center relative rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 mt-1 ml-6 px-3 py-2 pr-6">
+      <ExportIcon className="w-6 h-6 fill-current" />
+      <p className="ml-3 text-base">
+        Export
+      </p>
+    </button>
   );
 };
 
