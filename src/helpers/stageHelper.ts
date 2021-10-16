@@ -41,31 +41,31 @@ export const getStageCallingPositionRegex = (stage: number) => {
 
   switch (stage) {
     case 4:
-      callingPositionRegex = 'I|O|4';
+      callingPositionRegex = 'I|O|[1-4]';
       break;
     case 5:
-      callingPositionRegex = 'I|O|4|H';
+      callingPositionRegex = 'I|O|H|[1-5]';
       break;
     case 6:
-      callingPositionRegex = 'I|O|4|W|H';
+      callingPositionRegex = 'I|O|W|H|[1-6]';
       break;
     case 7:
-      callingPositionRegex = 'I|O|4|M|W|H';
+      callingPositionRegex = 'I|O|M|W|H|[1-7]';
       break;
     case 8:
-      callingPositionRegex = 'I|O|4|5|M|W|H';
+      callingPositionRegex = 'I|O|M|W|H|[1-8]';
       break;
     case 9:
-      callingPositionRegex = 'I|O|4|5|6|M|W|H';
+      callingPositionRegex = 'I|O|M|W|H|[1-9]';
       break;
     case 10:
-      callingPositionRegex = 'I|O|4|5|6|7|M|W|H';
+      callingPositionRegex = 'I|O|M|W|H|[1-9]|10';
       break;
     case 11:
-      callingPositionRegex = 'I|O|4|5|6|7|8|M|W|H';
+      callingPositionRegex = 'I|O|M|W|H|[1-7]|10|11';
       break;
     case 12:
-      callingPositionRegex = 'I|O|4|5|6|7|8|9|M|W|H';
+      callingPositionRegex = 'I|O|M|W|H|[1-7]|10|11|12';
       break;
     default:
       throw (new Error('Invalid stage'));
@@ -75,34 +75,27 @@ export const getStageCallingPositionRegex = (stage: number) => {
 };
 
 export const getTenorIndexFromCallPosition = (position: string, stage: number) => {
-  let index: number = 0;
+  let index: number = -1;
   const positionUpper = position.toUpperCase();
 
   if (positionUpper === 'I') {
     index = 1;
   } else if (positionUpper === 'O') {
     index = 2;
-  } else if (positionUpper === '4') {
-    index = 3;
   } else if (positionUpper === 'H' && stage >= 5) {
     index = stage - 1;
   } else if (positionUpper === 'W' && stage >= 6) {
     index = stage - 2;
   } else if (positionUpper === 'M' && stage >= 7) {
     index = stage - 3;
-  } else if (positionUpper === '5' && stage >= 8) {
-    index = 4;
-  } else if (positionUpper === '6' && stage >= 9) {
-    index = 5;
-  } else if (positionUpper === '7' && stage >= 10) {
-    index = 6;
-  } else if (positionUpper === '8' && stage >= 11) {
-    index = 7;
-  } else if (positionUpper === '9' && stage >= 12) {
-    index = 8;
+  } else {
+    const positionNumber = Number(positionUpper);
+    if (positionNumber && positionNumber <= stage) {
+      index = positionNumber - 1;
+    }
   }
 
-  if (index === 0) {
+  if (index < 0) {
     throw new Error(`calling position ${position} is not valid on ${stage.toString()} bells.`);
   }
 

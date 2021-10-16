@@ -15,12 +15,12 @@ import ResultsGrid from './resultsGrid';
 import SettingsContext from '../../context/settingsContext';
 
 const ResultsTab = () => {
-  const { settings: { methodStage } } = useContext(SettingsContext);
+  const { settings: { methodStage, selectedComposition } } = useContext(SettingsContext);
   const { compositions } = useContext(CompositionContext);
   const { methods } = useContext(MethodContext);
   const { calls } = useContext(CallContext);
   const { showError, showSuccess } = useContext(AlertContext);
-  const composition = compositions[0];
+  const composition = compositions[selectedComposition];
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(emptyResult);

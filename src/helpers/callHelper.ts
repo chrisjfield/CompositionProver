@@ -1,34 +1,31 @@
 import { Call } from '../types/calls';
 import { getStageNotationRegex } from './stateHelper';
 
-export const plainCall: Call = {
-  abbreviation: 'p',
-  editable: false,
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type PartialCall = PartialBy<Call, 'editable' | 'halfLeadPlaceNotation' | 'leadEndPlaceNotation'>;
+
+export const newCall = (call: PartialCall) : Call => ({
+  editable: true,
   halfLeadPlaceNotation: '',
   leadEndPlaceNotation: '',
+  ...call,
+});
+
+export const plainCall: Call = newCall({
+  abbreviation: 'p',
+  editable: false,
   name: 'Plain lead',
   stage: 0,
-};
+});
 
 export const isValidCallNotation = (stage: number, notation?: string) => {
-  let valid = true;
+  if (!notation) { return true; }
 
-  if (notation) {
-    const stageRegex = getStageNotationRegex(stage);
-    const validCallRegex = RegExp(`^[\\-]?${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
-    valid = validCallRegex.test(notation);
-  }
-
-  return valid;
+  const stageRegex = getStageNotationRegex(stage);
+  const validCallRegex = new RegExp(`^\\-$|^[\\-]?${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
+  return validCallRegex.test(notation);
 };
 
-export const getCallAbbreviationRegex = (calls: Call[]) => {
-  let regex = '';
-
-  if (calls.length > 0) {
-    calls.forEach((call) => { regex += `${call.abbreviation}|`; });
-    regex += 'p';
-  }
-
-  return regex;
-};
+export const getCallAbbreviationRegex = (calls: Call[]) => calls
+  .map((c) => c.abbreviation)
+  .reduce((prev, next) => `${prev}|${next}`, 'p');

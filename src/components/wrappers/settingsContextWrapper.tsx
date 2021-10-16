@@ -18,7 +18,7 @@ const settingsReducer = (settings: Settings, action: SettingsAction) => {
     case 'reset':
       return { ...defaultSettings };
     case 'update':
-      return { ...action.payload };
+      return { ...defaultSettings, ...action.payload };
     default:
       return assertUnreachable(action);
   }

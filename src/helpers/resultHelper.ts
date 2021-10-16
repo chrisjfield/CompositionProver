@@ -352,7 +352,7 @@ const calculateNumericalElement = (
   // do while to avoid infinite loop with call at the last lead of course
   do {
     if (newResultHelper.courseLeadCounter === position) {
-      newResultHelper = generateLead(newResultHelper, call, callAbbreviation, method, false);
+      newResultHelper = generateLead(newResultHelper, call, callAbbreviation, method, lastElement);
     } else {
       newResultHelper = generateLead(newResultHelper, plainCall, 'p', method, false);
     }

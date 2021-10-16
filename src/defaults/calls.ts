@@ -110,28 +110,28 @@ const defaultCalls: Call[] = [
     name: 'Single (1-0)', abbreviation: 'v', editable: false, stage: 12, leadEndPlaceNotation: '1234567890', halfLeadPlaceNotation: '34567890ET',
   },
   {
-    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 5, leadEndPlaceNotation: '3.1',
+    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 5, leadEndPlaceNotation: '3.1', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 7, leadEndPlaceNotation: '3.1',
+    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 7, leadEndPlaceNotation: '3.1', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 9, leadEndPlaceNotation: '3.1',
+    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 9, leadEndPlaceNotation: '3.1', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 11, leadEndPlaceNotation: '3.1',
+    name: 'Grandsire Bob', abbreviation: 'g', editable: false, stage: 11, leadEndPlaceNotation: '3.1', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 5, leadEndPlaceNotation: '3.13',
+    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 5, leadEndPlaceNotation: '3.13', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 7, leadEndPlaceNotation: '3.13',
+    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 7, leadEndPlaceNotation: '3.13', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 9, leadEndPlaceNotation: '3.13',
+    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 9, leadEndPlaceNotation: '3.13', halfLeadPlaceNotation: '',
   },
   {
-    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 11, leadEndPlaceNotation: '3.13',
+    name: 'Grandsire Single', abbreviation: 'h', editable: false, stage: 11, leadEndPlaceNotation: '3.13', halfLeadPlaceNotation: '',
   },
   {
     name: 'Stedman Bob', abbreviation: 'm', editable: false, stage: 7, leadEndPlaceNotation: '5.1.3.1', halfLeadPlaceNotation: '5.3.1.3',
@@ -152,100 +152,100 @@ const defaultCalls: Call[] = [
     name: 'Stedman Single', abbreviation: 'n', editable: false, stage: 11, leadEndPlaceNotation: '90E.1.3.1', halfLeadPlaceNotation: '90E.3.1.3',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 5,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 5, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 6,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 6, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 7,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 7, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 8,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 8, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 9,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 9, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 10,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 10, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 11,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 11, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 12,
+    name: 'User Defined Call 1', abbreviation: 'w', editable: true, stage: 12, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 5,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 5, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 6,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 6, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 7,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 7, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 8,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 8, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 9,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 9, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 10,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 10, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 11,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 11, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 12,
+    name: 'User Defined Call 2', abbreviation: 'x', editable: true, stage: 12, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 5,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 5, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 6,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 6, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 7,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 7, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 8,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 8, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 9,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 9, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 10,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 10, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 11,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 11, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 12,
+    name: 'User Defined Call 3', abbreviation: 'y', editable: true, stage: 12, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 5,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 5, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 6,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 6, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 7,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 7, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 8,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 8, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 9,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 9, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 10,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 10, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 11,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 11, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
   {
-    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 12,
+    name: 'User Defined Call 4', abbreviation: 'z', editable: true, stage: 12, leadEndPlaceNotation: '', halfLeadPlaceNotation: '',
   },
 ];
 

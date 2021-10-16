@@ -5,6 +5,7 @@ import {
 import ResultProps from '../../types/results/resultProps';
 import TextField from '../wrappers/materialWrappers';
 import CompositionContext from '../../context/compositionContext';
+import SettingsContext from '../../context/settingsContext';
 import LeadResult from '../../types/results/leadResult';
 import { getStageCharacter } from '../../helpers/stageHelper';
 
@@ -13,8 +14,9 @@ const resultsGrid = ({
     leads, initialChange, truth,
   },
 }: ResultProps) => {
+  const { settings: { selectedComposition } } = useContext(SettingsContext);
   const { compositions } = useContext(CompositionContext);
-  const { numberOfBells } = compositions[0];
+  const { numberOfBells } = compositions[selectedComposition];
 
   const [showGrid, setShowGrid] = useState(false);
   const [showTreble, setShowTreble] = useState(true);
@@ -32,11 +34,12 @@ const resultsGrid = ({
       {
         Array.from(row).map((char: string) => {
           let color = '';
-          if (showTreble && char === '1') { color = 'red'; }
-          if (char === getStageCharacter(Number(workingBell))) { color = 'blue'; }
+          let fontWeight = 400;
+          if (showTreble && char === '1') { color = 'red'; fontWeight = 700; }
+          if (char === getStageCharacter(Number(workingBell))) { color = 'blue'; fontWeight = 700; }
 
           return (
-            <span key={`${index}-bell-${char}`} style={{ color }}>
+            <span key={`${index}-bell-${char}`} style={{ color, fontWeight }}>
               {char}
             </span>
           );

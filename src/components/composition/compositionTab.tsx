@@ -14,12 +14,14 @@ import CallContext from '../../context/callContext';
 import CompositionHelpText from './compositionHelpText';
 import getTypedValue from '../../helpers/eventsHelper';
 import TextField from '../wrappers/materialWrappers';
+import SettingsContext from '../../context/settingsContext';
 
 const CompositionTab = () => {
+  const { settings: { selectedComposition } } = useContext(SettingsContext);
   const { compositions, dispatch } = useContext(CompositionContext);
   const { methods } = useContext(MethodContext);
   const { calls } = useContext(CallContext);
-  const composition = compositions[0];
+  const composition = compositions[selectedComposition];
 
   const getDropdownOptions = (array: Array<string | number>) => array.map((item) => (
     <MenuItem key={item.toString()} value={item}>
