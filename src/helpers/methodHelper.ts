@@ -1,6 +1,6 @@
 import { Composition } from '../types/compositions';
 import { Method } from '../types/methods';
-import PartialBy from '../types/PartialBy';
+import { PartialBy } from '../types/PartialExtensions';
 import { getStageNotationRegex } from './stageHelper';
 import methodsXml from '../data/methodsList';
 

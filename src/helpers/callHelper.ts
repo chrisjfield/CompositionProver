@@ -1,5 +1,5 @@
 import { Call } from '../types/calls';
-import PartialBy from '../types/PartialBy';
+import { PartialBy } from '../types/PartialExtensions';
 import { getStageNotationRegex } from './stageHelper';
 
 type PartialCall = PartialBy<Call, 'editable' | 'halfLeadPlaceNotation' | 'leadEndPlaceNotation'>;

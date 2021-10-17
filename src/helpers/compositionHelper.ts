@@ -5,7 +5,8 @@ import { Call } from '../types/calls';
 import { Method } from '../types/methods';
 import { Composition } from '../types/compositions';
 import assertUnreachable from './contextHelper';
-import PartialBy from '../types/PartialBy';
+import { PartialBy, PartialExcept } from '../types/PartialExtensions';
+import CompositionType from '../types/compositions/compositionType';
 
 type PartialComposition = PartialBy<Composition, 'type' | 'parts' | 'halfLead'>;
 
@@ -16,7 +17,7 @@ export const newComposition = (composition: PartialComposition) : Composition =>
   ...composition,
 });
 
-export const getCompositionDetailProperty = ({ type }: Composition) => {
+export const getCompositionDetailProperty = ({ type }: PartialExcept<Composition, 'type'>) => {
   switch (type) {
     case 'Full':
       return 'fullComposition';
@@ -42,90 +43,65 @@ export const getCompositionDetail = (composition: Composition) => {
   }
 };
 
-export const isValidComposition = (calls: Call[], methods: Method[], composition: Composition) => {
-  let valid = true;
-  const compositionDetail = getCompositionDetail(composition);
+export const getExpandedComposition = (composition: string) => {
+  const compositionSections: string[] = composition.replace(/[\n\r\s]+/g, '').split(';');
+  const partDictionary: { [id: string]: string; } = {};
 
-  if (compositionDetail) {
-    // compositions can have definitions at the start in the form: part=x.x;
-    // compositions are all in the form x.x, or part.part, or a combination i.e. part.x
+  // Add all part definitions to the dictionary
+  compositionSections.slice(0, -1).forEach((s) => {
+    if ((s.match(/=/g) || []).length !== 1) { throw new Error(`Composition part "${s}" is invalid.`); }
+    const [sectionName, sectionNotation] = s.split('=');
 
-    // First get the regex for valid "x" values for a composition type
-    // Then split on ";" to get the part definitions and check they are valid
-    // Second check the final element is valid where x can be the "x" definition or a part
-    // const stageRegex = getStageNotationRegex(stage);
+    if (sectionName in partDictionary) { throw new Error(`Composition part "${sectionName}" is defined more than once.`); }
+    partDictionary[sectionName] = sectionNotation;
+  });
 
-    const methodRegex = getMethodAbbreviationRegex(methods);
-    const callRegex = getCallAbbreviationRegex(calls);
+  // Iterate backwards over the parts incase of nesting when expanding the composition
+  let expandedComposition = compositionSections[compositionSections.length - 1];
+  Object.keys(partDictionary).reverse().forEach((key) => {
+    const compositionSection = partDictionary[key];
+    expandedComposition = expandedComposition.replace(new RegExp(key, 'gi'), compositionSection);
+  });
 
-    let baseRegex = '';
-    switch (composition.type) {
-      case 'Full':
-        baseRegex = `(${methodRegex}){1}(${callRegex}){1}`;
-        break;
-      case 'Numerical':
-        if (!composition.startingMethod) { return false; }
+  return expandedComposition;
+};
 
-        baseRegex = `(${callRegex})?([0-9]+)`;
-        break;
-      case 'Positional': {
-        if (!composition.startingMethod) { return false; }
-
-        const method = methods.find((m) => m.abbreviation === composition.startingMethod);
-        if (!method) { return false; }
-
-        const callingPositionRegex = getStageCallingPositionRegex(method.stage);
-
-        baseRegex = `([0-9]?)(${callRegex})?(${callingPositionRegex}){1}`;
-        break;
-      }
-      default:
-        throw new Error(`Invalid composition type: ${composition.type}`);
-    }
-
-    let partRegex: string = '';
-
-    const compositionParts = compositionDetail.replace(/[\n\r\s]+/g, '').split(';');
-    const setInvalid = () => { valid = false; };
-
-    for (let i = 0; i < compositionParts.length; i += 1) {
-      let notation;
-      let partName;
-
-      if (i !== compositionParts.length - 1) {
-        const partDefinition = compositionParts[i].split('=');
-
-        if (partDefinition.length !== 2) {
-          return false;
-        }
-
-        [partName, notation] = partDefinition;
-      } else {
-        notation = compositionParts[i];
-      }
-
-      if (`|${partRegex}|`.includes(`|${partName}|`)) {
-        return false;
-      }
-
-      let validNotationRegex: RegExp;
-      if (partRegex) {
-        validNotationRegex = RegExp(`^((${baseRegex})|(${partRegex}))$`);
-      } else {
-        validNotationRegex = RegExp(`^(${baseRegex})?$`);
-      }
-
-      notation.split('.').forEach((element) => {
-        if (!validNotationRegex.test(element)) {
-          setInvalid();
-        }
-      });
-
-      if (partName) {
-        partRegex = partRegex ? `${partRegex}|${partName}` : partName;
-      }
-    }
+export const getCompositionRegex = (
+  type: CompositionType, methodRegex: string, callRegex: string, callPositionRegex: string,
+) => {
+  let regex: string;
+  switch (type) {
+    case 'Full':
+      regex = `(${methodRegex}){1}(${callRegex}){1}`;
+      break;
+    case 'Numerical':
+      regex = `(${callRegex})?([0-9]+)`;
+      break;
+    case 'Positional':
+      regex = `([0-9]?)(${callRegex})?(${callPositionRegex}){1}`;
+      break;
+    default:
+      return assertUnreachable(type);
   }
 
-  return valid;
+  return new RegExp(`^${regex}([\\.\\-]{1}${regex})*$`);
+};
+
+export const isValidComposition = (calls: Call[], methods: Method[], composition: Composition) => {
+  const compositionDetail = getCompositionDetail(composition);
+  if (!compositionDetail) { return true; }
+
+  const method = methods.find((m) => m.abbreviation === composition.startingMethod);
+  if (!method && ['Numerical', 'Positional'].includes(composition.type)) { return false; }
+
+  const expandedComposition = getExpandedComposition(compositionDetail);
+  const methodRegex = getMethodAbbreviationRegex(methods);
+  const callRegex = getCallAbbreviationRegex(calls);
+  const callPositionRegex = method?.stage ? getStageCallingPositionRegex(method.stage) : '';
+
+  const compRegex = getCompositionRegex(
+    composition.type, methodRegex, callRegex, callPositionRegex,
+  );
+
+  return compRegex.test(expandedComposition);
 };

@@ -7,7 +7,7 @@ import {
   LeadResult, Result, ResultHelper, Truth,
 } from '../types/results';
 import MusicalChanges from '../types/results/musicalChanges';
-import { getCompositionDetail } from './compositionHelper';
+import { getCompositionDetail, getExpandedComposition } from './compositionHelper';
 import {
   getInitialChange,
   getStageCharacter,
@@ -18,52 +18,6 @@ import {
   getStageTittums,
   getTenorIndexFromCallPosition,
 } from './stageHelper';
-
-const getExpandedComposition = (composition: string) => {
-  const compositionSections: string[] = composition.replace(/[\n\r\s]+/g, '').split(';');
-  const compositionSectionDictionary: { [id: string]: string; } = {};
-  let expandedComposition: string = '';
-
-  for (let section = 0; section < compositionSections.length; section += 1) {
-    let sectionNotation: string = '';
-    let sectionName: string = '';
-
-    // if it is not the last element it is a definition, else it is the actual composition.
-    if (section !== compositionSections.length - 1) {
-      const sectionDefinition = compositionSections[section].split('=');
-
-      if (sectionDefinition.length !== 2) {
-        throw new Error(`Composition abbreviation "${sectionDefinition}" is invalid.`);
-      }
-
-      [sectionName, sectionNotation] = sectionDefinition;
-
-      if (sectionName in compositionSectionDictionary) {
-        throw new Error(`Composition abbreviation "${sectionName}" is definted more than once.`);
-      }
-    } else {
-      sectionNotation = compositionSections[section];
-    }
-
-    // loop through all previously defined sections
-    // replace with the abbreviation with the actual notation
-    Object.keys(compositionSectionDictionary).forEach((key) => {
-      const compositionSection = compositionSectionDictionary[key];
-      const globalReplaceRegex = new RegExp(key, 'gi');
-
-      sectionNotation = sectionNotation.replace(globalReplaceRegex, compositionSection);
-    });
-
-    // if it is a definition store it, else return the composition
-    if (section !== compositionSections.length - 1) {
-      compositionSectionDictionary[sectionName] = sectionNotation;
-    } else {
-      expandedComposition = sectionNotation;
-    }
-  }
-
-  return expandedComposition;
-};
 
 const getPlaceNotation = (
   currentResultHelper: ResultHelper, method: Method, call: Call,
