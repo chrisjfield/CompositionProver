@@ -1,10 +1,10 @@
+import { Composition } from '../../types/compositions';
+import Method from '../../types/methods/method';
 import { newComposition } from '../../helpers/compositionHelper';
 import {
   getMethodAbbreviationRegex, getMethodListForStage, isValidMethodNotation,
   methodValidForStage, newMethod, sortMethods,
 } from '../../helpers/methodHelper';
-import { Composition } from '../../types/compositions';
-import Method from '../../types/methods/method';
 
 jest.mock('../../data/methodsList', () => `<?xml version="1.0" encoding="UTF-8"?>
 <collection>

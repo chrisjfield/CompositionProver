@@ -1,8 +1,8 @@
 import { Composition } from '../types/compositions';
 import { Method } from '../types/methods';
 import { PartialBy } from '../types/PartialExtensions';
-import { getStageNotationRegex } from './stageHelper';
 import methodsXml from '../data/methodsList';
+import { getStageNotationRegex } from './stageHelper';
 
 type PartialMethod = PartialBy<Method, 'defaultBob' | 'defaultSingle'>;
 

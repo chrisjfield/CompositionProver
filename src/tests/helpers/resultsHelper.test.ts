@@ -1,8 +1,8 @@
-import calculateResult from '../../helpers/resultHelper';
+import { Composition } from '../../types/compositions';
+import defaultCalls from '../../defaults/calls';
 import defaultCompositions from '../../defaults/compositions';
 import defaultMethods from '../../defaults/methods';
-import defaultCalls from '../../defaults/calls';
-import { Composition } from '../../types/compositions';
+import calculateResult from '../../helpers/resultHelper';
 
 test('basic full comp', () => {
   const comp: Composition = { ...defaultCompositions[0], type: 'Full' };

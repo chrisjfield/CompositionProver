@@ -1,9 +1,9 @@
+import { Composition } from '../../types/compositions';
+import { newCall } from '../../helpers/callHelper';
 import {
   getCompositionDetail, getCompositionDetailProperty, getExpandedComposition,
   newComposition, isValidComposition, getCompositionRegex,
 } from '../../helpers/compositionHelper';
-import { Composition } from '../../types/compositions';
-import { newCall } from '../../helpers/callHelper';
 import { newMethod } from '../../helpers/methodHelper';
 
 describe('new composition generation', () => {

@@ -1,12 +1,12 @@
-import { getMethodAbbreviationRegex } from './methodHelper';
-import { getCallAbbreviationRegex } from './callHelper';
-import { getStageCallingPositionRegex } from './stageHelper';
 import { Call } from '../types/calls';
-import { Method } from '../types/methods';
 import { Composition } from '../types/compositions';
-import assertUnreachable from './contextHelper';
-import { PartialBy, PartialExcept } from '../types/PartialExtensions';
 import CompositionType from '../types/compositions/compositionType';
+import { Method } from '../types/methods';
+import { PartialBy, PartialExcept } from '../types/PartialExtensions';
+import { getCallAbbreviationRegex } from './callHelper';
+import assertUnreachable from './contextHelper';
+import { getMethodAbbreviationRegex } from './methodHelper';
+import { getStageCallingPositionRegex } from './stageHelper';
 
 type PartialComposition = PartialBy<Composition, 'type' | 'parts' | 'halfLead'>;
 
