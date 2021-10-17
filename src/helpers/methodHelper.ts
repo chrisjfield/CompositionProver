@@ -1,6 +1,6 @@
 import { Composition } from '../types/compositions';
 import { NewMethod, Method } from '../types/methods';
-import { getStageNotationRegex } from './stateHelper';
+import { getStageNotationRegex } from './stageHelper';
 
 const processMethods = (
   stage: number, methods: HTMLCollectionOf<Element>, methodArray: NewMethod[],

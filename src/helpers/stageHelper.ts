@@ -51,6 +51,23 @@ export const getStageCallingPositionRegex = (stage: number) => {
   }
 };
 
+export const getStageNotationRegex = (stage: number) => {
+  if (stage > 12) { throw (new Error('Invalid stage')); }
+
+  // get a lookahead to guarantee at least 1 character present
+  let lookAheadText: string = '';
+  if (stage < 10) { lookAheadText = `[1-${getStageCharacter(stage)}]`; }
+  if (stage === 10) { lookAheadText = '[0-9]'; }
+  if (stage === 11) { lookAheadText = '[0-9E]'; }
+  if (stage === 12) { lookAheadText = '[0-9ET]'; }
+
+  const characterCheck = [...Array(stage).keys()]
+    .map((i) => `[${getStageCharacter(i + 1)}]?`)
+    .join('');
+
+  return `(?=${lookAheadText})(${characterCheck})`;
+};
+
 export const getTenorIndexFromCallPosition = (position: string, stage: number) => {
   const positionUpper = position.toUpperCase();
 
@@ -129,18 +146,9 @@ export const getStageRollupsForward = (stage: number) => {
   }
 };
 
-export const getStageRollupsBackward = (stage: number) => {
-  const forwardRollup = getStageRollupsForward(stage);
-  return forwardRollup.split('').reverse().join('');
-};
+export const getStageRollupsBackward = (stage: number) => getStageRollupsForward(stage)
+  .split('').reverse().join('');
 
-export const getInitialChange = (stage: number) => {
-  const initialChange: string[] = [];
-
-  for (let i = 1; i <= stage; i += 1) {
-    initialChange.push(getStageCharacter(i));
-  }
-  const initialChangeString: string = initialChange.join('');
-
-  return initialChangeString;
-};
+export const getInitialChange = (stage: number) => [...Array(stage).keys()]
+  .map((i) => getStageCharacter(i + 1))
+  .join('');

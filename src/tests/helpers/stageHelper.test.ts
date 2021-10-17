@@ -1,7 +1,7 @@
 import {
   getStageCallingPositionRegex, getStageCharacter, getStageNumber,
   getTenorIndexFromCallPosition, getStageQueens, getStageTittums,
-  getStageRollupsForward, getStageRollupsBackward,
+  getStageRollupsForward, getStageRollupsBackward, getInitialChange, getStageNotationRegex,
 } from '../../helpers/stageHelper';
 
 describe('stage character conversion', () => {
@@ -47,6 +47,20 @@ describe('get stage call postion regex', () => {
 
   test('unsupported stage', () => {
     expect(() => getStageCallingPositionRegex(15)).toThrow('Invalid stage');
+  });
+});
+
+describe('get stage call postion regex', () => {
+  test('get valid call', () => {
+    expect(getStageNotationRegex(4)).toBe('(?=[1-4])([1]?[2]?[3]?[4]?)');
+    expect(getStageNotationRegex(8)).toBe('(?=[1-8])([1]?[2]?[3]?[4]?[5]?[6]?[7]?[8]?)');
+    expect(getStageNotationRegex(10)).toBe('(?=[0-9])([1]?[2]?[3]?[4]?[5]?[6]?[7]?[8]?[9]?[0]?)');
+    expect(getStageNotationRegex(11)).toBe('(?=[0-9E])([1]?[2]?[3]?[4]?[5]?[6]?[7]?[8]?[9]?[0]?[E]?)');
+    expect(getStageNotationRegex(12)).toBe('(?=[0-9ET])([1]?[2]?[3]?[4]?[5]?[6]?[7]?[8]?[9]?[0]?[E]?[T]?)');
+  });
+
+  test('unsupported stage', () => {
+    expect(() => getStageNotationRegex(15)).toThrow('Invalid stage');
   });
 });
 
@@ -136,5 +150,17 @@ describe('get rollups backwards', () => {
   test('unsupported stage', () => {
     expect(() => getStageRollupsBackward(3)).toThrow('Invalid stage');
     expect(() => getStageRollupsBackward(15)).toThrow('Invalid stage');
+  });
+});
+
+describe('get initial change', () => {
+  test('generate rollups backwards', () => {
+    expect(getInitialChange(4)).toBe('1234');
+    expect(getInitialChange(8)).toBe('12345678');
+    expect(getInitialChange(12)).toBe('1234567890ET');
+  });
+
+  test('unsupported stage', () => {
+    expect(() => getInitialChange(15)).toThrow('Invalid stage');
   });
 });

@@ -1,5 +1,5 @@
 import { Call } from '../types/calls';
-import { getStageNotationRegex } from './stateHelper';
+import { getStageNotationRegex } from './stageHelper';
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type PartialCall = PartialBy<Call, 'editable' | 'halfLeadPlaceNotation' | 'leadEndPlaceNotation'>;
