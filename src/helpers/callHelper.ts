@@ -20,7 +20,6 @@ export const plainCall: Call = newCall({
 
 export const isValidCallNotation = (stage: number, notation?: string) => {
   if (!notation) { return true; }
-
   const stageRegex = getStageNotationRegex(stage);
   const validCallRegex = new RegExp(`^\\-$|^[\\-]?${stageRegex}{1}([\\.\\-]{1}${stageRegex})*$`);
   return validCallRegex.test(notation);

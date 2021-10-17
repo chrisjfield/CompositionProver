@@ -1,257 +1,137 @@
 export const getStageCharacter = (stage: number) => {
-  let char: string = '';
+  if (stage > 12) { throw (new Error('Invalid stage')); }
+
   switch (stage) {
     case 10:
-      char = '0';
-      break;
+      return '0';
     case 11:
-      char = 'E';
-      break;
+      return 'E';
     case 12:
-      char = 'T';
-      break;
+      return 'T';
     default:
-      char = stage.toString();
+      return String(stage);
   }
-
-  return char;
 };
 
 export const getStageNumber = (stage: string) => {
-  let position: number;
   switch (stage) {
     case '0':
-      position = 10;
-      break;
+      return 10;
     case 'E':
-      position = 11;
-      break;
+      return 11;
     case 'T':
-      position = 12;
-      break;
-    default:
-      position = Number(stage);
+      return 12;
+    default: {
+      const stageNumber = Number(stage);
+      if (!stageNumber || stageNumber > 12) { throw (new Error('Invalid stage')); }
+      return stageNumber;
+    }
   }
-
-  return position;
 };
 
 export const getStageCallingPositionRegex = (stage: number) => {
-  let callingPositionRegex: string = '';
-
   switch (stage) {
     case 4:
-      callingPositionRegex = 'I|O|[1-4]';
-      break;
+      return 'I|O|H|[1-4]';
     case 5:
-      callingPositionRegex = 'I|O|H|[1-5]';
-      break;
+      return 'I|O|W|H|[1-5]';
     case 6:
-      callingPositionRegex = 'I|O|W|H|[1-6]';
-      break;
     case 7:
-      callingPositionRegex = 'I|O|M|W|H|[1-7]';
-      break;
     case 8:
-      callingPositionRegex = 'I|O|M|W|H|[1-8]';
-      break;
     case 9:
-      callingPositionRegex = 'I|O|M|W|H|[1-9]';
-      break;
+      return `I|O|M|W|H|[1-${stage}]`;
     case 10:
-      callingPositionRegex = 'I|O|M|W|H|[1-9]|10';
-      break;
+      return 'I|O|M|W|H|[1-9]|10';
     case 11:
-      callingPositionRegex = 'I|O|M|W|H|[1-7]|10|11';
-      break;
+      return 'I|O|M|W|H|[1-9]|10|11';
     case 12:
-      callingPositionRegex = 'I|O|M|W|H|[1-7]|10|11|12';
-      break;
+      return 'I|O|M|W|H|[1-9]|10|11|12';
     default:
       throw (new Error('Invalid stage'));
   }
-
-  return callingPositionRegex;
 };
 
 export const getTenorIndexFromCallPosition = (position: string, stage: number) => {
-  let index: number = -1;
   const positionUpper = position.toUpperCase();
 
-  if (positionUpper === 'I') {
-    index = 1;
-  } else if (positionUpper === 'O') {
-    index = 2;
-  } else if (positionUpper === 'H' && stage >= 5) {
-    index = stage - 1;
-  } else if (positionUpper === 'W' && stage >= 6) {
-    index = stage - 2;
-  } else if (positionUpper === 'M' && stage >= 7) {
-    index = stage - 3;
-  } else {
-    const positionNumber = Number(positionUpper);
-    if (positionNumber && positionNumber <= stage) {
-      index = positionNumber - 1;
-    }
-  }
+  if (positionUpper === 'I') { return 1; }
+  if (positionUpper === 'O') { return 2; }
+  if (positionUpper === 'H' && stage >= 4) { return stage - 1; }
+  if (positionUpper === 'W' && stage >= 5) { return stage - 2; }
+  if (positionUpper === 'M' && stage >= 6) { return stage - 3; }
 
-  if (index < 0) {
-    throw new Error(`calling position ${position} is not valid on ${stage.toString()} bells.`);
-  }
+  const positionNumber = Number(positionUpper);
+  if (positionNumber && positionNumber <= stage) { return positionNumber - 1; }
 
-  return index;
+  throw new Error(`Calling position ${position} is not valid on ${stage.toString()} bells.`);
 };
 
 export const getStageQueens = (stage: number) => {
-  let queens: string = '';
-
   switch (stage) {
     case 4:
-      queens = '1324';
-      break;
+      return '1324';
     case 5:
-      queens = '135246';
-      break;
     case 6:
-      queens = '135246';
-      break;
+      return '135246';
     case 7:
-      queens = '13572468';
-      break;
     case 8:
-      queens = '13572468';
-      break;
+      return '13572468';
     case 9:
-      queens = '1357924680';
-      break;
     case 10:
-      queens = '1357924680';
-      break;
+      return '1357924680';
     case 11:
-      queens = '13579E24680T';
-      break;
     case 12:
-      queens = '13579E24680T';
-      break;
+      return '13579E24680T';
     default:
       throw (new Error('Invalid stage'));
   }
-
-  return queens;
 };
 
 export const getStageTittums = (stage: number) => {
-  let tittums: string = '';
-
   switch (stage) {
     case 4:
-      tittums = '1324';
-      break;
+      return '1324';
     case 5:
-      tittums = '142536';
-      break;
     case 6:
-      tittums = '142536';
-      break;
+      return '142536';
     case 7:
-      tittums = '15263748';
-      break;
     case 8:
-      tittums = '15263748';
-      break;
+      return '15263748';
     case 9:
-      tittums = '1627384950';
-      break;
     case 10:
-      tittums = '1627384950';
-      break;
+      return '1627384950';
     case 11:
-      tittums = '172839405E6T';
-      break;
     case 12:
-      tittums = '172839405E6T';
-      break;
+      return '172839405E6T';
     default:
       throw (new Error('Invalid stage'));
   }
-
-  return tittums;
 };
 
 export const getStageRollupsForward = (stage: number) => {
-  let rollups: string = '';
-
   switch (stage) {
     case 4:
-      rollups = '1234';
-      break;
+      return '1234';
     case 5:
-      rollups = '3456';
-      break;
     case 6:
-      rollups = '3456';
-      break;
+      return '3456';
     case 7:
-      rollups = '5678';
-      break;
     case 8:
-      rollups = '5678';
-      break;
+      return '5678';
     case 9:
-      rollups = '7890';
-      break;
     case 10:
-      rollups = '7890';
-      break;
+      return '7890';
     case 11:
-      rollups = '90ET';
-      break;
     case 12:
-      rollups = '90ET';
-      break;
+      return '90ET';
     default:
       throw (new Error('Invalid stage'));
   }
-
-  return rollups;
 };
 
 export const getStageRollupsBackward = (stage: number) => {
-  let rollups: string = '';
-
-  switch (stage) {
-    case 4:
-      rollups = '4321';
-      break;
-    case 5:
-      rollups = '6543';
-      break;
-    case 6:
-      rollups = '6543';
-      break;
-    case 7:
-      rollups = '8765';
-      break;
-    case 8:
-      rollups = '8765';
-      break;
-    case 9:
-      rollups = '0987';
-      break;
-    case 10:
-      rollups = '0987';
-      break;
-    case 11:
-      rollups = 'TE09';
-      break;
-    case 12:
-      rollups = 'TE09';
-      break;
-    default:
-      throw (new Error('Invalid stage'));
-  }
-
-  return rollups;
+  const forwardRollup = getStageRollupsForward(stage);
+  return forwardRollup.split('').reverse().join('');
 };
 
 export const getInitialChange = (stage: number) => {

@@ -40,7 +40,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "craco test --coverage",
     "eject": "react-scripts eject",
     "lint": "npx eslint . --ext .ts,.tsx",
     "export-eslint-config": "npx eslint --print-config src/App.tsx >> eslint-config.json"
