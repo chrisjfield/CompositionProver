@@ -12,7 +12,7 @@ import { sortMethods, methodValidForStage } from '../../helpers/methodHelper';
 import { getCompositionDetail, getCompositionDetailProperty, isValidComposition } from '../../helpers/compositionHelper';
 import CallContext from '../../context/callContext';
 import CompositionHelpText from './compositionHelpText';
-import getTypedValue from '../../helpers/eventsHelper';
+import getTypedValue from '../../helpers/eventHelper';
 import TextField from '../wrappers/materialWrappers';
 import SettingsContext from '../../context/settingsContext';
 

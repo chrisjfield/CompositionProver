@@ -30,8 +30,12 @@ const MethodDialog = ({ stage, open, onClose }: MethodDialogProps) => {
 
   useEffect(() => {
     if (!open) { return; }
-    if (!loading) { setFilteredMethods(() => methods); }
-    if (loading) { getMethodListForStage(stage, setMethodProps); }
+    if (!loading) { setFilteredMethods(() => methods); return; }
+    // do this on a set timeout to allow the main thread long enough to render the loading page.
+    setTimeout(() => {
+      const methodsList = getMethodListForStage(stage);
+      setMethodProps(methodsList);
+    }, 100);
   }, [open]);
 
   const handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {

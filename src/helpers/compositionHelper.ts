@@ -5,6 +5,16 @@ import { Call } from '../types/calls';
 import { Method } from '../types/methods';
 import { Composition } from '../types/compositions';
 import assertUnreachable from './contextHelper';
+import PartialBy from '../types/PartialBy';
+
+type PartialComposition = PartialBy<Composition, 'type' | 'parts' | 'halfLead'>;
+
+export const newComposition = (composition: PartialComposition) : Composition => ({
+  type: 'Full',
+  parts: 1,
+  halfLead: false,
+  ...composition,
+});
 
 export const getCompositionDetailProperty = ({ type }: Composition) => {
   switch (type) {

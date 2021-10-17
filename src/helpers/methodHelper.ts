@@ -1,87 +1,65 @@
 import { Composition } from '../types/compositions';
-import { NewMethod, Method } from '../types/methods';
+import { Method } from '../types/methods';
+import PartialBy from '../types/PartialBy';
 import { getStageNotationRegex } from './stageHelper';
+import methodsXml from '../data/methodsList';
 
-const processMethods = (
-  stage: number, methods: HTMLCollectionOf<Element>, methodArray: NewMethod[],
-) => {
-  for (let i = 0; i < methods.length; i += 1) {
-    const methodName = String(methods[i].getElementsByTagName('title')[0].childNodes[0].nodeValue);
-    const methodPlaceNotation = String(methods[i].getElementsByTagName('notation')[0].childNodes[0].nodeValue);
-    const methodAbbreviation = String(methodName.replace(/[^a-z0-9+]+/gi, '')).substring(0, 3) + stage.toString();
+type PartialMethod = PartialBy<Method, 'defaultBob' | 'defaultSingle'>;
 
-    const method: NewMethod = {
-      name: methodName,
-      abbreviation: methodAbbreviation,
-      stage,
-      placeNotation: methodPlaceNotation.toUpperCase(),
-      defaultBob: 'b',
-      defaultSingle: 's',
-    };
+export const newMethod = (method: PartialMethod) : Method => ({
+  defaultBob: 'b',
+  defaultSingle: 's',
+  ...method,
+});
 
-    methodArray.push(method);
-  }
+const processMethods = (stage: number, methods: Element[]) => methods.map((m) => {
+  const methodName = String(m.getElementsByTagName('title')[0].childNodes[0].nodeValue);
+  const methodPlaceNotation = String(m.getElementsByTagName('notation')[0].childNodes[0].nodeValue);
+  const methodAbbreviation = String(methodName.replace(/[^a-z0-9+]+/gi, '')).substring(0, 3) + stage.toString();
 
-  return methodArray;
-};
+  return {
+    name: methodName,
+    abbreviation: methodAbbreviation,
+    stage,
+    placeNotation: methodPlaceNotation.toUpperCase(),
+    defaultBob: 'b',
+    defaultSingle: 's',
+  };
+});
 
-const processMethodSets = (stage: number, methodsText: string) => {
-  const methodArray: NewMethod[] = [];
-
+export const getMethodListForStage = (stage: number) => {
   const xmlParser = new DOMParser();
-  const document = xmlParser.parseFromString(methodsText, 'text/xml');
-  const methodSets = document.getElementsByTagName('methodSet');
+  const methodSets = Array.from(xmlParser
+    .parseFromString(methodsXml, 'text/xml')
+    .getElementsByTagName('methodSet'));
 
-  for (let i = 0; i < methodSets.length; i += 1) {
-    const methodSetStage = Number(methodSets[i].getElementsByTagName('stage')[0].childNodes[0].nodeValue);
-    if (methodSetStage === stage) {
-      const methods = methodSets[i].getElementsByTagName('method');
-      processMethods(stage, methods, methodArray);
-    }
-  }
+  const methods = methodSets
+    .filter((ms) => Number(ms.getElementsByTagName('stage')[0].childNodes[0].nodeValue) === stage)
+    .flatMap((ms) => Array.from(ms.getElementsByTagName('method')));
 
-  return methodArray;
-};
-
-export const getMethodListForStage = async (
-  stage: number, callBack: (methods: NewMethod[]) => void,
-) => {
-  const methodsUrl: string = `${window.location.origin.toString()}/methodsList.xml`;
-  fetch(methodsUrl).then((response) => response.text())
-    .then((methodsText) => processMethodSets(stage, methodsText))
-    .then((methods) => callBack(methods));
+  return processMethods(stage, methods);
 };
 
 export const isValidMethodNotation = (stage: number, notation: string) => {
-  let valid = true;
+  // regex allows multiple commas so check this is not the case
+  if (notation.split(',').length > 2) { return false; }
 
   const stageRegex = getStageNotationRegex(stage);
-  const validNotationRegex = RegExp(`^[\\-]?${stageRegex}{1}([\\.\\-\\,]{1}${stageRegex})*$`);
-  valid = validNotationRegex.test(notation);
-
-  // regex allows multiple commas so check this is not the case
-  valid = notation.split(',').length > 2 ? false : valid;
-
-  return valid;
+  const validNotationRegex = RegExp(`^\\-$|^[\\-]?${stageRegex}{1}([\\.\\-\\,]{1}${stageRegex})*$`);
+  return validNotationRegex.test(notation);
 };
 
 export const getMethodAbbreviationRegex = (methods: Method[]) => {
-  let regex = '';
+  if (!methods || methods.length === 0) { throw new Error('No methods found'); }
 
-  if (methods.length > 0) {
-    methods.forEach((method) => { regex += `${method.abbreviation}|`; });
-    regex = regex.slice(0, -1);
-  }
-
-  return regex;
+  return methods
+    .map((m) => String(m.abbreviation))
+    .reduce((prev, next) => `${prev}|${next}`);
 };
 
 export const sortMethods = (methodA: Method, methodB: Method) => {
-  if (methodA.stage < methodB.stage) {
-    return 1;
-  } if (methodA.stage === methodB.stage && methodA.name > methodB.name) {
-    return 1;
-  }
+  if (methodA.stage < methodB.stage) { return 1; }
+  if (methodA.stage === methodB.stage && methodA.name > methodB.name) { return 1; }
   return -1;
 };
 

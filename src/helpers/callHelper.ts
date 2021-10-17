@@ -1,7 +1,7 @@
 import { Call } from '../types/calls';
+import PartialBy from '../types/PartialBy';
 import { getStageNotationRegex } from './stageHelper';
 
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type PartialCall = PartialBy<Call, 'editable' | 'halfLeadPlaceNotation' | 'leadEndPlaceNotation'>;
 
 export const newCall = (call: PartialCall) : Call => ({
