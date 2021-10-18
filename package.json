@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && craco build",
     "test": "craco test",
     "test:coverage": "craco test --collectCoverageFrom=src/helpers/**/* --coverage --watchAll=false",
     "eject": "react-scripts eject",
