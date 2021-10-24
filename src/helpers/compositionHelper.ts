@@ -105,3 +105,31 @@ export const isValidComposition = (calls: Call[], methods: Method[], composition
 
   return compRegex.test(expandedComposition);
 };
+
+export const splitPositionalElement = (compElement: string): [string, string, number] => {
+  const elementLen = compElement.length;
+  const callPosition = compElement.substr(elementLen - 1);
+  let callAbbr = 'b';
+  let numberOfCalls = 1;
+
+  if (elementLen === 2) {
+    const firstChar = compElement.substr(elementLen - 2, 1);
+    if (Number(firstChar)) {
+      numberOfCalls = Number(firstChar);
+    } else {
+      callAbbr = firstChar;
+    }
+  }
+
+  if (elementLen > 2) {
+    const callChar = compElement.substr(elementLen - 2, 1);
+    if (Number(callChar)) {
+      numberOfCalls = Number(compElement.substr(0, elementLen - 1));
+    } else {
+      callAbbr = callChar;
+      numberOfCalls = Number(compElement.substr(0, elementLen - 2));
+    }
+  }
+
+  return [callPosition, callAbbr, numberOfCalls];
+};

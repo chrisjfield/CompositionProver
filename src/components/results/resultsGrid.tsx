@@ -75,7 +75,7 @@ const resultsGrid = ({
       {index === 0 && sectionHeader()}
       {lead.rows.map((row: string, rowIndex: number) => {
         const method = (rowIndex === 0 && methodChanged) ? lead.method : '';
-        const call = (rowIndex === lead.rows.length - lead.callLength) ? lead.call : '';
+        const call = (rowIndex === lead.callIndex) ? lead.call : '';
 
         return getGridRow(row, call, method, `lead${index}-row${rowIndex}`);
       })}

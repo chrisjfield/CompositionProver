@@ -5,7 +5,6 @@ import { emptyResult } from '../../defaults/results';
 import MethodContext from '../../context/methodContext';
 import CallContext from '../../context/callContext';
 import { Result } from '../../types/results';
-import calculateResult from '../../helpers/resultHelper';
 import AlertContext from '../../context/alertContext';
 import ResultsLoading from './resultsLoading';
 import ResultsStats from './resultsStats';
@@ -13,9 +12,10 @@ import ResultsMusic from './resultsMusic';
 import ResultsSections from './resultsSections';
 import ResultsGrid from './resultsGrid';
 import SettingsContext from '../../context/settingsContext';
+import ResultGenerator from '../../helpers/resultGenerator';
 
 const ResultsTab = () => {
-  const { settings: { methodStage, selectedComposition } } = useContext(SettingsContext);
+  const { settings: { selectedComposition } } = useContext(SettingsContext);
   const { compositions } = useContext(CompositionContext);
   const { methods } = useContext(MethodContext);
   const { calls } = useContext(CallContext);
@@ -32,8 +32,8 @@ const ResultsTab = () => {
 
   const runCalculation = () => {
     try {
-      const stageCalls = calls.filter((c) => c.stage === methodStage);
-      calculateResult(composition, methods, stageCalls, (res: Result) => onComplete(res));
+      const resultGenerator = new ResultGenerator(methods, calls, composition);
+      resultGenerator.calculateResult((res: Result) => onComplete(res));
       showSuccess('Computation Complete');
     } catch (e) {
       const errorMessage = (e as Error).message || 'An Unknown Error Occurred :(';

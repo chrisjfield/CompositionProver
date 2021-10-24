@@ -2,7 +2,7 @@ import { Composition } from '../../types/compositions';
 import { newCall } from '../../helpers/callHelper';
 import {
   getCompositionDetail, getCompositionDetailProperty, getExpandedComposition,
-  newComposition, isValidComposition, getCompositionRegex,
+  newComposition, isValidComposition, getCompositionRegex, splitPositionalElement,
 } from '../../helpers/compositionHelper';
 import { newMethod } from '../../helpers/methodHelper';
 
@@ -353,5 +353,49 @@ describe('check composition validity', () => {
 
   test('never', () => {
     expect(() => getCompositionRegex('test' as never, '', '', '')).toThrow('Didn\'t expect to get here: test');
+  });
+});
+
+describe('split positional element', () => {
+  test('calling position only', () => {
+    const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement('H');
+    expect(callPosition).toBe('H');
+    expect(callAbbr).toBe('b');
+    expect(numberOfCalls).toBe(1);
+  });
+
+  test('calling position and call', () => {
+    const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement('sH');
+    expect(callPosition).toBe('H');
+    expect(callAbbr).toBe('s');
+    expect(numberOfCalls).toBe(1);
+  });
+
+  test('repeated calling position', () => {
+    const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement('2H');
+    expect(callPosition).toBe('H');
+    expect(callAbbr).toBe('b');
+    expect(numberOfCalls).toBe(2);
+  });
+
+  test('double digit repeated calling position', () => {
+    const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement('15H');
+    expect(callPosition).toBe('H');
+    expect(callAbbr).toBe('b');
+    expect(numberOfCalls).toBe(15);
+  });
+
+  test('repeated calling position with call', () => {
+    const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement('2sH');
+    expect(callPosition).toBe('H');
+    expect(callAbbr).toBe('s');
+    expect(numberOfCalls).toBe(2);
+  });
+
+  test('double digit repeated calling position with call', () => {
+    const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement('15sH');
+    expect(callPosition).toBe('H');
+    expect(callAbbr).toBe('s');
+    expect(numberOfCalls).toBe(15);
   });
 });

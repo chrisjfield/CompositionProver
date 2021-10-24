@@ -1,6 +1,6 @@
 import {
   getStageCallingPositionRegex, getStageCharacter, getStageNumber,
-  getTenorIndexFromCallPosition, getStageQueens, getStageTittums,
+  getTenorIndexFromPosition, getStageQueens, getStageTittums,
   getStageRollupsForward, getStageRollupsBackward, getInitialChange, getStageNotationRegex,
 } from '../../helpers/stageHelper';
 
@@ -66,18 +66,18 @@ describe('get stage call postion regex', () => {
 
 describe('get tenor index for call postion', () => {
   test('get valid index', () => {
-    expect(getTenorIndexFromCallPosition('H', 8)).toBe(7);
-    expect(getTenorIndexFromCallPosition('W', 8)).toBe(6);
-    expect(getTenorIndexFromCallPosition('M', 8)).toBe(5);
-    expect(getTenorIndexFromCallPosition('I', 8)).toBe(1);
-    expect(getTenorIndexFromCallPosition('O', 8)).toBe(2);
-    expect(getTenorIndexFromCallPosition('7', 12)).toBe(6);
-    expect(getTenorIndexFromCallPosition('1', 10)).toBe(0);
+    expect(getTenorIndexFromPosition('H', 8)).toBe(7);
+    expect(getTenorIndexFromPosition('W', 8)).toBe(6);
+    expect(getTenorIndexFromPosition('M', 8)).toBe(5);
+    expect(getTenorIndexFromPosition('I', 8)).toBe(1);
+    expect(getTenorIndexFromPosition('O', 8)).toBe(2);
+    expect(getTenorIndexFromPosition('7', 12)).toBe(6);
+    expect(getTenorIndexFromPosition('1', 10)).toBe(0);
   });
 
   test('unsupported stage', () => {
-    expect(() => getTenorIndexFromCallPosition('M', 5)).toThrow('Calling position M is not valid on 5 bells');
-    expect(() => getTenorIndexFromCallPosition('6', 5)).toThrow('Calling position 6 is not valid on 5 bells');
+    expect(() => getTenorIndexFromPosition('M', 5)).toThrow('Calling position M is not valid on 5 bells');
+    expect(() => getTenorIndexFromPosition('6', 5)).toThrow('Calling position 6 is not valid on 5 bells');
   });
 });
 

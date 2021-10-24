@@ -50,7 +50,7 @@ const CompositionTab = () => {
     dispatch(updateComposition(updatedComposition));
   };
 
-  const validation: string = isValidComposition(calls, methods, composition) ? '' : 'Invalid Full Type Composition';
+  const validation: string = isValidComposition(calls, methods, composition) ? '' : 'Invalid Composition';
 
   return (
     <Grid container>

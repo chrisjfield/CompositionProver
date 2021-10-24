@@ -68,7 +68,7 @@ export const getStageNotationRegex = (stage: number) => {
   return `(?=${lookAheadText})(${characterCheck})`;
 };
 
-export const getTenorIndexFromCallPosition = (position: string, stage: number) => {
+export const getTenorIndexFromPosition = (position: string, stage: number) => {
   const positionUpper = position.toUpperCase();
 
   if (positionUpper === 'I') { return 1; }
