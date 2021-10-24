@@ -270,6 +270,42 @@ describe('check composition validity', () => {
     expect(isValidComposition(calls, methods, testComposition)).toBe(false);
   });
 
+  test('numeric with course end', () => {
+    const testComposition: Composition = {
+      ...composition, type: 'Numerical', startingMethod: 'ab1', numericalComposition: `
+      1.5(18)
+    `,
+    };
+    expect(isValidComposition(calls, methods, testComposition)).toBe(true);
+  });
+
+  test('numeric with multiple course ends', () => {
+    const testComposition: Composition = {
+      ...composition, type: 'Numerical', startingMethod: 'ab1', numericalComposition: `
+      1.5(15).1.5(12)
+    `,
+    };
+    expect(isValidComposition(calls, methods, testComposition)).toBe(true);
+  });
+
+  test('numeric with multiple course ends some not given', () => {
+    const testComposition: Composition = {
+      ...composition, type: 'Numerical', startingMethod: 'ab1', numericalComposition: `
+      1.5(15).1.5(12).1.5
+    `,
+    };
+    expect(isValidComposition(calls, methods, testComposition)).toBe(true);
+  });
+
+  test('numeric with consecutive course ends invalid', () => {
+    const testComposition: Composition = {
+      ...composition, type: 'Numerical', startingMethod: 'ab1', numericalComposition: `
+      1.5(15)(12)
+    `,
+    };
+    expect(isValidComposition(calls, methods, testComposition)).toBe(false);
+  });
+
   test('numeric invalid starting method', () => {
     const testComposition: Composition = {
       ...composition, type: 'Numerical', startingMethod: 'ab3', numericalComposition: `

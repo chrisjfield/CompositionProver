@@ -75,7 +75,7 @@ export const getCompositionRegex = (
       regex = `(${methodRegex}){1}(${callRegex}){1}`;
       break;
     case 'Numerical':
-      regex = `(${callRegex})?([0-9]+)`;
+      regex = `(${callRegex})?([0-9]+)(\\([0-9]+\\))?`;
       break;
     case 'Positional':
       regex = `([0-9]?)(${callRegex})?(${callPositionRegex}){1}`;
@@ -102,6 +102,11 @@ export const isValidComposition = (calls: Call[], methods: Method[], composition
   const compRegex = getCompositionRegex(
     composition.type, methodRegex, callRegex, callPositionRegex,
   );
+
+  if (composition.type === 'Numerical') {
+    console.log(compRegex);
+    console.log(expandedComposition);
+  }
 
   return compRegex.test(expandedComposition);
 };

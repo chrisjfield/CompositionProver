@@ -133,13 +133,20 @@ class ResultGenerator {
       this.composition.halfLead, this.halfLeadNext, this.currentMethod, call,
     );
     const leadRows: string[] = [];
+    let finishedEarly = false;
 
     for (let i = 0; i < placeNotation.length; i += 1) {
       this.generateNextRow(placeNotation[i], this.currentMethod.stage);
       leadRows.push(this.currentChange);
 
       // if it comes round in the last lead before the end stop calculating - it's a snap finish
-      if (possibleLastLead && this.currentChange === this.rounds) { break; }
+      if (possibleLastLead
+        && this.currentChange === this.rounds
+        && i !== placeNotation.length - 1
+      ) {
+        finishedEarly = true;
+        break;
+      }
     }
 
     // half lead will switch if using it
@@ -149,7 +156,7 @@ class ResultGenerator {
       call: callAbbr,
       callIndex,
       method: this.currentMethod.abbreviation,
-      leadEnd: this.currentChange,
+      leadEnd: finishedEarly ? `(${this.currentChange})` : this.currentChange,
       rows: leadRows,
     };
   };
