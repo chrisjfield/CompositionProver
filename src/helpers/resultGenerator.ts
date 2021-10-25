@@ -8,7 +8,9 @@ import { getMusicalChanges, getPlaceNotation, getTruth } from './resultHelper';
 import {
   getStageNumber, getInitialChange, getTenorIndexFromPosition, getStageCharacter,
 } from './stageHelper';
-import { getCompositionDetail, getExpandedComposition, splitPositionalElement } from './compositionHelper';
+import {
+  getCompositionDetail, getExpandedComposition, splitNumericElement, splitPositionalElement,
+} from './compositionHelper';
 
 class ResultGenerator {
   private readonly methods: Method[];
@@ -22,6 +24,8 @@ class ResultGenerator {
   private rounds: string;
 
   private currentChange: string;
+
+  private leadCount: number = 1;
 
   private currentMethod: Method;
 
@@ -200,11 +204,11 @@ class ResultGenerator {
     }
     while (loopStartChange !== this.currentChange);
 
-    throw new Error(`Loop encountered, cannot find calling position ${callAbbr}`);
+    throw new Error(`Loop encountered, tenor does not return to position ${expectedTenorIndex + 1}`);
   };
 
   private generatePositionalElement = (
-    compositionElement: string, lastElement: boolean,
+    compositionElement: string, lastElementOfPart: boolean, lastElement: boolean,
   ): LeadResult[] => {
     const [callPosition, callAbbr, numberOfCalls] = splitPositionalElement(compositionElement);
     const leadResults: LeadResult[] = [];
@@ -219,6 +223,9 @@ class ResultGenerator {
         ...this.generatePosition(tenorChar, expectedTenorIndex, callAbbr, lastElement),
       );
     }
+
+    if (lastElement) { leadResults.push(...this.continueToRounds()); }
+    if (lastElementOfPart && !lastElement) { leadResults.push(...this.continueToCourseEnd()); }
 
     return leadResults;
   };
@@ -239,36 +246,78 @@ class ResultGenerator {
     return leadResults;
   };
 
-  private generateCompElement = (element: string, lastElement: boolean): LeadResult[] => {
-    switch (this.composition.type) {
-      case 'Full':
-        return this.generateFullElement(element, lastElement);
-      case 'Numerical':
-        return this.generateFullElement(element, lastElement);
-      case 'Positional':
-        // don't support positional comps with half lead calls
-        this.composition.halfLead = false;
-        return this.generatePositionalElement(element, lastElement);
-      default:
-        return assertUnreachable(this.composition.type);
-    }
-  };
-
   private continueToCourseEnd = () => {
     // check if we are already at a course end
     const expectedTenorIndex = getTenorIndexFromPosition('H', this.currentMethod.stage);
     const tenorChar = getStageCharacter(this.currentMethod.stage);
-    if (this.currentChange.indexOf(tenorChar) === expectedTenorIndex) { return []; }
+    if (this.currentChange.indexOf(tenorChar) === expectedTenorIndex) {
+      this.leadCount = 1;
+      return [];
+    }
 
     // going to course end is just generating a home using plain calls
     // ensure we are not using half leads while looking for a course end
     const currentHalfLead = this.composition.halfLead;
 
     this.composition.halfLead = false;
-    const leadResults = this.generatePositionalElement('pH', false);
+    const leadResults = this.generatePositionalElement('pH', false, false);
     this.composition.halfLead = currentHalfLead;
 
+    this.leadCount = 1;
     return leadResults;
+  };
+
+  private generateNumericElement = (
+    numericElement: string, lastElementOfPart: boolean, lastElement: boolean,
+  ): LeadResult[] => {
+    const leadResults: LeadResult[] = [];
+    const [position, callAbbr, courseEnd] = splitNumericElement(numericElement);
+    if (position < this.leadCount) { leadResults.push(...this.continueToCourseEnd()); }
+
+    // loop till the call position
+    let loopStartChange: string = this.currentChange;
+    do {
+      const call = this.leadCount === position ? callAbbr : 'p';
+      const possibleLast = this.leadCount === position ? lastElement : false;
+
+      leadResults.push(this.generateNextLead(call, possibleLast));
+      this.leadCount += 1;
+    }
+    while (this.leadCount <= position && loopStartChange !== this.currentChange);
+
+    // if we have a course end loop until that then reset lead counter
+    if (courseEnd) {
+      loopStartChange = this.currentChange;
+      do {
+        const possibleLast = this.leadCount === courseEnd ? lastElement : false;
+        leadResults.push(this.generateNextLead('p', possibleLast));
+        this.leadCount += 1;
+      }
+      while (this.leadCount <= courseEnd && loopStartChange !== this.currentChange);
+      this.leadCount = 1;
+    }
+
+    if (lastElementOfPart && !courseEnd) { leadResults.push(...this.continueToCourseEnd()); }
+    if (lastElement && !courseEnd) { leadResults.push(...this.continueToRounds()); }
+
+    return leadResults;
+  };
+
+  private generateCompElement = (
+    element: string, lastElementOfPart: boolean, lastElement: boolean,
+  ): LeadResult[] => {
+    switch (this.composition.type) {
+      case 'Full':
+        return this.generateFullElement(element, lastElement);
+      case 'Numerical':
+        return this.generateNumericElement(element, lastElementOfPart, lastElement);
+      case 'Positional':
+        // don't support positional comps with half lead calls
+        this.composition.halfLead = false;
+        return this.generatePositionalElement(element, lastElementOfPart, lastElement);
+      default:
+        return assertUnreachable(this.composition.type);
+    }
   };
 
   private generatePart = (lastPart: boolean) => {
@@ -278,15 +327,7 @@ class ResultGenerator {
     this.expandedComp.forEach((element, index) => {
       const lastElementOfPart = index === compLen - 1;
       const lastElement = lastPart && lastElementOfPart;
-      leadResults.push(...this.generateCompElement(element, lastElement));
-
-      if (this.composition.type !== 'Full' && lastElement) {
-        leadResults.push(...this.continueToRounds());
-      }
-
-      if (this.composition.type !== 'Full' && lastElementOfPart && !lastElement) {
-        leadResults.push(...this.continueToCourseEnd());
-      }
+      leadResults.push(...this.generateCompElement(element, lastElementOfPart, lastElement));
     });
 
     return leadResults;

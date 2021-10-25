@@ -3,6 +3,7 @@ import { newCall } from '../../helpers/callHelper';
 import {
   getCompositionDetail, getCompositionDetailProperty, getExpandedComposition,
   newComposition, isValidComposition, getCompositionRegex, splitPositionalElement,
+  splitNumericElement,
 } from '../../helpers/compositionHelper';
 import { newMethod } from '../../helpers/methodHelper';
 
@@ -433,5 +434,43 @@ describe('split positional element', () => {
     expect(callPosition).toBe('H');
     expect(callAbbr).toBe('s');
     expect(numberOfCalls).toBe(15);
+  });
+});
+
+describe('split numerical element', () => {
+  test('calling position only', () => {
+    const [position, callAbbr, courseEnd] = splitNumericElement('1');
+    expect(position).toBe(1);
+    expect(callAbbr).toBe('b');
+    expect(courseEnd).toBe(NaN);
+  });
+
+  test('calling position only with call', () => {
+    const [position, callAbbr, courseEnd] = splitNumericElement('s1');
+    expect(position).toBe(1);
+    expect(callAbbr).toBe('s');
+    expect(courseEnd).toBe(NaN);
+  });
+
+  test('calling position with course end', () => {
+    const [position, callAbbr, courseEnd] = splitNumericElement('1(18)');
+    expect(position).toBe(1);
+    expect(callAbbr).toBe('b');
+    expect(courseEnd).toBe(18);
+  });
+
+  test('calling position with course end and call', () => {
+    const [position, callAbbr, courseEnd] = splitNumericElement('s1(18)');
+    expect(position).toBe(1);
+    expect(callAbbr).toBe('s');
+    expect(courseEnd).toBe(18);
+  });
+
+  test('invalid calling position', () => {
+    expect(() => splitNumericElement('b')).toThrow('does not end with a valid numerical position');
+  });
+
+  test('invalid course end', () => {
+    expect(() => splitNumericElement('s1(b)')).toThrow('is not a valid course number');
   });
 });

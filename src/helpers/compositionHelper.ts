@@ -103,11 +103,6 @@ export const isValidComposition = (calls: Call[], methods: Method[], composition
     composition.type, methodRegex, callRegex, callPositionRegex,
   );
 
-  if (composition.type === 'Numerical') {
-    console.log(compRegex);
-    console.log(expandedComposition);
-  }
-
   return compRegex.test(expandedComposition);
 };
 
@@ -137,4 +132,17 @@ export const splitPositionalElement = (compElement: string): [string, string, nu
   }
 
   return [callPosition, callAbbr, numberOfCalls];
+};
+
+export const splitNumericElement = (numericElement: string): [number, string, number] => {
+  const [element, courseEndString] = numericElement.replace(')', '').split('(');
+
+  const courseEnd = Number(courseEndString);
+  const callAbbr = Number(element) ? 'b' : element.substr(0, 1);
+  const position = Number(element) || Number(element.substr(1, element.length));
+
+  if (!position) { throw new Error(`"${element}" does not end with a valid numerical position.`); }
+  if (courseEndString && !courseEnd) { throw new Error(`"${courseEndString}" is not a valid course number.`); }
+
+  return [position, callAbbr, courseEnd];
 };

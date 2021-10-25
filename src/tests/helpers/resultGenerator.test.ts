@@ -16,17 +16,17 @@ test('basic full comp', () => {
   });
 });
 
-// test('basic numerical comp', () => {
-//   const comp: Composition = { ...defaultCompositions[0], type: 'Numerical' };
-//   const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+test('basic numerical comp', () => {
+  const comp: Composition = { ...defaultCompositions[0], type: 'Numerical' };
+  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
 
-//   resultGenerator.calculateResult((result) => {
-//     expect(result.numberOfChanges).toBe(336);
-//     expect(result.truth.true).toBe(true);
-//     expect(result.truth.comesRound).toBe(true);
-//     expect(result.changesOfMethod).toBe(0);
-//   });
-// });
+  resultGenerator.calculateResult((result) => {
+    expect(result.numberOfChanges).toBe(336);
+    expect(result.truth.true).toBe(true);
+    expect(result.truth.comesRound).toBe(true);
+    expect(result.changesOfMethod).toBe(0);
+  });
+});
 
 test('basic positional comp', () => {
   const comp: Composition = { ...defaultCompositions[0], type: 'Positional' };
@@ -52,17 +52,17 @@ test('stedman full comp', () => {
   });
 });
 
-// test('stedman numerical comp', () => {
-//   const comp: Composition = { ...defaultCompositions[1], type: 'Numerical' };
-//   const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+test('stedman numerical comp', () => {
+  const comp: Composition = { ...defaultCompositions[1], type: 'Numerical' };
+  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
 
-//   resultGenerator.calculateResult((result) => {
-//     expect(result.numberOfChanges).toBe(63);
-//     expect(result.truth.true).toBe(true);
-//     expect(result.truth.comesRound).toBe(true);
-//     expect(result.changesOfMethod).toBe(0);
-//   });
-// });
+  resultGenerator.calculateResult((result) => {
+    expect(result.numberOfChanges).toBe(63);
+    expect(result.truth.true).toBe(true);
+    expect(result.truth.comesRound).toBe(true);
+    expect(result.changesOfMethod).toBe(0);
+  });
+});
 
 test('stedman positional comp', () => {
   const comp: Composition = { ...defaultCompositions[1], type: 'Positional' };
@@ -125,16 +125,16 @@ test('test random calls positional', () => {
   });
 });
 
-// test('test multi course numerical', () => {
-//   const comp: Composition = { ...defaultCompositions[5], type: 'Numerical' };
-//   const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+test('test multi course numerical', () => {
+  const comp: Composition = { ...defaultCompositions[5], type: 'Numerical' };
+  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
 
-//   resultGenerator.calculateResult((result) => {
-//     expect(result.numberOfChanges).toBe(154);
-//     expect(result.truth.true).toBe(false);
-//     expect(result.truth.comesRound).toBe(false);
-//   });
-// });
+  resultGenerator.calculateResult((result) => {
+    expect(result.numberOfChanges).toBe(210);
+    expect(result.truth.true).toBe(false);
+    expect(result.truth.comesRound).toBe(false);
+  });
+});
 
 test('test invalid call full', () => {
   const comp: Composition = { ...defaultCompositions[6], type: 'Full' };
@@ -143,13 +143,12 @@ test('test invalid call full', () => {
   expect(() => resultGenerator.calculateResult(() => {})).toThrowError('is not a valid call');
 });
 
-// test('test invalid call numerical', () => {
-//   const comp: Composition = { ...defaultCompositions[6], type: 'Numerical' };
-//   const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+test('test invalid call numerical', () => {
+  const comp: Composition = { ...defaultCompositions[6], type: 'Numerical' };
+  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
 
-//   expect(() => resultGenerator.calculateResult(() => {}))
-// .toThrowError('does not start with a valid call');
-// });
+  expect(() => resultGenerator.calculateResult(() => {})).toThrowError('is not a valid call');
+});
 
 test('test invalid call positional', () => {
   const comp: Composition = { ...defaultCompositions[6], type: 'Positional' };
@@ -160,16 +159,13 @@ test('test invalid call positional', () => {
 
 test('test invalid method full', () => {
   const comp: Composition = { ...defaultCompositions[7], type: 'Full' };
-
   expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('is not a valid method');
 });
 
-// test('test invalid method numerical', () => {
-//   const comp: Composition = { ...defaultCompositions[7], type: 'Numerical' };
-//   const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-//   expect(() => resultGenerator.calculateResult(() => {})).toThrowError('is not a valid method');
-// });
+test('test invalid method numerical', () => {
+  const comp: Composition = { ...defaultCompositions[7], type: 'Numerical' };
+  expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('is not a valid method');
+});
 
 test('test invalid method positional', () => {
   const comp: Composition = { ...defaultCompositions[7], type: 'Positional' };
@@ -177,11 +173,14 @@ test('test invalid method positional', () => {
   expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('"fake" is not a valid method');
 });
 
-// test('test invalid numerical position', () => {
-//   const comp: Composition = { ...defaultCompositions[7],
-// startingMethod: 'pb8', type: 'Numerical' };
-//   const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+test('test invalid numerical position', () => {
+  const comp: Composition = {
+    ...defaultCompositions[7],
+    startingMethod: 'pb8',
+    type: 'Numerical',
+  };
+  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
 
-//   expect(() => resultGenerator.calculateResult(() => {})).
-// toThrowError('does not end with a valid numerical position');
-// });
+  expect(() => resultGenerator.calculateResult(() => {}))
+    . toThrowError('does not end with a valid numerical position');
+});
