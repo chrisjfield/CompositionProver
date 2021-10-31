@@ -25,15 +25,17 @@ class ResultGenerator {
 
   private currentChange: string;
 
-  private leadCount: number = 1;
-
   private currentMethod: Method;
 
   private halfLeadNext: boolean = true;
 
+  private leadCount: number = 1;
+
   private highestMethodStage : number;
 
   private changesOfMethod: number;
+
+  private courseEnds: string[] = [];
 
   constructor(methods: Method[], calls: Call[], composition: Composition) {
     this.methods = methods;
@@ -84,7 +86,7 @@ class ResultGenerator {
     placeNotationArray.forEach((element) => {
       const position = getStageNumber(element);
       if (position > stage) {
-        throw new Error(`Place Notation "${placeNotationArray}" contains an invalid expression.`);
+        throw new Error(`Place Notation "${placeNotation}" contains an invalid expression.`);
       }
       nextChange[position - 1] = rowArray[position - 1];
     });
@@ -178,8 +180,10 @@ class ResultGenerator {
     if (method.stage > this.highestMethodStage) { this.highestMethodStage = method.stage; }
 
     this.currentMethod = method;
+    const leadEnd = this.generateNextLead(callAbbr, lastElement);
+    this.checkForCourseEnd();
 
-    return [this.generateNextLead(callAbbr, lastElement)];
+    return [leadEnd];
   };
 
   private generatePosition = (
@@ -195,12 +199,14 @@ class ResultGenerator {
       // if the generated lead gives the right tenor position then great
       if (this.currentChange.indexOf(tenorChar) === expectedTenorIndex) {
         leadResults.push(leadEndWithCall);
+        this.checkForCourseEnd();
         return leadResults;
       }
 
       // otherwise go back and generate without the call and loop
       this.currentChange = leadStartChange;
       leadResults.push(this.generateNextLead('p', false));
+      this.checkForCourseEnd();
     }
     while (loopStartChange !== this.currentChange);
 
@@ -241,16 +247,24 @@ class ResultGenerator {
       if (this.currentChange === this.rounds) { break; }
     }
     while (loopStartChange !== this.currentChange);
+    this.checkForCourseEnd();
 
     // even if we don't find rounds just return with a plain course at the end
     return leadResults;
   };
 
-  private continueToCourseEnd = () => {
-    // check if we are already at a course end
+  private checkForCourseEnd = () => {
     const expectedTenorIndex = getTenorIndexFromPosition('H', this.currentMethod.stage);
     const tenorChar = getStageCharacter(this.currentMethod.stage);
-    if (this.currentChange.indexOf(tenorChar) === expectedTenorIndex) {
+    const courseEnd = this.currentChange.indexOf(tenorChar) === expectedTenorIndex;
+
+    if (courseEnd) { this.courseEnds.push(this.currentChange); }
+    return courseEnd;
+  };
+
+  private continueToCourseEnd = () => {
+    // check if we are already at a course end
+    if (this.checkForCourseEnd()) {
       this.leadCount = 1;
       return [];
     }
@@ -286,7 +300,7 @@ class ResultGenerator {
     while (this.leadCount <= position && loopStartChange !== this.currentChange);
 
     // if we have a course end loop until that then reset lead counter
-    if (courseEnd) {
+    if (courseEnd && this.leadCount <= courseEnd) {
       loopStartChange = this.currentChange;
       do {
         const possibleLast = this.leadCount === courseEnd ? lastElement : false;
@@ -295,6 +309,7 @@ class ResultGenerator {
       }
       while (this.leadCount <= courseEnd && loopStartChange !== this.currentChange);
       this.leadCount = 1;
+      this.courseEnds.push(this.currentChange);
     }
 
     if (lastElementOfPart && !courseEnd) { leadResults.push(...this.continueToCourseEnd()); }
@@ -347,7 +362,7 @@ class ResultGenerator {
     const result: Result = {
       leads,
       grid,
-      courseEnds: [],
+      courseEnds: this.courseEnds,
       partEnds,
       numberOfChanges: grid.length,
       changesOfMethod: this.changesOfMethod,

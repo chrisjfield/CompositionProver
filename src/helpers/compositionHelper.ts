@@ -143,6 +143,7 @@ export const splitNumericElement = (numericElement: string): [number, string, nu
 
   if (!position) { throw new Error(`"${element}" does not end with a valid numerical position.`); }
   if (courseEndString && !courseEnd) { throw new Error(`"${courseEndString}" is not a valid course number.`); }
+  if (courseEnd && courseEnd < position) { throw new Error(`Course end must be at or after the last call: ${element}`); }
 
   return [position, callAbbr, courseEnd];
 };

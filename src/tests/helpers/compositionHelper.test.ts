@@ -473,4 +473,8 @@ describe('split numerical element', () => {
   test('invalid course end', () => {
     expect(() => splitNumericElement('s1(b)')).toThrow('is not a valid course number');
   });
+
+  test('course end before call', () => {
+    expect(() => splitNumericElement('s5(4)')).toThrow('Course end must be at or after the last call');
+  });
 });

@@ -1,186 +1,223 @@
 import { Composition } from '../../types/compositions';
-import defaultCalls from '../../defaults/calls';
-import defaultCompositions from '../../defaults/compositions';
-import defaultMethods from '../../defaults/methods';
+import mockCalls from './data/mockCalls';
+import { mockValidCompositions, mockInValidCompositions } from './data/mockCompositions';
+import mockMethods from './data/mockMethods';
 import ResultGenerator from '../../helpers/resultGenerator';
 
-test('basic full comp', () => {
-  const comp: Composition = { ...defaultCompositions[0], type: 'Full' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Basic single part composition', () => {
+  const baseTestComp = mockValidCompositions[0];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(336);
-    expect(result.truth.true).toBe(true);
-    expect(result.truth.comesRound).toBe(true);
-    expect(result.changesOfMethod).toBe(0);
+  test('Full', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(336);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['14365278', '16325478', '12345678']);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
+  });
+
+  test('Numerical', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Numerical' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(336);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['14365278', '16325478', '12345678']);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
+  });
+
+  test('Positional', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Positional' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(336);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['14365278', '16325478', '12345678']);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
   });
 });
 
-test('basic numerical comp', () => {
-  const comp: Composition = { ...defaultCompositions[0], type: 'Numerical' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Basic multi part composition', () => {
+  const baseTestComp = mockValidCompositions[1];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(336);
-    expect(result.truth.true).toBe(true);
-    expect(result.truth.comesRound).toBe(true);
-    expect(result.changesOfMethod).toBe(0);
+  test('Full', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(224);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['16345278', '12345678']);
+      expect(result.partEnds).toStrictEqual(['16345278', '12345678']);
+    });
+  });
+
+  test('Numerical', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Numerical' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(224);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['16345278', '12345678']);
+      expect(result.partEnds).toStrictEqual(['16345278', '12345678']);
+    });
+  });
+
+  test('Positional', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Positional' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(224);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['16345278', '12345678']);
+      expect(result.partEnds).toStrictEqual(['16345278', '12345678']);
+    });
   });
 });
 
-test('basic positional comp', () => {
-  const comp: Composition = { ...defaultCompositions[0], type: 'Positional' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Stedman composition', () => {
+  const baseTestComp = mockValidCompositions[2];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(336);
-    expect(result.truth.true).toBe(true);
-    expect(result.truth.comesRound).toBe(true);
-    expect(result.changesOfMethod).toBe(0);
+  test('Full', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(63);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
+  });
+
+  test('Numerical', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Numerical' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(63);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['12345678']);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
   });
 });
 
-test('stedman full comp', () => {
-  const comp: Composition = { ...defaultCompositions[1], type: 'Full' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Mixed stage composition', () => {
+  const baseTestComp = mockValidCompositions[3];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(63);
-    expect(result.truth.true).toBe(true);
-    expect(result.truth.comesRound).toBe(true);
-    expect(result.changesOfMethod).toBe(0);
+  test('Full', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(84);
+      expect(result.truth.true).toBe(false);
+      expect(result.truth.comesRound).toBe(false);
+      expect(result.truth.firstFalseRow).toBe('16375428');
+      expect(result.changesOfMethod).toBe(5);
+      expect(result.courseEnds.length).toBe(0);
+      expect(result.partEnds).toStrictEqual(['16734582', '15873426']);
+    });
   });
 });
 
-test('stedman numerical comp', () => {
-  const comp: Composition = { ...defaultCompositions[1], type: 'Numerical' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Half lead composition', () => {
+  const baseTestComp = mockValidCompositions[4];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(63);
-    expect(result.truth.true).toBe(true);
-    expect(result.truth.comesRound).toBe(true);
-    expect(result.changesOfMethod).toBe(0);
+  test('Full', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(96);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(false);
+      expect(result.changesOfMethod).toBe(2);
+      expect(result.courseEnds.length).toBe(0);
+      expect(result.partEnds).toStrictEqual(['16473825']);
+    });
   });
 });
 
-test('stedman positional comp', () => {
-  const comp: Composition = { ...defaultCompositions[1], type: 'Positional' };
-  expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('No composition detail provided for type Positional');
-});
+describe('Forced places', () => {
+  const baseTestComp = mockValidCompositions[5];
 
-test('multi stage false', () => {
-  const comp: Composition = { ...defaultCompositions[2], type: 'Full' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+  test('Full', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(60);
-    expect(result.truth.true).toBe(false);
-    expect(result.truth.comesRound).toBe(false);
-    expect(result.changesOfMethod).toBe(3);
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(28);
+      expect(result.truth.true).toBe(false);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+    });
   });
 });
 
-test('false comp - too many repeated changes', () => {
-  const comp: Composition = { ...defaultCompositions[3], type: 'Full' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Invalid composition', () => {
+  const baseTestComp = mockInValidCompositions[0];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(200);
-    expect(result.truth.true).toBe(false);
-    expect(result.truth.comesRound).toBe(true);
+  test('Invalid type constructor', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+    (resultGenerator as any).composition.type = 'fake';
+
+    expect(() => (resultGenerator as any).getInitialMethod()).toThrow('Didn\'t expect to get here: fake');
+  });
+
+  test('Invalid type part generation', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+    (resultGenerator as any).composition.type = 'fake';
+
+    expect(() => resultGenerator.calculateResult(() => {})).toThrow('Didn\'t expect to get here: fake');
   });
 });
 
-test('multiple calls at position', () => {
-  const comp: Composition = { ...defaultCompositions[4], type: 'Positional' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Invalid method', () => {
+  const baseTestComp = mockInValidCompositions[1];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(448);
-    expect(result.truth.true).toBe(true);
-    expect(result.truth.comesRound).toBe(true);
+  test('Invalid place notation', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    expect(() => resultGenerator.calculateResult(() => {})).toThrow('Place Notation "39" contains an invalid expression');
   });
 });
 
-test('test random calls', () => {
-  const comp: Composition = { ...defaultCompositions[5], type: 'Full' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
+describe('Infinite loop', () => {
+  const baseTestComp = mockInValidCompositions[2];
 
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(70);
-    expect(result.truth.true).toBe(false);
-    expect(result.truth.comesRound).toBe(false);
+  test('Endless loop', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Positional' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    expect(() => resultGenerator.calculateResult(() => {})).toThrow('Loop encountered, tenor does not return to position 7');
   });
-});
-
-test('test random calls positional', () => {
-  const comp: Composition = { ...defaultCompositions[5], type: 'Positional' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(182);
-    expect(result.truth.true).toBe(false);
-    expect(result.truth.comesRound).toBe(false);
-  });
-});
-
-test('test multi course numerical', () => {
-  const comp: Composition = { ...defaultCompositions[5], type: 'Numerical' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-  resultGenerator.calculateResult((result) => {
-    expect(result.numberOfChanges).toBe(210);
-    expect(result.truth.true).toBe(false);
-    expect(result.truth.comesRound).toBe(false);
-  });
-});
-
-test('test invalid call full', () => {
-  const comp: Composition = { ...defaultCompositions[6], type: 'Full' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-  expect(() => resultGenerator.calculateResult(() => {})).toThrowError('is not a valid call');
-});
-
-test('test invalid call numerical', () => {
-  const comp: Composition = { ...defaultCompositions[6], type: 'Numerical' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-  expect(() => resultGenerator.calculateResult(() => {})).toThrowError('is not a valid call');
-});
-
-test('test invalid call positional', () => {
-  const comp: Composition = { ...defaultCompositions[6], type: 'Positional' };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-  expect(() => resultGenerator.calculateResult(() => {})).toThrowError('is not a valid call');
-});
-
-test('test invalid method full', () => {
-  const comp: Composition = { ...defaultCompositions[7], type: 'Full' };
-  expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('is not a valid method');
-});
-
-test('test invalid method numerical', () => {
-  const comp: Composition = { ...defaultCompositions[7], type: 'Numerical' };
-  expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('is not a valid method');
-});
-
-test('test invalid method positional', () => {
-  const comp: Composition = { ...defaultCompositions[7], type: 'Positional' };
-
-  expect(() => new ResultGenerator(defaultMethods, defaultCalls, comp)).toThrowError('"fake" is not a valid method');
-});
-
-test('test invalid numerical position', () => {
-  const comp: Composition = {
-    ...defaultCompositions[7],
-    startingMethod: 'pb8',
-    type: 'Numerical',
-  };
-  const resultGenerator = new ResultGenerator(defaultMethods, defaultCalls, comp);
-
-  expect(() => resultGenerator.calculateResult(() => {}))
-    . toThrowError('does not end with a valid numerical position');
 });

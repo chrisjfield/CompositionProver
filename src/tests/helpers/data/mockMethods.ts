@@ -1,0 +1,78 @@
+import { Method } from '../../../types/methods';
+
+const mockMethods: Method[] = [
+  {
+    id: 1,
+    name: 'Plain Bob Minor',
+    abbreviation: 'pb6',
+    placeNotation: '-16-16-16,12',
+    stage: 6,
+    defaultBob: 'b',
+    defaultSingle: 's',
+  },
+  {
+    id: 2,
+    name: 'Stedman Triples',
+    abbreviation: 'st7',
+    placeNotation: '3.1.7.3.1.3.1.3.7.1.3.1',
+    stage: 7,
+    defaultBob: 'm',
+    defaultSingle: 'n',
+  },
+  {
+    id: 3,
+    name: 'Grandsire Triples',
+    abbreviation: 'gr7',
+    placeNotation: '3.1.7.1.7.1.7.1.7.1.7.1.7.1',
+    stage: 7,
+    defaultBob: 'g',
+    defaultSingle: 'h',
+  },
+  {
+    id: 4,
+    name: 'Plain Bob Major',
+    abbreviation: 'pb8',
+    placeNotation: '-18-18-18-18,12',
+    stage: 8,
+    defaultBob: 'b',
+    defaultSingle: 's',
+  },
+  {
+    id: 5,
+    name: 'Cambridge Major',
+    abbreviation: 'c8',
+    placeNotation: '-38-14-1258-36-14-58-16-78,12',
+    stage: 8,
+    defaultBob: 'b',
+    defaultSingle: 's',
+  },
+  {
+    id: 6,
+    name: 'Yorkshire Major',
+    abbreviation: 'y8',
+    placeNotation: '-38-14-58-16-12-38-14-78,12',
+    stage: 8,
+    defaultBob: 'b',
+    defaultSingle: 's',
+  },
+  {
+    id: 7,
+    name: 'Invalid place notation Major',
+    abbreviation: 'i8',
+    placeNotation: '-39-14-58-16-12-38-14-78,12',
+    stage: 8,
+    defaultBob: 'b',
+    defaultSingle: 's',
+  },
+  {
+    id: 8,
+    name: 'ForcedPlaceMajor',
+    abbreviation: 'fp8',
+    placeNotation: '7.18',
+    stage: 8,
+    defaultBob: 'b',
+    defaultSingle: 's',
+  },
+];
+
+export default mockMethods;
