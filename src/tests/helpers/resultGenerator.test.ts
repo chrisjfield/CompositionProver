@@ -48,6 +48,34 @@ describe('Basic single part composition', () => {
       expect(result.partEnds).toStrictEqual(['12345678']);
     });
   });
+
+  test('Numerical multiple leads from rounds', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Numerical', numericalComposition: '1(7).1(7).1' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(336);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['15243678', '13542678', '12345678']);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
+  });
+
+  test('Positional multiple leads from rounds', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Positional', positionalComposition: '3W' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    resultGenerator.calculateResult((result) => {
+      expect(result.numberOfChanges).toBe(336);
+      expect(result.truth.true).toBe(true);
+      expect(result.truth.comesRound).toBe(true);
+      expect(result.changesOfMethod).toBe(0);
+      expect(result.courseEnds).toStrictEqual(['15243678', '13542678', '12345678']);
+      expect(result.partEnds).toStrictEqual(['12345678']);
+    });
+  });
 });
 
 describe('Basic multi part composition', () => {
@@ -198,9 +226,21 @@ describe('Invalid composition', () => {
 
     expect(() => resultGenerator.calculateResult(() => {})).toThrow('Didn\'t expect to get here: fake');
   });
+
+  test('Invalid composition detail', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Numerical' };
+
+    expect(() => new ResultGenerator(mockMethods, mockCalls, comp)).toThrow('No composition detail provided for type Numerical');
+  });
+
+  test('Invalid composition method', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Positional', startingMethod: '' };
+
+    expect(() => new ResultGenerator(mockMethods, mockCalls, comp)).toThrow('is not a valid method');
+  });
 });
 
-describe('Invalid method', () => {
+describe('Invalid place notation', () => {
   const baseTestComp = mockInValidCompositions[1];
 
   test('Invalid place notation', () => {
@@ -219,5 +259,23 @@ describe('Infinite loop', () => {
     const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
 
     expect(() => resultGenerator.calculateResult(() => {})).toThrow('Loop encountered, tenor does not return to position 7');
+  });
+});
+
+describe('Invalid composition', () => {
+  const baseTestComp = mockInValidCompositions[3];
+
+  test('Invalid call', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Numerical' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    expect(() => resultGenerator.calculateResult(() => {})).toThrow('is not a valid call');
+  });
+
+  test('Invalid method', () => {
+    const comp: Composition = { ...baseTestComp, type: 'Full' };
+    const resultGenerator = new ResultGenerator(mockMethods, mockCalls, comp);
+
+    expect(() => resultGenerator.calculateResult(() => {})).toThrow('is not a valid method');
   });
 });

@@ -131,7 +131,6 @@ class ResultGenerator {
   private generateNextLead = (
     callAbbr: string, possibleLastLead: boolean,
   ): LeadResult => {
-    if (!this.currentMethod) { throw new Error('No method found'); }
     const call = this.getLeadCall(callAbbr, this.currentMethod);
 
     // get the place notation for the next lead (or half lead)
