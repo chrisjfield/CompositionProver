@@ -25,7 +25,7 @@ const methodReducer = (methods: Method[], action: MethodAction) => {
         (m) => (m.id === action.payload.id ? action.payload : m),
       )];
     case 'add': {
-      const nextId = Math.max(...methods.map((m) => m.id), 0);
+      const nextId = Math.max(...methods.map((m) => m.id + 1), 0);
       return [...methods, { ...action.payload, id: nextId }];
     }
     case 'delete':
