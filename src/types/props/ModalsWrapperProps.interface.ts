@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 export default interface ModalsWrapperProps {
   children: ReactNode;
-  closeModal: Function;
+  isOpen: boolean;
+  onClose: () => void;
   hideCloseIcon?: boolean;
 }
