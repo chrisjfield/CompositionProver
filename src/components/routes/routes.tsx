@@ -1,30 +1,30 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
-import HomeTab from '../home/homeTab';
-import CompositionTab from '../composition/compositionTab';
-import MethodsTab from '../methods/methodsTab';
-import CallsTab from '../calls/callsTab';
-import HelpTab from '../help/helpTab';
-import ResultsTab from '../results/resultsTab';
+import CompositionPage from '../../pages/composition';
+import MethodsPage from '../../pages/methods';
+import CallsPage from '../../pages/calls';
+import ResultsPage from '../../pages/results';
+import HelpPage from '../../pages/help';
+import HomePage from '../../pages/home';
 
 const Routes = () => (
   <Switch>
     <Route exact path="/composition">
-      <CompositionTab />
+      <CompositionPage />
     </Route>
     <Route exact path="/methods">
-      <MethodsTab />
+      <MethodsPage />
     </Route>
     <Route exact path="/calls">
-      <CallsTab />
+      <CallsPage />
     </Route>
     <Route exact path="/results">
-      <ResultsTab />
+      <ResultsPage />
     </Route>
     <Route exact path="/help">
-      <HelpTab />
+      <HelpPage />
     </Route>
     <Route exact path="/">
-      <HomeTab />
+      <HomePage />
     </Route>
     <Redirect to="/" />
   </Switch>

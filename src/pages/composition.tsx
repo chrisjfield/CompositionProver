@@ -2,21 +2,20 @@ import { useContext } from 'react';
 import {
   Checkbox,
   FormControlLabel,
-  Grid, MenuItem,
+  Grid, MenuItem, TextField,
 } from '@mui/material';
-import CompositionContext from '../../context/compositionContext';
-import { updateComposition } from '../wrappers/compositionContextWrapper';
-import Composition from '../../types/compositions/composition';
-import MethodContext from '../../context/methodContext';
-import { sortMethods, methodValidForStage } from '../../helpers/methodHelper';
-import { getCompositionDetail, getCompositionDetailProperty, isValidComposition } from '../../helpers/compositionHelper';
-import CallContext from '../../context/callContext';
-import CompositionHelpText from './compositionHelpText';
-import getTypedValue from '../../helpers/eventHelper';
-import TextField from '../wrappers/materialWrappers';
-import SettingsContext from '../../context/settingsContext';
+import SettingsContext from '../context/settingsContext';
+import CompositionContext from '../context/compositionContext';
+import MethodContext from '../context/methodContext';
+import CallContext from '../context/callContext';
+import { Composition } from '../types/compositions';
+import getTypedValue from '../helpers/eventHelper';
+import { methodValidForStage, sortMethods } from '../helpers/methodHelper';
+import { updateComposition } from '../components/wrappers/compositionContextWrapper';
+import { getCompositionDetail, getCompositionDetailProperty, isValidComposition } from '../helpers/compositionHelper';
+import CompositionHelpText from '../components/composition/compositionHelpText';
 
-const CompositionTab = () => {
+const CompositionPage = () => {
   const { settings: { selectedComposition } } = useContext(SettingsContext);
   const { compositions, dispatch } = useContext(CompositionContext);
   const { methods } = useContext(MethodContext);
@@ -128,4 +127,4 @@ const CompositionTab = () => {
   );
 };
 
-export default CompositionTab;
+export default CompositionPage;

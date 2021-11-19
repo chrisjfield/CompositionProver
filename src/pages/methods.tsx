@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { Divider, Grid } from '@mui/material';
-import MethodContext from '../../context/methodContext';
-import SettingsContext from '../../context/settingsContext';
-import StageSelector from '../stageSelector/stageSelector';
-import EditableMethod from './editableMethod';
-import MethodButtons from './methodButtons';
+import MethodContext from '../context/methodContext';
+import SettingsContext from '../context/settingsContext';
+import StageSelector from '../components/stageSelector/stageSelector';
+import EditableMethod from '../components/methods/editableMethod';
+import MethodButtons from '../components/methods/methodButtons';
 
-const MethodsTab = () => {
+const MethodsPage = () => {
   const { methods } = useContext(MethodContext);
   const { settings: { methodStage } } = useContext(SettingsContext);
 
@@ -28,4 +28,4 @@ const MethodsTab = () => {
   );
 };
 
-export default MethodsTab;
+export default MethodsPage;

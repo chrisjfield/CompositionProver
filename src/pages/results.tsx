@@ -1,20 +1,20 @@
 import { useContext, useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import CompositionContext from '../../context/compositionContext';
-import { emptyResult } from '../../defaults/results';
-import MethodContext from '../../context/methodContext';
-import CallContext from '../../context/callContext';
-import { Result } from '../../types/results';
-import AlertContext from '../../context/alertContext';
-import ResultsLoading from './resultsLoading';
-import ResultsStats from './resultsStats';
-import ResultsMusic from './resultsMusic';
-import ResultsSections from './resultsSections';
-import ResultsGrid from './resultsGrid';
-import SettingsContext from '../../context/settingsContext';
-import ResultGenerator from '../../helpers/resultGenerator';
+import SettingsContext from '../context/settingsContext';
+import CompositionContext from '../context/compositionContext';
+import MethodContext from '../context/methodContext';
+import CallContext from '../context/callContext';
+import AlertContext from '../context/alertContext';
+import ResultsLoading from '../components/results/resultsLoading';
+import ResultsStats from '../components/results/resultsStats';
+import ResultsMusic from '../components/results/resultsMusic';
+import ResultsSections from '../components/results/resultsSections';
+import ResultsGrid from '../components/results/resultsGrid';
+import { Result } from '../types/results';
+import { emptyResult } from '../defaults/results';
+import ResultGenerator from '../helpers/resultGenerator';
 
-const ResultsTab = () => {
+const ResultsPage = () => {
   const { settings: { selectedComposition } } = useContext(SettingsContext);
   const { compositions } = useContext(CompositionContext);
   const { methods } = useContext(MethodContext);
@@ -58,4 +58,4 @@ const ResultsTab = () => {
     );
 };
 
-export default ResultsTab;
+export default ResultsPage;

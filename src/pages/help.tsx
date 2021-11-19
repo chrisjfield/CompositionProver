@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-const HelpTab = () => {
+const HelpPage = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange = (panel: string) => (_: React.ChangeEvent<{}>, isExpanded: boolean) => {
@@ -336,4 +336,4 @@ const HelpTab = () => {
   );
 };
 
-export default HelpTab;
+export default HelpPage;

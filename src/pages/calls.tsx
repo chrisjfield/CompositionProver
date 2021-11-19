@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Divider, Grid } from '@mui/material';
-import CallContext from '../../context/callContext';
-import SettingsContext from '../../context/settingsContext';
-import EditableCall from './editableCall';
-import StageSelector from '../stageSelector/stageSelector';
+import CallContext from '../context/callContext';
+import SettingsContext from '../context/settingsContext';
+import StageSelector from '../components/stageSelector/stageSelector';
+import EditableCall from '../components/calls/editableCall';
 
-const CallsTab = () => {
+const CallsPage = () => {
   const { calls } = useContext(CallContext);
   const { settings: { methodStage } } = useContext(SettingsContext);
 
@@ -26,4 +26,4 @@ const CallsTab = () => {
   );
 };
 
-export default CallsTab;
+export default CallsPage;
