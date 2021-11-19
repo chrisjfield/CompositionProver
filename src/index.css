@@ -11,3 +11,12 @@ body {
   min-width: 576px;
   min-height: 324px;
 }
+
+
+.method-card--button .method-card--button-label {
+  @apply text-white mr-2 hidden;
+}
+
+.method-card--button:hover .method-card--button-label {
+  @apply inline-block
+}

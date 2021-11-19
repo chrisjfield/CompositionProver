@@ -19,13 +19,15 @@ const MethodCard = ({ method }: { method: Method }) => {
       <p className="text-xl font-bold text-gray-800">{getCallName(method.defaultBob)}</p>
       <p className="text-xl font-bold text-gray-800">{getCallName(method.defaultSingle)}</p>
       <div className="flex border-t divide-x">
-        <button type="button" className="block w-1/2 text-center py-2 rounded-bl-lg text-gray-600 hover:bg-blue-700 hover:text-white">
+        <button type="button" className="w-1/2 flex justify-center items-center py-2 rounded-bl-lg text-gray-600 hover:bg-blue-700 hover:text-white method-card--button">
+          <span className="method-card--button-label">Edit</span>
           <span className="sr-only">Edit Method</span>
-          <PencilIcon className="w-8 h-8 mx-auto fill-current" />
+          <PencilIcon className="w-8 h-8 fill-current" />
         </button>
-        <button type="button" className="block w-1/2 text-center py-2 rounded-br-lg text-gray-600 hover:bg-red-700 hover:text-white">
+        <button type="button" className="w-1/2 flex justify-center items-center py-2 rounded-br-lg text-gray-600 hover:bg-red-700 hover:text-white method-card--button">
+          <span className="method-card--button-label">Delete</span>
           <span className="sr-only">Delete Method</span>
-          <BinIcon className="w-9 h-9 mx-auto fill-current" />
+          <BinIcon className="w-9 h-9 fill-current" />
         </button>
       </div>
     </div>
