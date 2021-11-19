@@ -61,7 +61,7 @@ const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
     <>
       {/* Navigation Items */}
       {navItems.map((navItem) => (
-        <Link to={navItem.url} key={navItem.url} onClick={closeNav} className="flex items-center rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 my-1 p-3 pr-6">
+        <Link to={navItem.url} key={navItem.url} onClick={closeNav} className="flex items-center rounded-lg hover:bg-brand-primary-dark text-gray-200 hover:text-white mx-2 my-px p-3 pr-6">
           {navItem.icon}
           <p className="ml-3 text-base">
             {navItem.name}
@@ -70,7 +70,7 @@ const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
       ))}
       <hr className="border-gray-200 opacity-50 my-4" />
       {/* Import/Export */}
-      <button onClick={toggleImportMenu} type="button" className="flex items-center relative rounded-lg hover:bg-blue-900 text-gray-200 hover:text-white mx-2 my-1 p-3 pr-6">
+      <button onClick={toggleImportMenu} type="button" className="flex items-center relative rounded-lg hover:bg-brand-primary-dark text-gray-200 hover:text-white mx-2 my-px p-3 pr-6">
         <ImportExportIcon className="w-6 h-6 mr-3 fill-current" />
         <p className="text-base">
           Import/Export
