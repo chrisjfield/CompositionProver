@@ -6,3 +6,8 @@ body {
   margin: 0;
   font-family: "Roboto";
 }
+
+.modal-dimensions {
+  min-width: 576px;
+  min-height: 324px;
+}
