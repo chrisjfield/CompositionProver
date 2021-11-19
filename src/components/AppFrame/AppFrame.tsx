@@ -39,7 +39,7 @@ const AppFrame = (
         </div>
       </div>
       {/* Main content */}
-      <div className="flex w-full flex-col">
+      <div className="w-full">
         {/* Mobile header */}
         <header className="flex md:hidden bg-blue-700 shadow-lg py-2 px-3">
           <button onClick={openNav} type="button">
