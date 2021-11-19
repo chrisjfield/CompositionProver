@@ -70,7 +70,7 @@ const SidenavItems = ({ closeNav }: SidenavItemsProps) => {
       ))}
       <hr className="border-gray-200 opacity-50 my-4" />
       {/* Import/Export */}
-      <button onClick={toggleImportMenu} type="button" className="flex items-center relative rounded-lg hover:bg-brand-primary-dark text-gray-200 hover:text-white mx-2 my-px p-3 pr-6">
+      <button onClick={toggleImportMenu} type="button" aria-expanded={importMenuOpen} className="flex items-center relative rounded-lg hover:bg-brand-primary-dark text-gray-200 hover:text-white mx-2 my-px p-3 pr-6">
         <ImportExportIcon className="w-6 h-6 mr-3 fill-current" />
         <p className="text-base">
           Import/Export
