@@ -1,4 +1,4 @@
-import SvgIconProps from '../../types/props/SvgIcon.interface';
+import { SvgIconProps } from '../../types/props';
 
 const CloseIcon = ({ className }: SvgIconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className={className}>
