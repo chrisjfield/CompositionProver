@@ -19,12 +19,12 @@ const MethodCard = ({ method }: { method: Method }) => {
       <p className="text-xl font-bold text-gray-800">{getCallName(method.defaultBob)}</p>
       <p className="text-xl font-bold text-gray-800">{getCallName(method.defaultSingle)}</p>
       <div className="flex border-t divide-x">
-        <button type="button" className="w-1/2 flex justify-center items-center py-2 rounded-bl-lg text-gray-600 hover:bg-blue-700 focus:bg-blue-700 hover:text-white focus:text-white method-card--button">
+        <button type="button" className="w-1/2 flex justify-center items-center py-2 rounded-bl-lg text-gray-600 hover:bg-blue-700 hover:text-white method-card--button">
           <span className="method-card--button-label" aria-hidden="true">Edit</span>
           <span className="sr-only">{`Edit Method: ${method.name}`}</span>
           <PencilIcon className="w-7 h-7 fill-current" />
         </button>
-        <button type="button" className="w-1/2 flex justify-center items-center py-2 rounded-br-lg text-gray-600 hover:bg-red-700 focus:bg-red-700 hover:text-white focus:text-white method-card--button">
+        <button type="button" className="w-1/2 flex justify-center items-center py-2 rounded-br-lg text-gray-600 hover:bg-red-700 hover:text-white method-card--button">
           <span className="method-card--button-label" aria-hidden="true">Delete</span>
           <span className="sr-only">{`Delete Method: ${method.name}`}</span>
           <BinIcon className="w-8 h-8 fill-current" />

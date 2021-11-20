@@ -17,7 +17,6 @@ body {
   @apply text-white mr-2 hidden;
 }
 
-.method-card--button:hover .method-card--button-label,
-.method-card--button:focus .method-card--button-label {
+.method-card--button:hover .method-card--button-label {
   @apply inline-block
 }
