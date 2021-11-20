@@ -18,8 +18,8 @@ const MethodsPage = () => {
   return (
     <>
       <StageSelector />
-      <div className="mx-auto rounded-lg overflow-hidden border md:mx-6 lg:mx-12 xl:mx-20">
-        {/* <table className="w-full">
+      {/* <div className="mx-auto rounded-lg overflow-hidden border md:mx-6 lg:mx-12 xl:mx-20">
+        <table className="w-full">
           <thead>
             <tr className="overflow-hidden bg-gray-100 border-b-2">
               {gridColumns.map((column) => (<th key={column} className="text-left pl-2 pr-6 py-2 font-normal border-gray-700 text-gray-600">{column}</th>))}
@@ -38,8 +38,8 @@ const MethodsPage = () => {
                 </tr>
               ))}
           </tbody>
-        </table> */}
-      </div>
+        </table>
+      </div> */}
       <div className="flex flex-row flex-wrap">
         {methods
           .filter((method) => method.stage === methodStage)
