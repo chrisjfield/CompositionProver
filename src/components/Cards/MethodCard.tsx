@@ -12,7 +12,7 @@ const MethodCard = ({ method }: { method: Method }) => {
   const getCallName = (value: string) => calls
     .find((call) => call.stage === methodStage && call.abbreviation === value)!.name;
   return (
-    <div className="rounded-lg border border-gray-600 shadow">
+    <div className="rounded-lg ring-1 ring-gray-200 shadow">
       <p className="text-xl font-bold text-gray-800">{method.name}</p>
       <p className="text-xl font-bold text-gray-800">{method.abbreviation}</p>
       <p className="text-xl font-bold text-gray-800">{method.placeNotation}</p>

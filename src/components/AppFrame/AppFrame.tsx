@@ -17,7 +17,7 @@ const AppFrame = (
     setNavOpen(false);
   };
 
-  const sidebarClasses = `flex flex-col fixed md:relative inset-0 z-10 w-full md:w-auto md:max-w-xs min-h-screen px-4 bg-brand-primary text-center md:text-left transform transition-all md:translate-x-0 md:visible ${navOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'}`;
+  const sidebarClasses = `flex flex-col fixed lg:relative inset-0 z-10 w-full lg:w-auto lg:max-w-xs min-h-screen px-4 bg-brand-primary text-center lg:text-left transform transition-all lg:translate-x-0 lg:visible ${navOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'}`;
 
   return (
     <main className="flex w-full min-h-screen">
@@ -25,15 +25,15 @@ const AppFrame = (
       <div className={sidebarClasses}>
         <div className="flex flex-col justify-between h-full overflow-y-auto">
           <nav className="flex flex-col">
-            <button onClick={closeNav} type="button" className="flex md:hidden absolute top-0 left-0 ml-3 mt-3">
-              <CloseIcon className="text-gray-200 fill-current w-8 h-8" />
+            <button onClick={closeNav} type="button" className="absolute top-0 left-0 flex mt-3 ml-3 lg:hidden">
+              <CloseIcon className="w-8 h-8 text-gray-200 fill-current" />
             </button>
-            <h1 className="py-4 text-gray-200 text-2xl whitespace-nowrap px-2">
+            <h1 className="px-2 py-4 text-2xl text-gray-200 whitespace-nowrap">
               Composition Prover
             </h1>
             <SidenavItems closeNav={closeNav} />
           </nav>
-          <a href="https://github.com/chrisjfield/CompositionProver" className="text-xs text-gray-200 underline py-4">
+          <a href="https://github.com/chrisjfield/CompositionProver" className="py-4 text-xs text-gray-200 underline">
             View source code on GitHub
           </a>
         </div>
@@ -41,12 +41,12 @@ const AppFrame = (
       {/* Main content */}
       <div className="w-full">
         {/* Mobile header */}
-        <header className="flex md:hidden bg-blue-700 shadow-lg py-2 px-3">
+        <header className="flex px-3 py-2 bg-blue-700 shadow-lg lg:hidden">
           <button onClick={openNav} type="button">
-            <MenuIcon className="text-gray-200 fill-current w-8 h-8" />
+            <MenuIcon className="w-8 h-8 text-gray-200 fill-current" />
           </button>
         </header>
-        <div className="p-4 pt-6 md:pt-8">
+        <div className="p-4 pt-6 lg:pt-8">
           {children}
         </div>
       </div>
