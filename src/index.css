@@ -19,3 +19,27 @@ body {
 .method-card--button:hover .method-card--button-label {
   @apply inline-block;
 }
+
+.methods-table--header > * {
+  @apply py-2 pl-2 pr-6 overflow-hidden whitespace-nowrap overflow-ellipsis;
+}
+
+.methods-table--column__name {
+  width: 27%;
+}
+
+.methods-table--column__abbr {
+  width: 14%;
+}
+
+.methods-table--column__notation {
+  width: 25%;
+}
+
+.methods-table--column__bob {
+  width: 17%;
+}
+
+.methods-table--column__single {
+  width: 17%;
+}

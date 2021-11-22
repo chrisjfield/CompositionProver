@@ -16,7 +16,8 @@ module.exports = {
   },
   variants: {
     extend: {
-      backgroundColor: ['even']
+      backgroundColor: ['even', 'last'],
+      borderRadius: ['last']
     },
   },
   plugins: [],
