@@ -29,19 +29,19 @@ body {
     width: 27%;
   }
 
-  .methods-table--column__abbr {
-    width: 14%;
-  }
-
   .methods-table--column__notation {
     width: 25%;
   }
 
   .methods-table--column__bob {
-    width: 17%;
+    width: 16%;
   }
 
   .methods-table--column__single {
-    width: 17%;
+    width: 16%;
+  }
+
+  .methods-table--column__actions {
+    width: 16%;
   }
 }
