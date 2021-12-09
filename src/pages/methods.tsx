@@ -1,19 +1,43 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import MethodContext from '../context/methodContext';
 import SettingsContext from '../context/settingsContext';
 import StageSelector from '../components/stageSelector/stageSelector';
 import CallContext from '../context/callContext';
+import ModalsEditMethod from '../components/Modals/ModalsEditMethod';
+import { deleteMethod } from '../components/wrappers/methodContextWrapper';
+import ModalsWrapper from '../components/Modals/ModalsWrapper';
+import { Method } from '../types/methods';
 
 const MethodsPage = () => {
-  const { methods } = useContext(MethodContext);
+  const [activeEditMethodId, setActiveEditMethodId] = useState(null as number | null);
+  const [activeDeleteMethod, setActiveDeleteMethod] = useState(null as Method | null);
+  const { methods, dispatch } = useContext(MethodContext);
   const { settings: { methodStage } } = useContext(SettingsContext);
   const { calls } = useContext(CallContext);
 
   const getCallName = (value: string) => calls
     .find((call) => call.stage === methodStage && call.abbreviation === value)!.name;
 
-  const deleteMethod = (id: number) => {
-    console.log('Deleting method', id);
+  const removeMethod = (method: Method) => {
+    setActiveDeleteMethod(method);
+  };
+
+  const confirmDeleteMethod = () => {
+    if (!activeDeleteMethod) return;
+    dispatch(deleteMethod(activeDeleteMethod.id));
+    setActiveDeleteMethod(null);
+  };
+
+  const cancelDeleteMethod = () => {
+    setActiveDeleteMethod(null);
+  };
+
+  const openEditModal = (methodId: number) => {
+    setActiveEditMethodId(methodId);
+  };
+
+  const closeEditModal = () => {
+    setActiveEditMethodId(null);
   };
 
   return (
@@ -53,13 +77,25 @@ const MethodsPage = () => {
                 {getCallName(method.defaultSingle)}
               </p>
               <div className="flex flex-row flex-wrap justify-end w-full sm:justify-start methods-table--column__actions">
-                <button type="button" className="w-16 py-1 my-1 mr-2 text-white bg-blue-700 rounded sm:py-0 hover:bg-blue-800" onClick={() => deleteMethod(method.id)}>Edit</button>
-                <button type="button" className="w-16 py-1 my-1 mr-2 text-white bg-red-700 rounded sm:py-0 hover:bg-red-800" onClick={() => deleteMethod(method.id)}>Delete</button>
+                <button type="button" className="w-16 py-1 my-1 mr-2 text-white bg-blue-700 rounded sm:py-0 hover:bg-blue-800" onClick={() => openEditModal(method.id)}>Edit</button>
+                <button type="button" className="w-16 py-1 my-1 mr-2 text-white bg-red-700 rounded sm:py-0 hover:bg-red-800" onClick={() => removeMethod(method)}>Delete</button>
               </div>
             </div>
           ))}
         </div>
       </div>
+      <ModalsEditMethod onClose={closeEditModal} activeEditMethodId={activeEditMethodId} />
+      <ModalsWrapper isOpen={!!activeDeleteMethod} onClose={cancelDeleteMethod}>
+        <p>
+          Are you sure you want to delete
+          {' '}
+          {activeDeleteMethod?.name}
+          {' '}
+          ?
+        </p>
+        <button type="button" className="px-8 py-2 text-lg text-white bg-red-700 rounded-full w-36 hover:bg-red-800" onClick={confirmDeleteMethod}>Yes</button>
+        <button type="button" className="px-8 py-2 ml-6 text-lg text-white bg-blue-700 rounded-full w-36 hover:bg-blue-800" onClick={cancelDeleteMethod}>No</button>
+      </ModalsWrapper>
     </>
   );
 };
