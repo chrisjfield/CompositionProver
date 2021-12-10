@@ -86,13 +86,7 @@ const MethodsPage = () => {
       </div>
       <ModalsEditMethod onClose={closeEditModal} activeEditMethodId={activeEditMethodId} />
       <ModalsWrapper isOpen={!!activeDeleteMethod} onClose={cancelDeleteMethod}>
-        <p>
-          Are you sure you want to delete
-          {' '}
-          {activeDeleteMethod?.name}
-          {' '}
-          ?
-        </p>
+        <p>{`Are you sure you want to delete ${activeDeleteMethod?.name}?`}</p>
         <button type="button" className="px-8 py-2 text-lg text-white bg-red-700 rounded-full w-36 hover:bg-red-800" onClick={confirmDeleteMethod}>Yes</button>
         <button type="button" className="px-8 py-2 ml-6 text-lg text-white bg-blue-700 rounded-full w-36 hover:bg-blue-800" onClick={cancelDeleteMethod}>No</button>
       </ModalsWrapper>
