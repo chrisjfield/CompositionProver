@@ -89,16 +89,14 @@ const MethodsPage = () => {
       {/* Delete method modal */}
       <ModalsWrapper isOpen={!!activeDeleteMethod} onClose={cancelDeleteMethod}>
         <h3 className="mb-3 text-3xl">Confirm delete</h3>
-        <p className="max-w-lg mb-4">
+        <p className="max-w-lg">
           Are you sure you want to delete
           {' '}
           <b>{activeDeleteMethod?.name}</b>
           ?
         </p>
-        <div className="flex flex-wrap justify-center">
-          <button type="button" className="w-full px-6 py-1 mb-3 text-lg text-red-700 bg-transparent rounded-full ring-2 ring-red-700 hover:bg-red-700 hover:text-white" onClick={confirmDeleteMethod}>Confirm</button>
-          <button type="button" className="w-full px-8 py-2 text-lg text-white bg-blue-700 rounded-full hover:bg-blue-800" onClick={cancelDeleteMethod}>Cancel</button>
-        </div>
+        <button type="button" className="w-full py-1 mt-3 text-lg text-red-700 bg-transparent border-2 border-red-700 rounded-full hover:bg-red-700 hover:text-white" onClick={confirmDeleteMethod}>Confirm</button>
+        <button type="button" className="w-full py-1 mt-3 text-lg text-white bg-blue-700 border-2 border-blue-700 rounded-full hover:border-blue-800 hover:bg-blue-800" onClick={cancelDeleteMethod}>Cancel</button>
       </ModalsWrapper>
     </>
   );

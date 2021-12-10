@@ -168,8 +168,8 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
             formErrors.single && <p className="form-error">{formErrors.single}</p>
           }
         </label>
-        <button type="submit" className="px-6 py-2 mr-3 text-white bg-blue-700 rounded ring-2 ring-blue-700" onClick={submit}>Submit</button>
-        <button type="button" className="px-6 py-2 text-red-700 bg-transparent rounded ring-2 ring-red-700 hover:bg-red-700 hover:text-white" onClick={onClose}>Cancel</button>
+        <button type="submit" className="w-full py-1 mt-3 text-lg text-white bg-blue-700 border-2 border-blue-700 rounded-full hover:border-blue-800 hover:bg-blue-800" onClick={submit}>Submit</button>
+        <button type="button" className="w-full py-1 mt-3 text-lg text-red-700 bg-transparent border-2 border-red-700 rounded-full hover:bg-red-700 hover:text-white" onClick={onClose}>Cancel</button>
       </form>
     </ModalsWrapper>
   );
