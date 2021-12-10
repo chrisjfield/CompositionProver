@@ -2,6 +2,7 @@ import {
   FormEvent, useContext, useEffect, useState,
 } from 'react';
 import MethodContext from '../../context/methodContext';
+import { updateMethod } from '../wrappers/methodContextWrapper';
 import SettingsContext from '../../context/settingsContext';
 import { isValidMethodNotation } from '../../helpers/methodHelper';
 import { Method } from '../../types/methods';
@@ -10,7 +11,7 @@ import { ModalsEditMethodProps } from '../../types/props';
 import ModalsWrapper from './ModalsWrapper';
 
 const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps) => {
-  const { methods } = useContext(MethodContext);
+  const { methods, dispatch } = useContext(MethodContext);
   const { settings: { methodStage } } = useContext(SettingsContext);
   const activeMethod = methods.find((method) => method.id === activeEditMethodId);
   const [name, setName] = useState('');
@@ -94,14 +95,23 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
       errors.single = 'You must select a default single';
     }
     setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return false;
+    return true;
   };
 
   const submit = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    validateForm();
-    if (Object.keys(formErrors).length) return;
+
+    if (!activeMethod) return;
+
+    const isFormValid = validateForm();
+    if (!isFormValid) return;
+
     // Submit the form
-    console.log('form success');
+    dispatch(updateMethod({
+      ...activeMethod, name, abbreviation, defaultBob, defaultSingle, placeNotation,
+    }));
+    onClose();
   };
 
   if (!activeMethod) return null;
@@ -145,7 +155,7 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
             formErrors.single && <p className="form-error">{formErrors.single}</p>
           }
         </label>
-        <button type="submit" className="px-6 py-2 text-white bg-blue-700 rounded" onClick={submit}>Submit</button>
+        <button type="submit" className="px-6 py-2 mr-3 text-white bg-blue-700 rounded ring-2 ring-blue-700" onClick={submit}>Submit</button>
         <button type="button" className="px-6 py-2 text-red-700 bg-transparent rounded ring-2 ring-red-700 hover:bg-red-700 hover:text-white" onClick={onClose}>Cancel</button>
       </form>
     </ModalsWrapper>
