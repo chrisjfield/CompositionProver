@@ -54,7 +54,7 @@ const MethodsPage = () => {
         <div className="w-full bg-white border border-gray-200 divide-y rounded-b-lg">
           {methods.filter((method) => method.stage === methodStage).map((method) => (
             <div key={method.id} className="flex flex-wrap items-center w-full border-gray-200 sm:flex-nowrap even:bg-gray-50 last:rounded-b-lg">
-              <div className="block py-2 pl-2 sm:pr-6 sm:flex methods-table--column__name">
+              <div className="block p-2 sm:flex methods-table--column__name">
                 <p className="text-lg sm:text-base">
                   <span className="font-bold">{method.name}</span>
                   <span className="ml-1">
@@ -64,15 +64,15 @@ const MethodsPage = () => {
                   </span>
                 </p>
               </div>
-              <p className="w-full py-2 pl-2 pr-6 methods-table--column__notation">
+              <p className="w-full p-2 sm:text-sm methods-table--column__notation">
                 <span className="mr-2 text-sm text-gray-600 sm:hidden">Place Notation:</span>
                 {method.placeNotation}
               </p>
-              <p className="py-2 pl-2 pr-6 methods-table--column__bob">
+              <p className="p-2 methods-table--column__bob">
                 <span className="mr-2 text-sm text-gray-600 sm:hidden">Default Bob:</span>
                 {getCallName(method.defaultBob)}
               </p>
-              <p className="py-2 pl-2 pr-6 methods-table--column__single">
+              <p className="p-2 methods-table--column__single">
                 <span className="mr-2 text-sm text-gray-600 sm:hidden">Default Single:</span>
                 {getCallName(method.defaultSingle)}
               </p>
