@@ -1,12 +1,22 @@
+import { useEffect, useRef } from 'react';
 import { ModalsWrapperProps } from '../../types/props';
 import CloseIcon from '../icons/CloseIcon';
 
 const ModalsWrapper = ({
   children, isOpen, onClose, hideCloseIcon,
 }: ModalsWrapperProps) => {
+  const closeIcon = useRef(null as HTMLButtonElement | null);
+
   const dismissModal = () => {
     onClose();
   };
+
+  // Set focus to the close button when opening a modal
+  useEffect(() => {
+    if (isOpen && !hideCloseIcon) {
+      closeIcon.current!.focus();
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -23,7 +33,7 @@ const ModalsWrapper = ({
       <div className="relative z-30 p-12 mx-4 bg-white rounded-xl">
         {!hideCloseIcon
           && (
-          <button type="button" onClick={dismissModal} className="absolute top-0 right-0 m-6">
+          <button type="button" onClick={dismissModal} ref={closeIcon} className="absolute top-0 right-0 m-6">
             <span className="sr-only">Close</span>
             <CloseIcon className="w-8 h-8 text-gray-500" />
           </button>
