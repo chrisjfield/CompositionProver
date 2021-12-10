@@ -9,9 +9,11 @@ import { Method } from '../../types/methods';
 import EditMethodFormErrors from '../../types/methods/EditMethodFormErrors.interface';
 import { ModalsEditMethodProps } from '../../types/props';
 import ModalsWrapper from './ModalsWrapper';
+import CallContext from '../../context/callContext';
 
 const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps) => {
   const { methods, dispatch } = useContext(MethodContext);
+  const { calls } = useContext(CallContext);
   const { settings: { methodStage } } = useContext(SettingsContext);
   const activeMethod = methods.find((method) => method.id === activeEditMethodId);
   const [name, setName] = useState('');
@@ -54,12 +56,12 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
     setPlaceNotation((event.target as HTMLInputElement).value);
   };
 
-  const updateBobField = (event: FormEvent<HTMLInputElement>) => {
+  const updateBobField = (event: FormEvent<HTMLSelectElement>) => {
     setFormErrors({ ...formErrors, bob: undefined });
     setDefaultBob((event.target as HTMLInputElement).value);
   };
 
-  const updateSingleField = (event: FormEvent<HTMLInputElement>) => {
+  const updateSingleField = (event: FormEvent<HTMLSelectElement>) => {
     setFormErrors({ ...formErrors, single: undefined });
     setDefaultSingle((event.target as HTMLInputElement).value);
   };
@@ -116,6 +118,11 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
     onClose();
   };
 
+  const getCallDropdownValues = (searchString: string) => calls
+    .filter(
+      (call) => ((call.stage === methodStage) && (call.name.includes(searchString) || call.name.includes('User'))),
+    );
+
   if (!activeMethod) return null;
 
   return (
@@ -145,14 +152,18 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
         </label>
         <label htmlFor="method-bob">
           Default Bob
-          <input id="method-bob" type="text" value={defaultBob} onChange={updateBobField} className={formErrors.bob && 'field-has-error'} />
+          <select id="method-bob" value={defaultBob} onChange={updateBobField} className={formErrors.bob && 'field-has-error'}>
+            {getCallDropdownValues('Bob').map((call) => <option value={call.abbreviation}>{call.name}</option>)}
+          </select>
           {
             formErrors.bob && <p className="form-error">{formErrors.bob}</p>
           }
         </label>
         <label htmlFor="method-single">
           Default Single
-          <input id="method-single" type="text" value={defaultSingle} onChange={updateSingleField} className={formErrors.single && 'field-has-error'} />
+          <select id="method-single" value={defaultSingle} onChange={updateSingleField} className={formErrors.single && 'field-has-error'}>
+            {getCallDropdownValues('Single').map((call) => <option value={call.abbreviation}>{call.name}</option>)}
+          </select>
           {
             formErrors.single && <p className="form-error">{formErrors.single}</p>
           }

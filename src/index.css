@@ -8,7 +8,7 @@ body {
 }
 
 .method-card--button .method-card--button-label {
-  @apply text-white mr-2 hidden;
+  @apply hidden mr-2 text-white;
 }
 
 .method-card--button:hover .method-card--button-label {
@@ -19,12 +19,12 @@ body {
   @apply py-2 pl-2 pr-6 overflow-hidden whitespace-nowrap overflow-ellipsis;
 }
 
-.form input {
-  @apply w-72 block rounded ring-2 ring-gray-400 p-2 mb-2 text-black;
+.form input, .form select {
+  @apply block p-2 mb-2 text-black bg-transparent rounded w-72 ring-2 ring-gray-400;
 }
 
-.form input.field-has-error {
-  @apply w-72 block rounded ring-2 ring-red-600 mb-1 p-2 text-black;
+.form input.field-has-error, .form select.field-has-error {
+  @apply block p-2 mb-1 text-black rounded w-72 ring-2 ring-red-600;
 }
 
 .form label {
@@ -32,7 +32,7 @@ body {
 }
 
 .form .form-error {
-  @apply text-red-600 text-xs mb-2;
+  @apply mb-2 text-xs text-red-600;
 }
 
 @screen sm {
