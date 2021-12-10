@@ -7,11 +7,6 @@ body {
   font-family: 'Roboto';
 }
 
-.modal-dimensions {
-  min-width: 576px;
-  min-height: 324px;
-}
-
 .method-card--button .method-card--button-label {
   @apply text-white mr-2 hidden;
 }

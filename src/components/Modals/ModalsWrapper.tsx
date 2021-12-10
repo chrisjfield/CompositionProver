@@ -8,30 +8,30 @@ const ModalsWrapper = ({
     onClose();
   };
 
-  return isOpen ? (
-    (
-      <div className="fixed w-full h-full inset-0 flex justify-center items-center z-30">
-        <div
-          role={hideCloseIcon ? undefined : 'button'}
-          aria-label="close"
-          tabIndex={hideCloseIcon ? undefined : 0}
-          onClick={hideCloseIcon ? undefined : dismissModal}
-          onKeyUp={hideCloseIcon ? undefined : () => {}}
-          className="absolute inset-0 w-full h-full bg-black opacity-50 cursor-default z-30"
-        />
-        <div className="modal-dimensions relative rounded-xl bg-white p-12 z-30">
-          {!hideCloseIcon
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-30 flex items-center justify-center w-full h-full">
+      <div
+        role={hideCloseIcon ? undefined : 'button'}
+        aria-label="close"
+        tabIndex={hideCloseIcon ? undefined : 0}
+        onClick={hideCloseIcon ? undefined : dismissModal}
+        onKeyUp={hideCloseIcon ? undefined : () => {}}
+        className="absolute inset-0 z-30 w-full h-full bg-black opacity-50 cursor-default"
+      />
+      <div className="relative z-30 p-12 mx-4 bg-white rounded-xl">
+        {!hideCloseIcon
           && (
           <button type="button" onClick={dismissModal} className="absolute top-0 right-0 m-6">
             <span className="sr-only">Close</span>
-            <CloseIcon className="text-gray-500 w-8 h-8" />
+            <CloseIcon className="w-8 h-8 text-gray-500" />
           </button>
           )}
-          {children}
-        </div>
+        {children}
       </div>
-    )
-  ) : null;
+    </div>
+  );
 };
 
 export default ModalsWrapper;
