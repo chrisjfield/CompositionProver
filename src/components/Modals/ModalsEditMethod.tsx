@@ -66,7 +66,7 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
 
   const isUniqueAbbreviation = (abbr: string) => methods.filter((method) => (
     method.abbreviation === abbr && method.id !== activeMethod?.id
-  )).length > 0;
+  )).length === 0;
 
   // TODO: extract this to some Utils file potentially
   const validateForm = () => {
@@ -80,8 +80,10 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
     }
     if (!abbreviation) {
       errors.abbr = 'You must provide an abbreviation';
-    } else if (isUniqueAbbreviation(abbreviation)) {
+    } else if (!isUniqueAbbreviation(abbreviation)) {
       errors.abbr = 'You must use a unique abbreviation';
+    } else if (abbreviation.length > 5) {
+      errors.abbr = 'The abbreviation must not be longer than 5 characters';
     }
     if (!placeNotation) {
       errors.notation = 'You must provide a place notation';
@@ -129,7 +131,7 @@ const ModalsEditMethod = ({ onClose, activeEditMethodId }: ModalsEditMethodProps
         </label>
         <label htmlFor="method-abbreviation">
           Abbreviation
-          <input id="method-abbreviation" type="text" value={abbreviation} onChange={updateAbbreviationField} className={formErrors.abbr && 'field-has-error'} />
+          <input id="method-abbreviation" type="text" maxLength={5} value={abbreviation} onChange={updateAbbreviationField} className={formErrors.abbr && 'field-has-error'} />
           {
             formErrors.abbr && <p className="form-error">{formErrors.abbr}</p>
           }
